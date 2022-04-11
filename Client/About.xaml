@@ -1,0 +1,140 @@
+﻿<Window x:Class="Client.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="À propos" Height="210" Width="600" BorderThickness="1.45" WindowStyle="None" WindowStartupLocation="CenterScreen" BorderBrush="DimGray" ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="#FFEEEEEE"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                    <Setter Property="Background" Value="#FF292929"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <Grid>
+
+        <Label x:Name="title" Content="À propos" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="5,0,0,0" Height="26">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Button x:Name="button" Content="X" Margin="0,8,8,0" VerticalAlignment="Top" BorderBrush="{x:Null}"  Width="25" Height="25" Click="MouseClick" HorizontalAlignment="Right">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFC74040"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFBF5555"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FFE28C8C"/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <TextBox IsHitTestVisible="false" Margin="29,70,28,50" TextWrapping="Wrap"  IsReadOnly="True" Text="Application pour gestion des équipements Desjardins.&#xA;&#xA;---------------------------------&#xA;Programmé par Daniel Harvey&#xA;C# .NET 6.0">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBox.Foreground" Value="LightGray"/>
+                            <Setter Property="TextBox.Background" Value="#FF3A3A3A"/>
+                            <Setter Property="TextBox.BorderBrush" Value="DimGray"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="false">
+                            <Setter Property="TextBox.Background" Value="#FFF7F7F7"/>
+                            <Setter Property="TextBox.BorderBrush" Value="Black"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+
+        <Button Content="Fermer" Margin="0,0,0,10" Click="Button_Click" HorizontalAlignment="Center" Width="88" Height="23" VerticalAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <TextBlock HorizontalAlignment="Left" Margin="6,0,0,0" TextWrapping="Wrap" Text="{Binding version}" Width="54" Height="18" VerticalAlignment="Bottom">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Label Content="Inventaire Entrepôt (Client)" Height="42"  VerticalAlignment="Top" FontWeight="Bold" FontStyle="Italic" FontSize="24" HorizontalAlignment="Center" Margin="0,23,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="Label.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+    </Grid>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
+    </WindowChrome.WindowChrome>
+</Window>

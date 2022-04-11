@@ -1,0 +1,171 @@
+﻿<Window x:Class="Client.Logs"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Logs" Height="460" Width="750" HorizontalAlignment="Left" VerticalAlignment="Top" MinHeight="400" MinWidth="600" WindowStyle="None" BorderThickness="1.45" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="#FFEEEEEE"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                    <Setter Property="Background" Value="#FF292929"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <Grid Loaded="Grid_Loaded">
+
+        <Label x:Name="LBLLogs" Content="Logs" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Button x:Name="button" Content="X" Margin="0,8,8,0" VerticalAlignment="Top" BorderBrush="{x:Null}"  Width="25" Height="25" Click="MouseClick" HorizontalAlignment="Right">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFC74040"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFBF5555"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FFE28C8C"/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+
+        <TextBlock Text="Recherche :" Margin="9,0,0,7" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="68">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Button x:Name="btn_rapport" Content="Rapport" Margin="0,0,0,5" Click="btn_rapport_Click" HorizontalAlignment="Center" Width="65" Height="20" VerticalAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Label x:Name="lbl_countLog" Content="{Binding countLog}" Margin="0,0,8,4" VerticalAlignment="Bottom" Height="26" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Width="66">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_RFsearch" Text="{Binding searchLog, UpdateSourceTrigger=PropertyChanged}" Margin="76,0,0,7" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" TextChanged="tb_RFsearch_TextChanged">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <ListBox x:Name="listLogs" ItemsSource="{Binding logsRapport}" SelectionMode="Extended" VirtualizingPanel.ScrollUnit="Pixel" Margin="10,45,10,30" MouseLeftButtonDown="listLogs_MouseLeftButtonDown" >
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FFECECEC"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+
+            <ListBox.Resources>
+                <ContextMenu x:Key="MyElementMenu">
+                    <MenuItem Header="Copier" Click="MenuItem_Click"/>
+                </ContextMenu>
+
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="ContextMenu" Value="{StaticResource MyElementMenu}"/>
+                </Style>
+            </ListBox.Resources>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding info}" Foreground="DarkBlue"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+    </Grid>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
+    </WindowChrome.WindowChrome>
+
+</Window>

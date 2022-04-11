@@ -1,0 +1,507 @@
+﻿<Window x:Class="Client.WaybillsLog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Waybills" Height="850" Width="1100" HorizontalAlignment="Left" MinHeight="500" MinWidth="850" MaxWidth="1300" VerticalAlignment="Top"  WindowStyle="None" BorderThickness="1.45" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" MouseLeftButtonDown="mainWindow_MouseLeftButtonDown" Loaded="Window_Loaded" Closing="Window_Closing">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="#FFEEEEEE"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                    <Setter Property="Background" Value="#FF292929"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <Grid>
+
+        <Label x:Name="wayb" Content="Waybills" HorizontalAlignment="Left" VerticalAlignment="Top" Width="166" Margin="5,0,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Button x:Name="button" Content="X" Margin="0,8,8,0" VerticalAlignment="Top" BorderBrush="{x:Null}" Width="25" Height="25" Click="MouseClick" HorizontalAlignment="Right">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFC74040"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFBF5555"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FFE28C8C"/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <TextBlock Text="Recherche RF :" Margin="15,0,0,116" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="79">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBox x:Name="tb_RFsearch" Text="{Binding wbRFsearch, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="99,0,0,10" TextWrapping="NoWrap" VerticalAlignment="Bottom" AcceptsReturn="True" HorizontalAlignment="Left" Width="123" TextChanged="tb_RFsearch_TextChanged" Height="124">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="btn_Filtre" Content="Enlever les filtres" HorizontalAlignment="Left" Width="108" Click="btn_Filtre_Click" Margin="227,0,0,92" Height="19" VerticalAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <TextBlock Text="Recheche WB :" Margin="229,0,0,116" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="84">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Button x:Name="btn_rapport" Content="Rapport" HorizontalAlignment="Right" Margin="0,0,340,114" Width="65" Height="20" VerticalAlignment="Bottom" Click="btn_rapport_Click">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <TextBox x:Name="tb_WBsearch" Text="{Binding WBsearch, UpdateSourceTrigger=PropertyChanged}" Margin="313,0,0,116" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="102" TextChanged="tb_WBsearch_TextChanged">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Label x:Name="wb_count" Content="{Binding countWB}" VerticalContentAlignment="Top" HorizontalContentAlignment="Right" Margin="0,0,281,110" FontSize="14" VerticalAlignment="Bottom" Height="32" HorizontalAlignment="Right" Width="55">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+
+        <ListView x:Name="ListBills" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding waybillsView}" Margin="15,81,283,139" SelectionMode="Single" MouseLeftButtonDown="ListBills_MouseLeftButtonDown" Loaded="ListBills_Loaded" SelectionChanged="ListBills_SelectionChanged" KeyUp="ListBills_KeyUp" >
+
+            <ListView.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FFECECEC"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+
+            <ListView.Resources>
+                <ContextMenu x:Key="ItemContextMenu">
+                    <MenuItem x:Name="comment" IsEnabled="{Binding Path=DataContext.delWB, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}" Header="Ajouter/Modifier Commentaire ..." FontSize="12" Foreground="Black" Click="comment_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="livre" Header="Livré" FontSize="12" Foreground="Black" Click="livre_Click" />
+                    <Separator/>
+                    <MenuItem x:Name="copyRF" Header="Copier le RF" FontSize="12" Foreground="Black" Click="copyRF_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="copyBills" Header="Copier les Waybills" FontSize="12" Foreground="Black" Click="copyBills_Click"/>
+                    <MenuItem x:Name="copyRFetBills" Header="Copier le RF et les Waybills" FontSize="12" Foreground="Black" Click="copyRFetBills_Click" />
+                    <Separator/>
+                    <MenuItem x:Name="copyBillsRetour" Header="Copier les Waybills de Retour" FontSize="12" Foreground="Black" Click="copyBillsRetour_Click"/>
+                    <MenuItem x:Name="copyRFetBillsRetour" Header="Copier le RF et les Waybills de Retour" FontSize="12" Foreground="Black" Click="copyRFetBillsRetour_Click" />
+                    <Separator/>
+                    <MenuItem x:Name="copyRFAllBill" Header="Copier le RF les Waybills (Sortie et Retour)" FontSize="12" Foreground="Black" Click="copyRFAllBill_Click"/>
+                    <MenuItem x:Name="copyAllBill" Header="Copier les Waybills (Sortie et Retour)" FontSize="12" Foreground="Black" Click="copyAllBill_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="puro" Header="Ouvrir tracking de Puro ..." FontSize="12" Foreground="Black" Click="puro_Click"/>
+                    <MenuItem x:Name="puroRetour" Header="Ouvrir tracking de Puro (WB de Retour) ..." FontSize="12" Foreground="Black" Click="puroRetour_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="delete" IsEnabled="{Binding Path=DataContext.delWB, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}" Margin="0,10,0,0" Header="Supprimer ce Waybill" FontSize="12" Foreground="Black" Click="delete_Click"/>
+                </ContextMenu>
+
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderThickness="0,0,0,1" BorderBrush="LightGray" Background="LightSteelBlue">
+                                    <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Segoe UI" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+
+                <Style TargetType="ToolTip">
+                    <Setter Property="HasDropShadow" Value="True"/>
+
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+                </Style>
+
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+
+                    <GridViewColumn Header=" RF" DisplayMemberBinding="{Binding RF}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Waybills" DisplayMemberBinding="{Binding wayb}" Width="275" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" WB de Retour" DisplayMemberBinding="{Binding wbRetour}" Width="275">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Commentaire" DisplayMemberBinding="{Binding comment}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Setters>
+                        <Setter Property="Foreground" Value="black"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Mois: " Foreground="DarkBlue"/>
+                                    <TextBlock Text="{Binding mois}"/>
+                                    <TextBlock Text="    Jour: " Foreground="DarkBlue"/>
+                                    <TextBlock Text="{Binding jour}"/>
+                                </StackPanel>
+                            </Setter.Value>
+                        </Setter>
+                    </Style.Setters>
+
+
+
+
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+
+        <Label x:Name="rf" Content="Demande (RF) :" VerticalAlignment="Top" Margin="0,52,132,0" HorizontalAlignment="Right" Width="128">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_RF" Margin="0,57,71,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" HorizontalAlignment="Right" Width="99">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Label x:Name="wb" Content="Waybills :" VerticalAlignment="Top" Margin="0,78,195,0" HorizontalAlignment="Right" Width="64">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Label x:Name="lbl_count" Content="{Binding countAdd}" VerticalContentAlignment="Bottom" Margin="0,67,10,0" FontSize="14" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="68" Height="37" VerticalAlignment="Top">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_waybills" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,101,15,188" TextWrapping="NoWrap" AcceptsReturn="True" Loaded="tb_waybills_Loaded" TextChanged="tb_waybills_TextChanged" HorizontalAlignment="Right" Width="239" PreviewTextInput="tb_PreviewTextInput">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <CheckBox x:Name="chk_Retour" Content="Waybills de Retour" Margin="0,0,120,159" Checked="chk_Retour_Checked" Unchecked="chk_Retour_Unchecked" Height="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="134">
+            <CheckBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+
+        <TextBox x:Name="tb_waybillsRetour" VerticalScrollBarVisibility="Auto" IsEnabled="False" HorizontalScrollBarVisibility="Auto" Margin="0,0,30,43" TextWrapping="NoWrap" AcceptsReturn="True" Loaded="tb_waybills_Loaded" TextChanged="tb_waybills_TextChanged" Height="113" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="224" PreviewTextInput="tb_PreviewTextInput">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="btn_way" Content="Ajout Waybills" HorizontalAlignment="Right" IsEnabled="{Binding enableAjout}" Margin="0,0,30,10" Width="224" Click="btn_Lab_Click" Height="28" VerticalAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="14">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Label x:Name="anné" Content="Année :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="10,33,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Label x:Name="mois" Content="Mois :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="49" Margin="75,33,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Label x:Name="jour" Content="Jour :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="189,33,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <ComboBox x:Name="cb_year" ItemsSource="{Binding wbYears}" SelectedItem="{Binding selectedYear}" IsEnabled="{Binding enableAjout}" HorizontalAlignment="Left" Margin="15,54,0,0" VerticalAlignment="Top" Width="60" SelectionChanged="cb_year_SelectionChanged"/>
+        <ComboBox x:Name="cb_mois" ItemsSource="{Binding mois}" SelectedItem="{Binding selectedMois}" IsEnabled="{Binding enableAjout}" HorizontalAlignment="Left" Margin="80,54,0,0" VerticalAlignment="Top" Width="109" SelectionChanged="cb_mois_SelectionChanged"/>
+        <ComboBox x:Name="cb_jour" ItemsSource="{Binding jour}" SelectedItem="{Binding selectedJour}" IsEnabled="{Binding enableAjout}" HorizontalAlignment="Left" Margin="194,54,0,0" VerticalAlignment="Top" Width="60" SelectionChanged="cb_jour_SelectionChanged"/>
+
+        <TextBlock Text="{Binding WBdate}" Margin="274,56,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="auto">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+    </Grid>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
+    </WindowChrome.WindowChrome>
+
+</Window>

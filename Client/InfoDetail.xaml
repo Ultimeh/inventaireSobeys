@@ -1,0 +1,517 @@
+﻿<Window x:Class="Client.InfoDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Info Détails" Height="350" Width="1568" MinHeight="300" MinWidth="1000" BorderThickness="1.45" WindowStyle="None" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="#FFEEEEEE"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                    <Setter Property="Background" Value="#FF292929"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="174*"/>
+            <ColumnDefinition Width="235*"/>
+            <ColumnDefinition Width="235*"/>
+            <ColumnDefinition Width="404*"/>
+            <ColumnDefinition Width="255*"/>
+            <ColumnDefinition Width="261*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label x:Name="modify" Content="Info Détails" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="5,0,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <Button x:Name="bntX" Content="X" Margin="0,8,8,0" VerticalAlignment="Top" BorderBrush="{x:Null}"  Width="25" Height="25" Click="btnX_Click" HorizontalAlignment="Right" Grid.Column="5">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFC74040"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFBF5555"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FFE28C8C"/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <ListView x:Name="viewInfo" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="10,38,10,0" SelectionMode="Single" MouseLeftButtonDown="ListViewData_MouseLeftButtonDown" Height="96" VerticalAlignment="Top" Grid.ColumnSpan="6" >
+
+            <ListView.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FFECECEC"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+
+            <ListView.Resources>
+                <ContextMenu x:Key="ItemContextMenu">
+                    <MenuItem x:Name="copyAll" Header="Copier ligne(s) au complet" FontSize="12" Foreground="Black" Click="copyAll_Click" />
+                    <MenuItem x:Name="copyRF" Header="Copier RF(s) de Sortie" FontSize="12" Foreground="Black" Click="copyRF_Click"/>
+                    <MenuItem x:Name="copyRFretour" Header="Copier RF(s) de Retour" FontSize="12" Foreground="Black" Click="copyRFretour_Click"/>
+                    <MenuItem x:Name="copySN" Header="Copier numéro(s) de série" FontSize="12" Foreground="Black" Click="copySN_Click"/>
+                </ContextMenu>
+
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderThickness="0,0,0,1" BorderBrush="LightGray" Background="LightSteelBlue">
+                                    <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Segoe UI" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView x:Name="dataGridViewReg" AllowsColumnReorder="False">
+
+                    <GridViewColumn Header=" Type" DisplayMemberBinding="{Binding type}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Modèle" DisplayMemberBinding="{Binding model}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" # Actif" DisplayMemberBinding="{Binding asset}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Numéro de série" DisplayMemberBinding="{Binding serial}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Statut" DisplayMemberBinding="{Binding statut}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" RF de Sortie" DisplayMemberBinding="{Binding RF}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Date de Sortie" DisplayMemberBinding="{Binding dateSortie}" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" RF de Retour" DisplayMemberBinding="{Binding RFretour}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Date de Retour" DisplayMemberBinding="{Binding dateRetour}" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Emplacement" DisplayMemberBinding="{Binding emplacement}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Date d'ajout" DisplayMemberBinding="{Binding dateEntry}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Date d'envoie au Lab" DisplayMemberBinding="{Binding dateEntryLab}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Date Clonage" DisplayMemberBinding="{Binding dateClone}" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Expiration Clonage" DisplayMemberBinding="{Binding dateCloneValid}" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Setters>
+                        <Setter Property="Foreground" Value="black"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+                    </Style.Setters>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+
+        <TextBlock Text="Info ajout :" Margin="10,139,181,0" Height="19" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ScrollViewer VerticalScrollBarVisibility="Disabled" Margin="10,156,5,0" Grid.Column="0" Height="20" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBox x:Name="tb_ajout" TextWrapping="NoWrap" IsReadOnly="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Loaded="tb_ajout_Loaded">
+                    <TextBox.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                                    <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                                    <Setter Property="TextBlock.Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <TextBlock Text="Commentaire :" Margin="10,185,0,0" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBox x:Name="tb_comment" TextWrapping="wrap" AcceptsReturn="True" Grid.Column="0" Margin="10,204,5,34" Loaded="tb_comment_Loaded" TextChanged="tb_comment_TextChanged">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="btn_comment" Content="Enregistrer" HorizontalAlignment="Center" IsEnabled="False" Width="108" Margin="0,0,0,10" Click="btn_comment_Click" Height="19" VerticalAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+
+        <TextBlock Text="Info Sortie :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="72" Margin="2,140,0,0" Grid.ColumnSpan="1" Grid.Column="1">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox x:Name="infoSortie" Margin="2,157,5,9" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.ColumnSpan="1" Grid.Column="1" >
+
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+        <TextBlock Text="Info Retour :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="72" Margin="2,140,0,0" Grid.Column="2">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox x:Name="infoRetour" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="2" Margin="2,156,5,9"  >
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+        <TextBlock Text="Info emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1,139,0,0" Grid.Column="3">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox x:Name="infoEmplacement" Margin="1,156,4,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="3" >
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+        <TextBlock Text="Info envoie lab :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1,139,0,0" Grid.Column="4">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox x:Name="infoEnvoieLab" Margin="1,156,5,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="4" >
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+        <TextBlock Text="Info corfirmation clonage :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="144" Margin="1,139,0,0" Grid.Column="5">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <ListBox x:Name="infoConfirm" Margin="1,156,10,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="5" >
+            <ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+
+    </Grid>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="1" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
+    </WindowChrome.WindowChrome>
+</Window>
