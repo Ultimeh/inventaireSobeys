@@ -119,7 +119,7 @@ namespace Client
 				if (!string.IsNullOrWhiteSpace(tb_SpecialModAutre.Text)) model = tb_SpecialModAutre.Text;
 				else model = cb_specialModel.SelectedItem.ToString();
 
-				im.RetourSpecial(type, model, serial, tb_RF.Text.ToUpper().Trim(), data);
+				//im.RetourSpecial(type, model, serial, tb_RF.Text.ToUpper().Trim(), data);
 
 
 				checkDivers.IsChecked = false;

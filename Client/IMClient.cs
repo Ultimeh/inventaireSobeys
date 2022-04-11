@@ -83,42 +83,42 @@ namespace Client
 		public const byte IM_DeleteUser = 37; // delete une entry
 		public const byte IM_WByear = 38; // les anners des wb
 		public const byte IM_rapportLab = 39; // rapport lab
-		public const byte IM_Seuil = 40; // seuils client tab
-		public const byte IM_SeuilAdmin = 41; // seuils admin modif
-		public const byte IM_SeuilAdminRequest = 42; // admin tab info
+		//public const byte IM_Seuil = 40; // seuils client tab
+		//public const byte IM_SeuilAdmin = 41; // seuils admin modif
+		//public const byte IM_SeuilAdminRequest = 42; // admin tab info
 		public const byte IM_Modify = 43; // modify infos
-		public const byte IM_SeuilLCDajout = 44; // ajout moniteur seuil
-		public const byte IM_SeuilLCDmodif = 45; // modif moniteur seuil
-		public const byte IM_SeuilDELlcd = 46; // delete moniteur seuil
-		public const byte IM_AccessAjout = 47; // ajout accessoir seuil
-		public const byte IM_AccessRequest = 48; // request access seuil au login
-		public const byte IM_DelAccess = 49; // request access seuil au login
-		public const byte IM_ModifAccess = 50; // modif des accessoire
-		public const byte IM_QteAccess = 51; // ajout/ retrai Access qté
-		public const byte IM_RetourSpecial = 52; // retour equipement special (admin)
-		public const byte IM_FileUpload = 53; // file upload
-		public const byte IM_AjoutPreparation = 54; // ajout de material a un transit
-		public const byte IM_DeletePreparation = 55; // delete de material a un transit
-		public const byte IM_CheckPreparation = 56; // check a un transit
-		public const byte IM_PreparationSortie = 57; // sortie de material a un transit
-		public const byte IM_ConfirmSortiePrep = 58; // sortie de material a un transit confirmer
-		public const byte IM_PreparationDeleteTransit = 59; // delete transit
-		public const byte IM_ModifyPreparation = 60; // modify / add a un transit
-		public const byte IM_CheckPreparationAcess = 61; //check accessoire
-		public const byte IM_CommentPreparation = 62; //check accessoire
-		public const byte IM_SelectedPreparation = 63; //selection de preparation
-		public const byte IM_PreparationSemaine = 64; //ajout semaine prep manuel
-		public const byte IM_PreparationTransfert = 65; //transfer transit
-		public const byte IM_PreparationRF = 66; //prep RF
+		//public const byte IM_SeuilLCDajout = 44; // ajout moniteur seuil
+		//public const byte IM_SeuilLCDmodif = 45; // modif moniteur seuil
+		//public const byte IM_SeuilDELlcd = 46; // delete moniteur seuil
+		//public const byte IM_AccessAjout = 47; // ajout accessoir seuil
+		//public const byte IM_AccessRequest = 48; // request access seuil au login
+		//public const byte IM_DelAccess = 49; // request access seuil au login
+		//public const byte IM_ModifAccess = 50; // modif des accessoire
+		//public const byte IM_QteAccess = 51; // ajout/ retrai Access qté
+		//public const byte IM_RetourSpecial = 52; // retour equipement special (admin)
+		//public const byte IM_FileUpload = 53; // file upload
+		//public const byte IM_AjoutPreparation = 54; // ajout de material a un transit
+		//public const byte IM_DeletePreparation = 55; // delete de material a un transit
+		//public const byte IM_CheckPreparation = 56; // check a un transit
+		//public const byte IM_PreparationSortie = 57; // sortie de material a un transit
+		//public const byte IM_ConfirmSortiePrep = 58; // sortie de material a un transit confirmer
+		//public const byte IM_PreparationDeleteTransit = 59; // delete transit
+		//public const byte IM_ModifyPreparation = 60; // modify / add a un transit
+		//public const byte IM_CheckPreparationAcess = 61; //check accessoire
+		//public const byte IM_CommentPreparation = 62; //check accessoire
+		//public const byte IM_SelectedPreparation = 63; //selection de preparation
+		//public const byte IM_PreparationSemaine = 64; //ajout semaine prep manuel
+		//public const byte IM_PreparationTransfert = 65; //transfer transit
+		//public const byte IM_PreparationRF = 66; //prep RF
 		public const byte IM_MainComment = 67; // comment main
-		public const byte IM_UploadNotice = 68; // file error
+		//public const byte IM_UploadNotice = 68; // file error
 
 		public const byte IM_TrackingPuro = 91; //demande tu tracking puro via API
 		public const byte IM_UpdateExisting = 92; //update database general
 
 		public const byte IM_ForceDisconnect = 93;
-		public const byte IM_RequestPreparation = 94;
-		public const byte IM_NewPreparation = 95;
+		//public const byte IM_RequestPreparation = 94;
+		//public const byte IM_NewPreparation = 95;
 		public const byte IM_ForceQuit = 96;
 		public const byte IM_RequestLogs = 97;
 		public const byte IM_Logs = 98;
@@ -291,80 +291,80 @@ namespace Client
 
 					switch (data)
 					{
-						case IM_NewPreparation:
-							{
-								var semaine = br.ReadString();
-								List<Preparation> temp = new List<Preparation>();
-								temp = JsonSerializer.Deserialize<List<Preparation>>(semaine);
+						//case IM_NewPreparation:
+						//	{
+						//		var semaine = br.ReadString();
+						//		List<Preparation> temp = new List<Preparation>();
+						//		temp = JsonSerializer.Deserialize<List<Preparation>>(semaine);
 
-								lock (App.appData.lockPrepare)
-								{
-									bool exist = false;
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			bool exist = false;
 
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == temp[0].semaine)
-										{
-											exist = true;
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == temp[0].semaine)
+						//				{
+						//					exist = true;
 
-											foreach (var stuff in temp[0].info)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													item.info.Add(stuff);
+						//					foreach (var stuff in temp[0].info)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							item.info.Add(stuff);
 
-													if ((main as MainWindow).cb_semaine.SelectedIndex != -1)
-													{
-														if ( (main as MainWindow).cb_semaine.SelectedItem.ToString() == item.semaine) App.appData.transits.Add(new Transit { transit = stuff.transit, ready = stuff.ready });
-													}
-												});
-											}
+						//							if ((main as MainWindow).cb_semaine.SelectedIndex != -1)
+						//							{
+						//								if ( (main as MainWindow).cb_semaine.SelectedItem.ToString() == item.semaine) App.appData.transits.Add(new Transit { transit = stuff.transit, ready = stuff.ready });
+						//							}
+						//						});
+						//					}
 
-											break;
-										}
-									}
+						//					break;
+						//				}
+						//			}
 
-									if (!exist)
-									{
-										Application.Current.Dispatcher.Invoke(() =>
-										{
-											App.appData.semaine.Add(temp[0].semaine);
-											App.appData.prepareList.Add(temp[0]);
-										});
-									}
-								}
-							}
-							break;
+						//			if (!exist)
+						//			{
+						//				Application.Current.Dispatcher.Invoke(() =>
+						//				{
+						//					App.appData.semaine.Add(temp[0].semaine);
+						//					App.appData.prepareList.Add(temp[0]);
+						//				});
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_RequestPreparation:
-							{
-								string info = br.ReadString();
+						//case IM_RequestPreparation:
+						//	{
+						//		string info = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									try
-									{
-										App.appData.prepareList = JsonSerializer.Deserialize<List<Preparation>>(info);
-									}
-									catch (Exception ex)
-									{
-										MessageBox.Show(ex.Message);
-									}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			try
+						//			{
+						//				App.appData.prepareList = JsonSerializer.Deserialize<List<Preparation>>(info);
+						//			}
+						//			catch (Exception ex)
+						//			{
+						//				MessageBox.Show(ex.Message);
+						//			}
 
-									List<string> list = new List<string>();
+						//			List<string> list = new List<string>();
 
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										foreach (var item in App.appData.prepareList.ToArray())
-										{
-											App.appData.semaine.Add(item.semaine);
-										}
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				foreach (var item in App.appData.prepareList.ToArray())
+						//				{
+						//					App.appData.semaine.Add(item.semaine);
+						//				}
 
-										App.appData.sortSemaine.CustomSort = new CustomerSorterSemaine();
-									});
-								}
-							}
-							break;
+						//				App.appData.sortSemaine.CustomSort = new CustomerSorterSemaine();
+						//			});
+						//		}
+						//	}
+						//	break;
 
 						case IM_WByear:
 							{
@@ -383,14 +383,14 @@ namespace Client
 							}
 							break;
 
-						case IM_UploadNotice:
-							{
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									MessageBox.Show("Erreur a la lecteur du fichier CSV." + Environment.NewLine + "Veuillez valider que le fichier est bien conforme.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Error);
-								});
-							}
-							break;
+						//case IM_UploadNotice:
+						//	{
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			MessageBox.Show("Erreur a la lecteur du fichier CSV." + Environment.NewLine + "Veuillez valider que le fichier est bien conforme.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Error);
+						//		});
+						//	}
+						//	break;
 
 						case IM_ForceQuit:
 							{
@@ -573,331 +573,331 @@ namespace Client
 							}
 							break;
 
-						case IM_Seuil:
-							{
-								string dataLine = br.ReadString();
-								var dataArray = dataLine.Split(";");
-								string[] temp;
+						//case IM_Seuil:
+						//	{
+						//		string dataLine = br.ReadString();
+						//		var dataArray = dataLine.Split(";");
+						//		string[] temp;
 
-								decimal calcul;
-								string color = "";
-								string commande = "";
+						//		decimal calcul;
+						//		string color = "";
+						//		string commande = "";
 
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									App.appData.seuil.Clear();
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			App.appData.seuil.Clear();
 
-									foreach (var item in dataArray)
-									{
-										temp = item.Split(",");
-										color = "";
-										commande = "";
+						//			foreach (var item in dataArray)
+						//			{
+						//				temp = item.Split(",");
+						//				color = "";
+						//				commande = "";
 
-										if (temp[2] != "0")
-										{
-											calcul = Math.Round(decimal.Parse(temp[1]) / decimal.Parse(temp[2]), 2);
+						//				if (temp[2] != "0")
+						//				{
+						//					calcul = Math.Round(decimal.Parse(temp[1]) / decimal.Parse(temp[2]), 2);
 
-											if (calcul <= (decimal)0.99)
-											{
-												color = "1";
-												commande = "À commander";
-											}
+						//					if (calcul <= (decimal)0.99)
+						//					{
+						//						color = "1";
+						//						commande = "À commander";
+						//					}
 
-											if (calcul <= (decimal)0.25) color = "2";
-										}
+						//					if (calcul <= (decimal)0.25) color = "2";
+						//				}
 
-										App.appData.seuil.Add(new Seuil { type = temp[0], actuel = temp[1], seuil = temp[2], max = temp[3], color = color, commande = commande });
-									}
-								});
-							}
-							break;
+						//				App.appData.seuil.Add(new Seuil { type = temp[0], actuel = temp[1], seuil = temp[2], max = temp[3], color = color, commande = commande });
+						//			}
+						//		});
+						//	}
+						//	break;
 
-						case IM_AccessRequest:
-							{
-								string dataLine = br.ReadString();
-								var dataArray = dataLine.Split("|");
-								string[] temp;
+						//case IM_AccessRequest:
+						//	{
+						//		string dataLine = br.ReadString();
+						//		var dataArray = dataLine.Split("|");
+						//		string[] temp;
 
-								decimal calcul;
-								string color = "";
-								string commande = "";
+						//		decimal calcul;
+						//		string color = "";
+						//		string commande = "";
 
-								lock (lockAccess)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										App.appData.seuilAccess.Clear();
+						//		lock (lockAccess)
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				App.appData.seuilAccess.Clear();
 
-										foreach (var item in dataArray)
-										{
-											temp = item.Split(";");
-											color = "";
-											commande = "";
+						//				foreach (var item in dataArray)
+						//				{
+						//					temp = item.Split(";");
+						//					color = "";
+						//					commande = "";
 
-											if (temp[2] != "0")
-											{
-												calcul = Math.Round(decimal.Parse(temp[1]) / decimal.Parse(temp[2]), 2);
+						//					if (temp[2] != "0")
+						//					{
+						//						calcul = Math.Round(decimal.Parse(temp[1]) / decimal.Parse(temp[2]), 2);
 
-												if (calcul <= (decimal)0.99)
-												{
-													color = "1";
-													commande = "À commander";
-												}
+						//						if (calcul <= (decimal)0.99)
+						//						{
+						//							color = "1";
+						//							commande = "À commander";
+						//						}
 
-												if (calcul <= (decimal)0.25) color = "2";
-											}
+						//						if (calcul <= (decimal)0.25) color = "2";
+						//					}
 
-											App.appData.seuilAccess.Add(new Seuil { type = temp[0], actuel = temp[1], seuil = temp[2], max = temp[3], color = color, commande = commande });
-										}
-									});
-								}
-							}
-							break;
+						//					App.appData.seuilAccess.Add(new Seuil { type = temp[0], actuel = temp[1], seuil = temp[2], max = temp[3], color = color, commande = commande });
+						//				}
+						//			});
+						//		}
+						//	}
+						//	break;
 
-						case IM_SeuilAdminRequest:
-							{
-								string posteAlerte = br.ReadString();
-								string posteMax = br.ReadString();
-								string lapAlerte = br.ReadString();
-								string lapMax = br.ReadString();
-								string tabAlerte = br.ReadString();
-								string tabMax = br.ReadString();
-								string moniteurs = br.ReadString();
+						//case IM_SeuilAdminRequest:
+						//	{
+						//		string posteAlerte = br.ReadString();
+						//		string posteMax = br.ReadString();
+						//		string lapAlerte = br.ReadString();
+						//		string lapMax = br.ReadString();
+						//		string tabAlerte = br.ReadString();
+						//		string tabMax = br.ReadString();
+						//		string moniteurs = br.ReadString();
 
-								var infoLCD = moniteurs.Split("|");
-								string[] valeurs;
-								string[] moniteurArray;
+						//		var infoLCD = moniteurs.Split("|");
+						//		string[] valeurs;
+						//		string[] moniteurArray;
 
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									App.appData.seuilAdmin.Clear();
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			App.appData.seuilAdmin.Clear();
 
-									App.appData.seuilAdmin.Add(new Seuil { type = "Postes", seuil = posteAlerte, max = posteMax });
-									App.appData.seuilAdmin.Add(new Seuil { type = "Portables", seuil = lapAlerte, max = lapMax });
-									App.appData.seuilAdmin.Add(new Seuil { type = "Tablettes", seuil = tabAlerte, max = tabMax });
+						//			App.appData.seuilAdmin.Add(new Seuil { type = "Postes", seuil = posteAlerte, max = posteMax });
+						//			App.appData.seuilAdmin.Add(new Seuil { type = "Portables", seuil = lapAlerte, max = lapMax });
+						//			App.appData.seuilAdmin.Add(new Seuil { type = "Tablettes", seuil = tabAlerte, max = tabMax });
 
-									foreach (var item in infoLCD)
-									{
-										valeurs = item.Split(";");
+						//			foreach (var item in infoLCD)
+						//			{
+						//				valeurs = item.Split(";");
 
-										if (!string.IsNullOrEmpty(valeurs[0]))
-										{
-											moniteurArray = valeurs[1].Split(",");
-											App.appData.seuilAdmin.Add(new Seuil { type = valeurs[0], modele = new List<string>(moniteurArray), seuil = valeurs[2], max = valeurs[3] });
-										}
-									}
-								});
+						//				if (!string.IsNullOrEmpty(valeurs[0]))
+						//				{
+						//					moniteurArray = valeurs[1].Split(",");
+						//					App.appData.seuilAdmin.Add(new Seuil { type = valeurs[0], modele = new List<string>(moniteurArray), seuil = valeurs[2], max = valeurs[3] });
+						//				}
+						//			}
+						//		});
 
-							}
-							break;
+						//	}
+						//	break;
 
-						case IM_AjoutPreparation:
-							{
-								string detail = br.ReadString();
-								string semaine = br.ReadString();
-								string transif = br.ReadString();
+						//case IM_AjoutPreparation:
+						//	{
+						//		string detail = br.ReadString();
+						//		string semaine = br.ReadString();
+						//		string transif = br.ReadString();
 
-								string dataLine = br.ReadString();
-								var dataArray = dataLine.Split("§");
+						//		string dataLine = br.ReadString();
+						//		var dataArray = dataLine.Split("§");
 
-								lock (lockDB)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										foreach (var serial in dataArray)
-										{
-											foreach (var item in App.appData.invPostes.ToArray())
-											{
-												if (item.serial == serial.Split(" - ")[1])
-												{
-													item.statut = "Réservé";
-													item.emplacement = transif;
-													break;
-												}
-											}
-										}
-									});
-								}
+						//		lock (lockDB)
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				foreach (var serial in dataArray)
+						//				{
+						//					foreach (var item in App.appData.invPostes.ToArray())
+						//					{
+						//						if (item.serial == serial.Split(" - ")[1])
+						//						{
+						//							item.statut = "Réservé";
+						//							item.emplacement = transif;
+						//							break;
+						//						}
+						//					}
+						//				}
+						//			});
+						//		}
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var trans in item.info)
-											{
-												if (trans.transit == transif)
-												{
-													Application.Current.Dispatcher.Invoke(() =>
-													{
-														if (detail == "mini") foreach (var SN in dataArray) trans.SNmini.Add(SN);
-														if (detail == "sff") foreach (var SN in dataArray) trans.SNsff.Add(SN);
-														if (detail == "laptop") foreach (var SN in dataArray) trans.SNlaptop.Add(SN);
-														if (detail == "lcd22") foreach (var SN in dataArray) trans.SNlcd22.Add(SN);
-														if (detail == "lcd27") foreach (var SN in dataArray) trans.SNlcd27.Add(SN);
-														if (detail == "nip") foreach (var SN in dataArray) trans.SNnip.Add(SN);
-														if (detail == "recu") foreach (var SN in dataArray) trans.SNrecu.Add(SN);
-													});
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var trans in item.info)
+						//					{
+						//						if (trans.transit == transif)
+						//						{
+						//							Application.Current.Dispatcher.Invoke(() =>
+						//							{
+						//								if (detail == "mini") foreach (var SN in dataArray) trans.SNmini.Add(SN);
+						//								if (detail == "sff") foreach (var SN in dataArray) trans.SNsff.Add(SN);
+						//								if (detail == "laptop") foreach (var SN in dataArray) trans.SNlaptop.Add(SN);
+						//								if (detail == "lcd22") foreach (var SN in dataArray) trans.SNlcd22.Add(SN);
+						//								if (detail == "lcd27") foreach (var SN in dataArray) trans.SNlcd27.Add(SN);
+						//								if (detail == "nip") foreach (var SN in dataArray) trans.SNnip.Add(SN);
+						//								if (detail == "recu") foreach (var SN in dataArray) trans.SNrecu.Add(SN);
+						//							});
 
-													break;
-												}
-											}
+						//							break;
+						//						}
+						//					}
 
-											break;
-										}
-									}
-								}
+						//					break;
+						//				}
+						//			}
+						//		}
 
-								if (App.appData.tabPrepareSelected)
-								{
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        (main as MainWindow).UpdateChangeAndColor();
-                                    });
-                                }
-                            }
-                            break;
+						//		if (App.appData.tabPrepareSelected)
+						//		{
+      //                              Application.Current.Dispatcher.Invoke(() =>
+      //                              {
+      //                                  (main as MainWindow).UpdateChangeAndColor();
+      //                              });
+      //                          }
+      //                      }
+      //                      break;
 
-                        case IM_DeletePreparation:
-                            {
-								string detail = br.ReadString();
-								string semaine = br.ReadString();
-								string transif = br.ReadString();
-								string dataLine = br.ReadString();
+       //                 case IM_DeletePreparation:
+       //                     {
+							//	string detail = br.ReadString();
+							//	string semaine = br.ReadString();
+							//	string transif = br.ReadString();
+							//	string dataLine = br.ReadString();
 
-								var dataArray = dataLine.Split("§");
+							//	var dataArray = dataLine.Split("§");
 
-								lock (lockDB)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										foreach (var serial in dataArray)
-										{
-											foreach (var item in App.appData.invPostes.ToArray())
-											{
-												if (serial == item.serial && item.statut != "Sortie")
-												{
-													item.statut = "En Stock";
+							//	lock (lockDB)
+							//	{
+							//		Application.Current.Dispatcher.Invoke(() =>
+							//		{
+							//			foreach (var serial in dataArray)
+							//			{
+							//				foreach (var item in App.appData.invPostes.ToArray())
+							//				{
+							//					if (serial == item.serial && item.statut != "Sortie")
+							//					{
+							//						item.statut = "En Stock";
 
-													if (item.type == "Moniteur" || item.type == "Clavier nip" || item.type.ToLower().Contains("imprimante")) item.emplacement = "ALL";										
-													else item.emplacement = "R2GO";
+							//						if (item.type == "Moniteur" || item.type == "Clavier nip" || item.type.ToLower().Contains("imprimante")) item.emplacement = "ALL";										
+							//						else item.emplacement = "R2GO";
 
-													break;
-												}
-											}
-										}
-									});
-								}
+							//						break;
+							//					}
+							//				}
+							//			}
+							//		});
+							//	}
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var trans in item.info)
-											{
-												if (trans.transit == transif)
-												{
-													Application.Current.Dispatcher.Invoke(() =>
-													{
-														if (detail == "mini") 
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNmini.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNmini.Remove(del);									
-																}
-															}
-														}
+							//	lock (App.appData.lockPrepare)
+							//	{
+							//		foreach (var item in App.appData.prepareList.ToArray())
+							//		{
+							//			if (item.semaine == semaine)
+							//			{
+							//				foreach (var trans in item.info)
+							//				{
+							//					if (trans.transit == transif)
+							//					{
+							//						Application.Current.Dispatcher.Invoke(() =>
+							//						{
+							//							if (detail == "mini") 
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNmini.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNmini.Remove(del);									
+							//									}
+							//								}
+							//							}
 
-														if (detail == "sff")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNsff.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNsff.Remove(del);
-																}
-															}
-														}
+							//							if (detail == "sff")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNsff.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNsff.Remove(del);
+							//									}
+							//								}
+							//							}
 
-														if (detail == "laptop")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNlaptop.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNlaptop.Remove(del);
-																}
-															}
-														}
+							//							if (detail == "laptop")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNlaptop.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNlaptop.Remove(del);
+							//									}
+							//								}
+							//							}
 
-														if (detail == "lcd22")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNlcd22.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNlcd22.Remove(del);
-																}
-															}
-														}
+							//							if (detail == "lcd22")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNlcd22.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNlcd22.Remove(del);
+							//									}
+							//								}
+							//							}
 
-														if (detail == "lcd27")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNlcd27.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNlcd27.Remove(del);
-																}
-															}
-														}
+							//							if (detail == "lcd27")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNlcd27.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNlcd27.Remove(del);
+							//									}
+							//								}
+							//							}
 
-														if (detail == "nip")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNnip.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNnip.Remove(del);
-																}
-															}
-														}
+							//							if (detail == "nip")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNnip.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNnip.Remove(del);
+							//									}
+							//								}
+							//							}
 
-														if (detail == "recu")
-														{
-															foreach (var SN in dataArray)
-															{
-																foreach (var del in trans.SNrecu.ToArray())
-																{
-																	if (del.Contains(SN)) trans.SNrecu.Remove(del);
-																}
-															}
-														}
-													});
+							//							if (detail == "recu")
+							//							{
+							//								foreach (var SN in dataArray)
+							//								{
+							//									foreach (var del in trans.SNrecu.ToArray())
+							//									{
+							//										if (del.Contains(SN)) trans.SNrecu.Remove(del);
+							//									}
+							//								}
+							//							}
+							//						});
 
-													break;
-												}
-											}
+							//						break;
+							//					}
+							//				}
 
-											break;
-										}
-									}
-								}
+							//				break;
+							//			}
+							//		}
+							//	}
 
-								if (App.appData.tabPrepareSelected)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										(main as MainWindow).UpdateChangeAndColor();
-									});
-								}
-							}
-							break;
+							//	if (App.appData.tabPrepareSelected)
+							//	{
+							//		Application.Current.Dispatcher.Invoke(() =>
+							//		{
+							//			(main as MainWindow).UpdateChangeAndColor();
+							//		});
+							//	}
+							//}
+							//break;
 
 						case IM_ModeleMoniteur:
 							{
@@ -957,12 +957,12 @@ namespace Client
 											setMain = false;
 										}
 
-										if (window.GetType() == typeof(AjoutPreparation))
-										{
-											(window as AjoutPreparation).tb_erreur.Text = info;
-											(window as AjoutPreparation).tb_serial.Text = listSN;
-											setMain = false;
-										}
+										//if (window.GetType() == typeof(AjoutPreparation))
+										//{
+										//	(window as AjoutPreparation).tb_erreur.Text = info;
+										//	(window as AjoutPreparation).tb_serial.Text = listSN;
+										//	setMain = false;
+										//}
 									}
 
 									if (setMain)
@@ -998,157 +998,157 @@ namespace Client
 							}
 							break;
 
-						case IM_CheckPreparation:
-							{
-								bool valeur = br.ReadBoolean();
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
+						//case IM_CheckPreparation:
+						//	{
+						//		bool valeur = br.ReadBoolean();
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var trans in item.info)
-											{
-												if (trans.transit == transit)
-												{
-													trans.ready = valeur;
-													break;
-												}
-											}
-										}
-									}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var trans in item.info)
+						//					{
+						//						if (trans.transit == transit)
+						//						{
+						//							trans.ready = valeur;
+						//							break;
+						//						}
+						//					}
+						//				}
+						//			}
 
-									foreach (var item in App.appData.transits.ToArray())
-									{
-										if (item.transit == transit)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												App.appData.transCheck = false;
-												item.ready = valeur;
-												App.appData.transCheck = true;
-											});
+						//			foreach (var item in App.appData.transits.ToArray())
+						//			{
+						//				if (item.transit == transit)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						App.appData.transCheck = false;
+						//						item.ready = valeur;
+						//						App.appData.transCheck = true;
+						//					});
 
-											break;
-										}
-									}
-								}
+						//					break;
+						//				}
+						//			}
+						//		}
 
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									if (App.appData.tabPrepareSelected && (main as MainWindow).cb_semaine.SelectedIndex != -1)
-									{
-										(main as MainWindow).UpdateChangeAndColor();
-									}
-								});
-							}
-							break;
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			if (App.appData.tabPrepareSelected && (main as MainWindow).cb_semaine.SelectedIndex != -1)
+						//			{
+						//				(main as MainWindow).UpdateChangeAndColor();
+						//			}
+						//		});
+						//	}
+						//	break;
 
-						case IM_SelectedPreparation:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
-								bool valeur = br.ReadBoolean();
+						//case IM_SelectedPreparation:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
+						//		bool valeur = br.ReadBoolean();
 
-								lock (App.appData.lockPrepare)
-								{
+						//		lock (App.appData.lockPrepare)
+						//		{
 
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var trans in item.info)
-											{
-												if (trans.transit == transit)
-												{
-													trans.selected = valeur;
-													break;
-												}
-											}
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var trans in item.info)
+						//					{
+						//						if (trans.transit == transit)
+						//						{
+						//							trans.selected = valeur;
+						//							break;
+						//						}
+						//					}
 
-											break;
-										}
-									}
+						//					break;
+						//				}
+						//			}
 
 
-									foreach (var item in App.appData.transits.ToArray())
-									{
-										if (item.transit == transit)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												item.selected = valeur;
-											});
+						//			foreach (var item in App.appData.transits.ToArray())
+						//			{
+						//				if (item.transit == transit)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						item.selected = valeur;
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_CheckPreparationAcess:
-							{
-								string info = br.ReadString();
-								bool valeur = br.ReadBoolean();
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
+						//case IM_CheckPreparationAcess:
+						//	{
+						//		string info = br.ReadString();
+						//		bool valeur = br.ReadBoolean();
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var trans in item.info)
-											{
-												if (trans.transit == transit)
-												{
-													if (info == "clavier") trans.clavierCheck = valeur;
-													if (info == "sourisSansFil") trans.sourisSansFilCheck = valeur;
-													if (info == "cableSecure") trans.cableSecureCheck = valeur;
-													if (info == "sac") trans.sacCheck = valeur;
-													if (info == "sacBandou") trans.sacBandouCheck = valeur;
-													if (info == "hubUsb") trans.hubUsbCheck = valeur;
-													if (info == "usbcDP") trans.usbcDPCheck = valeur;
-													if (info == "livret") trans.livretCheck = valeur;
-													break;
-												}
-											}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var trans in item.info)
+						//					{
+						//						if (trans.transit == transit)
+						//						{
+						//							if (info == "clavier") trans.clavierCheck = valeur;
+						//							if (info == "sourisSansFil") trans.sourisSansFilCheck = valeur;
+						//							if (info == "cableSecure") trans.cableSecureCheck = valeur;
+						//							if (info == "sac") trans.sacCheck = valeur;
+						//							if (info == "sacBandou") trans.sacBandouCheck = valeur;
+						//							if (info == "hubUsb") trans.hubUsbCheck = valeur;
+						//							if (info == "usbcDP") trans.usbcDPCheck = valeur;
+						//							if (info == "livret") trans.livretCheck = valeur;
+						//							break;
+						//						}
+						//					}
 
-											break;
-										}
-									}
+						//					break;
+						//				}
+						//			}
 
-									foreach (var item in App.appData.transitSelected.ToArray())
-									{
-										if (item.transit == transit)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												App.appData.accesCheck = false;
+						//			foreach (var item in App.appData.transitSelected.ToArray())
+						//			{
+						//				if (item.transit == transit)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						App.appData.accesCheck = false;
 
-												if (info == "clavier") item.clavierCheck = valeur;
-												if (info == "sourisSansFil") item.sourisSansFilCheck = valeur;
-												if (info == "cableSecure") item.cableSecureCheck = valeur;
-												if (info == "sac") item.sacCheck = valeur;
-												if (info == "sacBandou") item.sacBandouCheck = valeur;
-												if (info == "hubUsb") item.hubUsbCheck = valeur;
-												if (info == "usbcDP") item.usbcDPCheck = valeur;
-												if (info == "livret") item.livretCheck = valeur;
+						//						if (info == "clavier") item.clavierCheck = valeur;
+						//						if (info == "sourisSansFil") item.sourisSansFilCheck = valeur;
+						//						if (info == "cableSecure") item.cableSecureCheck = valeur;
+						//						if (info == "sac") item.sacCheck = valeur;
+						//						if (info == "sacBandou") item.sacBandouCheck = valeur;
+						//						if (info == "hubUsb") item.hubUsbCheck = valeur;
+						//						if (info == "usbcDP") item.usbcDPCheck = valeur;
+						//						if (info == "livret") item.livretCheck = valeur;
 
-												App.appData.accesCheck = true;
-											});
+						//						App.appData.accesCheck = true;
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
 						case IM_MainComment:
 							{
@@ -1254,17 +1254,17 @@ namespace Client
 							}
 							break;
 
-						case IM_ConfirmSortiePrep:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
+						//case IM_ConfirmSortiePrep:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
 
-								Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-								{
-									MessageBox.Show(Application.Current.MainWindow, "Sortie complèté pour le transit " + transit + " de la " + semaine + " et est enlevé de la liste.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Information);
-								}));
-							}
-							break;
+						//		Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+						//		{
+						//			MessageBox.Show(Application.Current.MainWindow, "Sortie complèté pour le transit " + transit + " de la " + semaine + " et est enlevé de la liste.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Information);
+						//		}));
+						//	}
+						//	break;
 
 						case IM_AjoutEnd:
 							{
@@ -1323,11 +1323,11 @@ namespace Client
 
 											if (window.GetType() == typeof(WaybillsLog)) setMain = false;
 
-											if (window.GetType() == typeof(AjoutPreparation))
-											{
-												(window as AjoutPreparation).Close();
-												setMain = false;
-											}
+											//if (window.GetType() == typeof(AjoutPreparation))
+											//{
+											//	(window as AjoutPreparation).Close();
+											//	setMain = false;
+											//}
 										}
 
 										if (setMain) (main as MainWindow).tb_serialLab.Text = "";
@@ -1379,11 +1379,6 @@ namespace Client
 
 						case IM_ForceDisconnect:
 							{
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									(main as MainWindow).listTransit.SelectedIndex = -1;
-								});
-
 								bw.Write(IM_ForceDisconnect);
 								bw.Flush();
 							}
@@ -1422,380 +1417,380 @@ namespace Client
 							}
 							break;
 
-						case IM_ModifyPreparation:
-							{
-								string action = br.ReadString();
-								string semaine = br.ReadString();
-								string info = br.ReadString();
+						//case IM_ModifyPreparation:
+						//	{
+						//		string action = br.ReadString();
+						//		string semaine = br.ReadString();
+						//		string info = br.ReadString();
 
-								var valeur = JsonSerializer.Deserialize<List<Contenu>>(info);
-								var contenu = valeur[0];
+						//		var valeur = JsonSerializer.Deserialize<List<Contenu>>(info);
+						//		var contenu = valeur[0];
 
-								lock (App.appData.lockPrepare)
-								{
-									if (action == "add")
-									{
-										foreach (var item in App.appData.prepareList.ToArray())
-										{
-											if (item.semaine == semaine)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													item.info.Add(contenu);
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			if (action == "add")
+						//			{
+						//				foreach (var item in App.appData.prepareList.ToArray())
+						//				{
+						//					if (item.semaine == semaine)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							item.info.Add(contenu);
 
-													if ((main as MainWindow).cb_semaine.SelectedIndex != -1)
-													{
-														if ((main as MainWindow).cb_semaine.SelectedItem.ToString() == semaine) App.appData.transits.Add(new Transit { transit = contenu.transit });
-													}
-												});
+						//							if ((main as MainWindow).cb_semaine.SelectedIndex != -1)
+						//							{
+						//								if ((main as MainWindow).cb_semaine.SelectedItem.ToString() == semaine) App.appData.transits.Add(new Transit { transit = contenu.transit });
+						//							}
+						//						});
 
-												break;
-											}
-										}
-									}
-								}
+						//						break;
+						//					}
+						//				}
+						//			}
+						//		}
 
-								if (action == "modify")
-								{
-									lock (App.appData.lockPrepare)
-									{
-										foreach (var item in App.appData.prepareList.ToArray())
-										{
-											if (item.semaine == semaine)
-											{
-												foreach (var trans in item.info)
-												{
-													if (trans.transit == contenu.transit)
-													{
-														Application.Current.Dispatcher.Invoke(() =>
-														{
-															trans.mini = contenu.mini;
-															trans.laptop = contenu.laptop;
-															trans.sff = contenu.sff;
-															trans.nip = contenu.nip;
-															trans.recu = contenu.recu;
-															trans.lcd22 = contenu.lcd22;
-															trans.lcd27 = contenu.lcd27;
-															trans.hubUsb = contenu.hubUsb;
-															trans.cableSecure = contenu.cableSecure;
-															trans.clavier = contenu.clavier;
-															trans.livret = contenu.livret;
-															trans.sac = contenu.sac;
-															trans.sacBandou = contenu.sacBandou;
-															trans.sourisSansFil = contenu.sourisSansFil;
-															trans.usbcDP = contenu.usbcDP;
-														});
+						//		if (action == "modify")
+						//		{
+						//			lock (App.appData.lockPrepare)
+						//			{
+						//				foreach (var item in App.appData.prepareList.ToArray())
+						//				{
+						//					if (item.semaine == semaine)
+						//					{
+						//						foreach (var trans in item.info)
+						//						{
+						//							if (trans.transit == contenu.transit)
+						//							{
+						//								Application.Current.Dispatcher.Invoke(() =>
+						//								{
+						//									trans.mini = contenu.mini;
+						//									trans.laptop = contenu.laptop;
+						//									trans.sff = contenu.sff;
+						//									trans.nip = contenu.nip;
+						//									trans.recu = contenu.recu;
+						//									trans.lcd22 = contenu.lcd22;
+						//									trans.lcd27 = contenu.lcd27;
+						//									trans.hubUsb = contenu.hubUsb;
+						//									trans.cableSecure = contenu.cableSecure;
+						//									trans.clavier = contenu.clavier;
+						//									trans.livret = contenu.livret;
+						//									trans.sac = contenu.sac;
+						//									trans.sacBandou = contenu.sacBandou;
+						//									trans.sourisSansFil = contenu.sourisSansFil;
+						//									trans.usbcDP = contenu.usbcDP;
+						//								});
 
-														break;
-													}
-												}
+						//								break;
+						//							}
+						//						}
 
-												break;
-											}
-										}
-									}
+						//						break;
+						//					}
+						//				}
+						//			}
 
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										(main as MainWindow).UpdateChangeAndColor();
-									});
-								}
-							}
-							break;
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				(main as MainWindow).UpdateChangeAndColor();
+						//			});
+						//		}
+						//	}
+						//	break;
 
-						case IM_CommentPreparation:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
-								string info = br.ReadString();
+						//case IM_CommentPreparation:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
+						//		string info = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var tans in item.info)
-											{
-												if (tans.transit == transit)
-												{
-													tans.comment = info;
-													break;
-												}
-											}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var tans in item.info)
+						//					{
+						//						if (tans.transit == transit)
+						//						{
+						//							tans.comment = info;
+						//							break;
+						//						}
+						//					}
 
-											break;
-										}
-									}
-								}
+						//					break;
+						//				}
+						//			}
+						//		}
 
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									if ((main as MainWindow).listTransit.SelectedIndex != -1)
-									{
-										if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).UpdateComment();
-									}						
-								});
-							}
-							break;
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			if ((main as MainWindow).listTransit.SelectedIndex != -1)
+						//			{
+						//				if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).UpdateComment();
+						//			}						
+						//		});
+						//	}
+						//	break;
 
-						case IM_PreparationRF:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
-								string info = br.ReadString();
+						//case IM_PreparationRF:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
+						//		string info = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var tans in item.info)
-											{
-												if (tans.transit == transit)
-												{
-													tans.rf = info;
-													break;
-												}
-											}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var tans in item.info)
+						//					{
+						//						if (tans.transit == transit)
+						//						{
+						//							tans.rf = info;
+						//							break;
+						//						}
+						//					}
 
-											break;
-										}
-									}
-								}
+						//					break;
+						//				}
+						//			}
+						//		}
 
-								Application.Current.Dispatcher.Invoke(() =>
-								{
-									if ((main as MainWindow).listTransit.SelectedIndex != -1)
-									{
-										if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).UpdateRF();
-									}
-								});
-							}
-							break;
+						//		Application.Current.Dispatcher.Invoke(() =>
+						//		{
+						//			if ((main as MainWindow).listTransit.SelectedIndex != -1)
+						//			{
+						//				if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).UpdateRF();
+						//			}
+						//		});
+						//	}
+						//	break;
 
-						case IM_PreparationSortie:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
-								string info = br.ReadString();
+						//case IM_PreparationSortie:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
+						//		string info = br.ReadString();
 
-								List<InvPostes> temp = new List<InvPostes>();
-								temp = JsonSerializer.Deserialize<List<InvPostes>>(info, new JsonSerializerOptions { WriteIndented = true });
+						//		List<InvPostes> temp = new List<InvPostes>();
+						//		temp = JsonSerializer.Deserialize<List<InvPostes>>(info, new JsonSerializerOptions { WriteIndented = true });
 
-								lock (lockDB)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										if ((main as MainWindow).listTransit.SelectedIndex != -1)
-										{
-											if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).listTransit.UnselectAll();
-										}
-									});
+						//		lock (lockDB)
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				if ((main as MainWindow).listTransit.SelectedIndex != -1)
+						//				{
+						//					if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).listTransit.UnselectAll();
+						//				}
+						//			});
 
-									foreach (var item in temp)
-									{
-										foreach (var stuff in App.appData.invPostes.ToArray())
-										{
-											if (item.serial == stuff.serial)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													stuff.statut = item.statut;
-													stuff.RF = item.RF;
-													stuff.dateSortie = item.dateSortie;
-													stuff.emplacement = item.emplacement;
-												});
+						//			foreach (var item in temp)
+						//			{
+						//				foreach (var stuff in App.appData.invPostes.ToArray())
+						//				{
+						//					if (item.serial == stuff.serial)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							stuff.statut = item.statut;
+						//							stuff.RF = item.RF;
+						//							stuff.dateSortie = item.dateSortie;
+						//							stuff.emplacement = item.emplacement;
+						//						});
 
-												break;
-											}
-										}
-									}
-								}
+						//						break;
+						//					}
+						//				}
+						//			}
+						//		}
 
-								lock (App.appData.lockPrepare)
-								{
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var tans in item.info)
-											{
-												if (tans.transit == transit)
-												{
-													item.info.Remove(tans);
-													break;
-												}
-											}
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var tans in item.info)
+						//					{
+						//						if (tans.transit == transit)
+						//						{
+						//							item.info.Remove(tans);
+						//							break;
+						//						}
+						//					}
 
-											if (item.info.Count == 0)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													if ((main as MainWindow).cb_semaine.SelectedIndex != -1) (main as MainWindow).cb_semaine.SelectedIndex = -1;
-												});
+						//					if (item.info.Count == 0)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							if ((main as MainWindow).cb_semaine.SelectedIndex != -1) (main as MainWindow).cb_semaine.SelectedIndex = -1;
+						//						});
 
-												App.appData.prepareList.Remove(item);
-											}
+						//						App.appData.prepareList.Remove(item);
+						//					}
 
-											break;
-										}
-									}
+						//					break;
+						//				}
+						//			}
 
-									foreach (var item in App.appData.transits.ToArray())
-									{
-										if (item.transit == transit)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												App.appData.transits.Remove(item);
-											});
+						//			foreach (var item in App.appData.transits.ToArray())
+						//			{
+						//				if (item.transit == transit)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						App.appData.transits.Remove(item);
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_PreparationDeleteTransit:
-							{
-								string semaine = br.ReadString();
-								string transit = br.ReadString();
+						//case IM_PreparationDeleteTransit:
+						//	{
+						//		string semaine = br.ReadString();
+						//		string transit = br.ReadString();
 
-								lock (App.appData.lockPrepare)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										if ((main as MainWindow).listTransit.SelectedIndex != -1)
-										{
-											if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).listTransit.UnselectAll();
-										}
-									});
+						//		lock (App.appData.lockPrepare)
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				if ((main as MainWindow).listTransit.SelectedIndex != -1)
+						//				{
+						//					if (((main as MainWindow).listTransit.SelectedItem as Transit).transit == transit) (main as MainWindow).listTransit.UnselectAll();
+						//				}
+						//			});
 
-									foreach (var item in App.appData.prepareList.ToArray())
-									{
-										if (item.semaine == semaine)
-										{
-											foreach (var tans in item.info)
-											{
-												if (tans.transit == transit)
-												{
-													item.info.Remove(tans);
-													break;
-												}
-											}
+						//			foreach (var item in App.appData.prepareList.ToArray())
+						//			{
+						//				if (item.semaine == semaine)
+						//				{
+						//					foreach (var tans in item.info)
+						//					{
+						//						if (tans.transit == transit)
+						//						{
+						//							item.info.Remove(tans);
+						//							break;
+						//						}
+						//					}
 
-											if (item.info.Count == 0)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													if ((main as MainWindow).cb_semaine.SelectedIndex != -1) (main as MainWindow).cb_semaine.SelectedIndex = -1;
-													App.appData.semaine.Remove(semaine);
-												});
+						//					if (item.info.Count == 0)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							if ((main as MainWindow).cb_semaine.SelectedIndex != -1) (main as MainWindow).cb_semaine.SelectedIndex = -1;
+						//							App.appData.semaine.Remove(semaine);
+						//						});
 
-												App.appData.prepareList.Remove(item);
-											}
+						//						App.appData.prepareList.Remove(item);
+						//					}
 
-											break;
-										}
-									}
+						//					break;
+						//				}
+						//			}
 
-									foreach (var item in App.appData.transits.ToArray())
-									{
-										if (item.transit == transit)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												App.appData.transits.Remove(item);
-											});
+						//			foreach (var item in App.appData.transits.ToArray())
+						//			{
+						//				if (item.transit == transit)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						App.appData.transits.Remove(item);
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_PreparationSemaine:
-							{
-								string semaine = br.ReadString();
+						//case IM_PreparationSemaine:
+						//	{
+						//		string semaine = br.ReadString();
 
-                                lock (App.appData.lockPrepare)
-                                {
-                                    App.appData.prepareList.Add(new Preparation { semaine = semaine });
+      //                          lock (App.appData.lockPrepare)
+      //                          {
+      //                              App.appData.prepareList.Add(new Preparation { semaine = semaine });
 
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        App.appData.semaine.Add(semaine);
+      //                              Application.Current.Dispatcher.Invoke(() =>
+      //                              {
+      //                                  App.appData.semaine.Add(semaine);
 
-                                    });
-                                }
-                            }
-							break;
+      //                              });
+      //                          }
+      //                      }
+						//	break;
 
-						case IM_PreparationTransfert:
-							{
-								string oldSemaine = br.ReadString();
-								string newSemaine = br.ReadString();
-								string transit = br.ReadString();
+						//case IM_PreparationTransfert:
+						//	{
+						//		string oldSemaine = br.ReadString();
+						//		string newSemaine = br.ReadString();
+						//		string transit = br.ReadString();
 
-								if (oldSemaine == "")
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										MessageBox.Show(main as MainWindow, "Transfer pas complété car le transit " + transit + " existe déjà dans : " + newSemaine, "Inventaire Entrepot");
-									});
-								}
-								else
-								{
-									lock (App.appData.lockPrepare)
-									{
-										Contenu info = new Contenu();
+						//		if (oldSemaine == "")
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				MessageBox.Show(main as MainWindow, "Transfer pas complété car le transit " + transit + " existe déjà dans : " + newSemaine, "Inventaire Entrepot");
+						//			});
+						//		}
+						//		else
+						//		{
+						//			lock (App.appData.lockPrepare)
+						//			{
+						//				Contenu info = new Contenu();
 
-										foreach (var item in App.appData.prepareList.ToArray())
-										{
-											if (item.semaine == oldSemaine)
-											{
-												foreach (var trans in item.info)
-												{
-													if (trans.transit == transit)
-													{
-														info = trans;
-														item.info.Remove(trans);
-														break;
-													}
-												}
-											}
-										}
+						//				foreach (var item in App.appData.prepareList.ToArray())
+						//				{
+						//					if (item.semaine == oldSemaine)
+						//					{
+						//						foreach (var trans in item.info)
+						//						{
+						//							if (trans.transit == transit)
+						//							{
+						//								info = trans;
+						//								item.info.Remove(trans);
+						//								break;
+						//							}
+						//						}
+						//					}
+						//				}
 
-										foreach (var item in App.appData.prepareList.ToArray())
-										{
-											if (item.semaine == newSemaine)
-											{
-												info.selected = false;
-												item.info.Add(info);
-												break;
-											}
-										}
+						//				foreach (var item in App.appData.prepareList.ToArray())
+						//				{
+						//					if (item.semaine == newSemaine)
+						//					{
+						//						info.selected = false;
+						//						item.info.Add(info);
+						//						break;
+						//					}
+						//				}
 
-										foreach (var item in App.appData.transits.ToArray())
-										{
-											if (item.transit == transit)
-											{
-												Application.Current.Dispatcher.Invoke(() =>
-												{
-													App.appData.transits.Remove(item);
-												});
+						//				foreach (var item in App.appData.transits.ToArray())
+						//				{
+						//					if (item.transit == transit)
+						//					{
+						//						Application.Current.Dispatcher.Invoke(() =>
+						//						{
+						//							App.appData.transits.Remove(item);
+						//						});
 
-												break;
-											}
-										}
-									}
-								}
-							}
-							break;
+						//						break;
+						//					}
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
 						case IM_RequestLogs:
 							{
@@ -1951,138 +1946,138 @@ namespace Client
 							}
 							break;
 
-						case IM_DelAccess:
-							{
-								string type = br.ReadString();
-								string actuel = br.ReadString();
-								string alerte = br.ReadString();
-								string max = br.ReadString();
+						//case IM_DelAccess:
+						//	{
+						//		string type = br.ReadString();
+						//		string actuel = br.ReadString();
+						//		string alerte = br.ReadString();
+						//		string max = br.ReadString();
 
-								lock (lockAccess)
-								{
-									foreach (var item in App.appData.seuilAccess.ToArray())
-									{
-										if (item.type == type && item.actuel == actuel && item.seuil == alerte && item.max == max)
-										{
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												App.appData.seuilAccess.Remove(item);
-											});
+						//		lock (lockAccess)
+						//		{
+						//			foreach (var item in App.appData.seuilAccess.ToArray())
+						//			{
+						//				if (item.type == type && item.actuel == actuel && item.seuil == alerte && item.max == max)
+						//				{
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						App.appData.seuilAccess.Remove(item);
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_ModifAccess:
-							{
-								string type = br.ReadString();
-								string alerte = br.ReadString();
-								string max = br.ReadString();
+						//case IM_ModifAccess:
+						//	{
+						//		string type = br.ReadString();
+						//		string alerte = br.ReadString();
+						//		string max = br.ReadString();
 
-								lock (lockAccess)
-								{
-									string color = "";
-									decimal calcul;
-									string commande = "";
+						//		lock (lockAccess)
+						//		{
+						//			string color = "";
+						//			decimal calcul;
+						//			string commande = "";
 
-									foreach (var item in App.appData.seuilAccess.ToArray())
-									{
-										if (item.type == type)
-										{
-											if (alerte != "0")
-											{
-												calcul = Math.Round(decimal.Parse(item.actuel) / decimal.Parse(alerte), 2);
+						//			foreach (var item in App.appData.seuilAccess.ToArray())
+						//			{
+						//				if (item.type == type)
+						//				{
+						//					if (alerte != "0")
+						//					{
+						//						calcul = Math.Round(decimal.Parse(item.actuel) / decimal.Parse(alerte), 2);
 
-												if (calcul <= (decimal)0.99)
-												{
-													color = "1";
-													commande = "À commander";
-												}
+						//						if (calcul <= (decimal)0.99)
+						//						{
+						//							color = "1";
+						//							commande = "À commander";
+						//						}
 
-												if (calcul <= (decimal)0.25) color = "2";
-											}
+						//						if (calcul <= (decimal)0.25) color = "2";
+						//					}
 
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												item.seuil = alerte;
-												item.max = max;
-												item.color = color;
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						item.seuil = alerte;
+						//						item.max = max;
+						//						item.color = color;
 
-												if (commande != "") item.commande = commande;
-											});
+						//						if (commande != "") item.commande = commande;
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_QteAccess:
-							{
-								string type = br.ReadString();
-								string actuel = br.ReadString();
+						//case IM_QteAccess:
+						//	{
+						//		string type = br.ReadString();
+						//		string actuel = br.ReadString();
 
-								lock (lockAccess)
-								{
-									string color = "";
-									decimal calcul;
+						//		lock (lockAccess)
+						//		{
+						//			string color = "";
+						//			decimal calcul;
 
-									foreach (var item in App.appData.seuilAccess.ToArray())
-									{
-										if (item.type == type)
-										{
-											if (item.seuil != "0")
-											{
-												calcul = Math.Round(decimal.Parse(actuel) / decimal.Parse(item.seuil), 2);
+						//			foreach (var item in App.appData.seuilAccess.ToArray())
+						//			{
+						//				if (item.type == type)
+						//				{
+						//					if (item.seuil != "0")
+						//					{
+						//						calcul = Math.Round(decimal.Parse(actuel) / decimal.Parse(item.seuil), 2);
 
-												if (calcul <= (decimal)0.50) color = "1";
-												if (calcul <= (decimal)0.25) color = "2";
-											}
+						//						if (calcul <= (decimal)0.50) color = "1";
+						//						if (calcul <= (decimal)0.25) color = "2";
+						//					}
 
-											Application.Current.Dispatcher.Invoke(() =>
-											{
-												item.actuel = actuel;
-												item.color = color;
-											});
+						//					Application.Current.Dispatcher.Invoke(() =>
+						//					{
+						//						item.actuel = actuel;
+						//						item.color = color;
+						//					});
 
-											break;
-										}
-									}
-								}
-							}
-							break;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//	}
+						//	break;
 
-						case IM_AccessAjout:
-							{
-								string type = br.ReadString();
-								string actuel = br.ReadString();
-								string alerte = br.ReadString();
-								string max = br.ReadString();
+						//case IM_AccessAjout:
+						//	{
+						//		string type = br.ReadString();
+						//		string actuel = br.ReadString();
+						//		string alerte = br.ReadString();
+						//		string max = br.ReadString();
 
-								string color = "";
-								decimal calcul;
+						//		string color = "";
+						//		decimal calcul;
 
-								if (alerte != "0")
-								{
-									calcul = Math.Round(decimal.Parse(actuel) / decimal.Parse(alerte), 2);
+						//		if (alerte != "0")
+						//		{
+						//			calcul = Math.Round(decimal.Parse(actuel) / decimal.Parse(alerte), 2);
 
-									if (calcul <= (decimal)0.50) color = "1";
-									if (calcul <= (decimal)0.25) color = "2";
-								}
+						//			if (calcul <= (decimal)0.50) color = "1";
+						//			if (calcul <= (decimal)0.25) color = "2";
+						//		}
 
-								lock (lockAccess)
-								{
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										App.appData.seuilAccess.Add(new Seuil { type = type, actuel = actuel, seuil = alerte, max = max, color = color });
-									});
-								}
-							}
-							break;
+						//		lock (lockAccess)
+						//		{
+						//			Application.Current.Dispatcher.Invoke(() =>
+						//			{
+						//				App.appData.seuilAccess.Add(new Seuil { type = type, actuel = actuel, seuil = alerte, max = max, color = color });
+						//			});
+						//		}
+						//	}
+						//	break;
 
 						case IM_ServerNotice:
 							{
@@ -2263,16 +2258,16 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void RetourSpecial(string type, string model, string serial, string rf, string emp)
-		{
-			bw.Write(IM_RetourSpecial);
-			bw.Write(type);
-			bw.Write(model);
-			bw.Write(serial);
-			bw.Write(rf);
-			bw.Write(emp);
-			bw.Flush();
-		}
+		//public void RetourSpecial(string type, string model, string serial, string rf, string emp)
+		//{
+		//	bw.Write(IM_RetourSpecial);
+		//	bw.Write(type);
+		//	bw.Write(model);
+		//	bw.Write(serial);
+		//	bw.Write(rf);
+		//	bw.Write(emp);
+		//	bw.Flush();
+		//}
 
 		public void EnvoieLab(string serial, bool check)
 		{
@@ -2298,23 +2293,23 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void EnvoieCommentPreparation(string semaine, string transit, string info)
-		{
-			bw.Write(IM_CommentPreparation);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(info);
-			bw.Flush();
-		}
+		//public void EnvoieCommentPreparation(string semaine, string transit, string info)
+		//{
+		//	bw.Write(IM_CommentPreparation);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(info);
+		//	bw.Flush();
+		//}
 
-		public void EnvoiePrepRF(string semaine, string transit, string info)
-		{
-			bw.Write(IM_PreparationRF);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(info);
-			bw.Flush();
-		}
+		//public void EnvoiePrepRF(string semaine, string transit, string info)
+		//{
+		//	bw.Write(IM_PreparationRF);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(info);
+		//	bw.Flush();
+		//}
 
 		public void changePivilege(string name, string info)
 		{
@@ -2330,11 +2325,11 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void RequestAccess()
-		{
-			bw.Write(IM_AccessRequest);
-			bw.Flush();
-		}
+		//public void RequestAccess()
+		//{
+		//	bw.Write(IM_AccessRequest);
+		//	bw.Flush();
+		//}
 
 		public void RequestLogs()
 		{
@@ -2342,68 +2337,68 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void RequestSeuil()
-		{
-			bw.Write(IM_Seuil);
-			bw.Flush();
-		}
+		//public void RequestSeuil()
+		//{
+		//	bw.Write(IM_Seuil);
+		//	bw.Flush();
+		//}
 
-		public void SeuilAjout(string type, string model)
-		{
-			bw.Write(IM_SeuilLCDajout);
-			bw.Write(type);
-			bw.Write(model);
-			bw.Flush();
+		//public void SeuilAjout(string type, string model)
+		//{
+		//	bw.Write(IM_SeuilLCDajout);
+		//	bw.Write(type);
+		//	bw.Write(model);
+		//	bw.Flush();
 
-			if ((main as MainWindow).checkSeuil) RequestSeuil();
-		}
+		//	if ((main as MainWindow).checkSeuil) RequestSeuil();
+		//}
 
-		public void SeuilModif(string type, string model)
-		{
-			bw.Write(IM_SeuilLCDmodif);
-			bw.Write(type);
-			bw.Write(model);
-			bw.Flush();
+		//public void SeuilModif(string type, string model)
+		//{
+		//	bw.Write(IM_SeuilLCDmodif);
+		//	bw.Write(type);
+		//	bw.Write(model);
+		//	bw.Flush();
 
-			if ((main as MainWindow).checkSeuil) RequestSeuil();
+		//	if ((main as MainWindow).checkSeuil) RequestSeuil();
 
-			Application.Current.Dispatcher.Invoke(() =>
-			{
-				foreach (Window window in Application.Current.Windows)
-				{
-					if (window.GetType() == typeof(Admin))
-					{
-						RequestSeuilAdmin();
-						break;
-					}
-				}
-			});
-		}
+		//	Application.Current.Dispatcher.Invoke(() =>
+		//	{
+		//		foreach (Window window in Application.Current.Windows)
+		//		{
+		//			if (window.GetType() == typeof(Admin))
+		//			{
+		//				RequestSeuilAdmin();
+		//				break;
+		//			}
+		//		}
+		//	});
+		//}
 
-		public void RequestSeuilAdmin()
-		{
-			bw.Write(IM_SeuilAdminRequest);
-			bw.Flush();
-		}
+		//public void RequestSeuilAdmin()
+		//{
+		//	bw.Write(IM_SeuilAdminRequest);
+		//	bw.Flush();
+		//}
 
-		public void FileUpload(string action, string info)
-		{
-			bw.Write(IM_FileUpload);
-			bw.Write(action);
-			bw.Write(info);
-			bw.Flush();
-		}
+		//public void FileUpload(string action, string info)
+		//{
+		//	bw.Write(IM_FileUpload);
+		//	bw.Write(action);
+		//	bw.Write(info);
+		//	bw.Flush();
+		//}
 
-		public void SeuilAdminModif(string type, string alerte, string max)
-		{
-			bw.Write(IM_SeuilAdmin);
-			bw.Write(type);
-			bw.Write(alerte);
-			bw.Write(max);
-			bw.Flush();
+		//public void SeuilAdminModif(string type, string alerte, string max)
+		//{
+		//	bw.Write(IM_SeuilAdmin);
+		//	bw.Write(type);
+		//	bw.Write(alerte);
+		//	bw.Write(max);
+		//	bw.Flush();
 
-			if ((main as MainWindow).checkSeuil) RequestSeuil();
-		}
+		//	if ((main as MainWindow).checkSeuil) RequestSeuil();
+		//}
 
 		public void RequestConfirmClone(string serial)
 		{
@@ -2412,150 +2407,150 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void RequestDelSeuilLCD(string type, string alerte, string max)
-		{
-			bw.Write(IM_SeuilDELlcd);
-			bw.Write(type);
-			bw.Write(alerte);
-			bw.Write(max);
-			bw.Flush();
-		}
+		//public void RequestDelSeuilLCD(string type, string alerte, string max)
+		//{
+		//	bw.Write(IM_SeuilDELlcd);
+		//	bw.Write(type);
+		//	bw.Write(alerte);
+		//	bw.Write(max);
+		//	bw.Flush();
+		//}
 
-		public void RequestPreparation()
-		{
-			bw.Write(IM_RequestPreparation);
-			bw.Flush();
-		}
+		//public void RequestPreparation()
+		//{
+		//	bw.Write(IM_RequestPreparation);
+		//	bw.Flush();
+		//}
 
-		public void PreparationTransfer(string old, string nouv, string transit)
-		{
-			bw.Write(IM_PreparationTransfert);
-			bw.Write(old);
-			bw.Write(nouv);
-			bw.Write(transit);
-			bw.Flush();
-		}
+		//public void PreparationTransfer(string old, string nouv, string transit)
+		//{
+		//	bw.Write(IM_PreparationTransfert);
+		//	bw.Write(old);
+		//	bw.Write(nouv);
+		//	bw.Write(transit);
+		//	bw.Flush();
+		//}
 
-		public void AjoutSemaine(string info)
-		{
-			bw.Write(IM_PreparationSemaine);
-			bw.Write(info);
-			bw.Flush();
-		}
+		//public void AjoutSemaine(string info)
+		//{
+		//	bw.Write(IM_PreparationSemaine);
+		//	bw.Write(info);
+		//	bw.Flush();
+		//}
 
-		public void SelectionPreparation(string semaine, string transit, bool select)
-		{
-			bw.Write(IM_SelectedPreparation);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(select);
-			bw.Flush();
-		}
+		//public void SelectionPreparation(string semaine, string transit, bool select)
+		//{
+		//	bw.Write(IM_SelectedPreparation);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(select);
+		//	bw.Flush();
+		//}
 
-		public void ModifyPreparation(string action, string semaine, string info)
-		{
-			bw.Write(IM_ModifyPreparation);
-			bw.Write(action);
-			bw.Write(semaine);
-			bw.Write(info);
-			bw.Flush();
-		}
+		//public void ModifyPreparation(string action, string semaine, string info)
+		//{
+		//	bw.Write(IM_ModifyPreparation);
+		//	bw.Write(action);
+		//	bw.Write(semaine);
+		//	bw.Write(info);
+		//	bw.Flush();
+		//}
 
-		public void DeleteTransit(string semaine, string transit)
-		{
-			bw.Write(IM_PreparationDeleteTransit);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Flush();
-		}
+		//public void DeleteTransit(string semaine, string transit)
+		//{
+		//	bw.Write(IM_PreparationDeleteTransit);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Flush();
+		//}
 
-		public void CheckPreparation(bool valeur, string semaine, string transit)
-		{
-			bw.Write(IM_CheckPreparation);
-			bw.Write(valeur);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Flush();
-		}
+		//public void CheckPreparation(bool valeur, string semaine, string transit)
+		//{
+		//	bw.Write(IM_CheckPreparation);
+		//	bw.Write(valeur);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Flush();
+		//}
 
-		public void CheckPreparationAcess(string info, bool valeur, string semaine, string transit)
-		{
-			bw.Write(IM_CheckPreparationAcess);
-			bw.Write(info);
-			bw.Write(valeur);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Flush();
-		}
+		//public void CheckPreparationAcess(string info, bool valeur, string semaine, string transit)
+		//{
+		//	bw.Write(IM_CheckPreparationAcess);
+		//	bw.Write(info);
+		//	bw.Write(valeur);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Flush();
+		//}
 
-		public void PreparationSortie(string semaine, string transit, string rf, string emp)
-		{
-			bw.Write(IM_PreparationSortie);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(rf);
-			bw.Write(emp);
-			bw.Flush();
-		}
+		//public void PreparationSortie(string semaine, string transit, string rf, string emp)
+		//{
+		//	bw.Write(IM_PreparationSortie);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(rf);
+		//	bw.Write(emp);
+		//	bw.Flush();
+		//}
 
-		public void AjoutPreparation(string type, string item, string semaine, string transit, string serial)
-		{
-			bw.Write(IM_AjoutPreparation);
-			bw.Write(type);
-			bw.Write(item);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(serial);
-			bw.Flush();
-		}
+		//public void AjoutPreparation(string type, string item, string semaine, string transit, string serial)
+		//{
+		//	bw.Write(IM_AjoutPreparation);
+		//	bw.Write(type);
+		//	bw.Write(item);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(serial);
+		//	bw.Flush();
+		//}
 
-		public void DeletePreparation(string item, string semaine, string transit, string serial)
-		{
-			bw.Write(IM_DeletePreparation);
-			bw.Write(item);
-			bw.Write(semaine);
-			bw.Write(transit);
-			bw.Write(serial);
-			bw.Flush();
-		}
+		//public void DeletePreparation(string item, string semaine, string transit, string serial)
+		//{
+		//	bw.Write(IM_DeletePreparation);
+		//	bw.Write(item);
+		//	bw.Write(semaine);
+		//	bw.Write(transit);
+		//	bw.Write(serial);
+		//	bw.Flush();
+		//}
 
-		public void DeleteAccess(string type, string actuel, string alerte, string max)
-		{
-			bw.Write(IM_DelAccess);
-			bw.Write(type);
-			bw.Write(actuel);
-			bw.Write(alerte);
-			bw.Write(max);
-			bw.Flush();
-		}
+		//public void DeleteAccess(string type, string actuel, string alerte, string max)
+		//{
+		//	bw.Write(IM_DelAccess);
+		//	bw.Write(type);
+		//	bw.Write(actuel);
+		//	bw.Write(alerte);
+		//	bw.Write(max);
+		//	bw.Flush();
+		//}
 
-		public void AccessAjout(string type, string actuel, string alerte, string max)
-		{
-			bw.Write(IM_AccessAjout);
-			bw.Write(type);
-			bw.Write(actuel);
-			bw.Write(alerte);
-			bw.Write(max);
-			bw.Flush();
-		}
+		//public void AccessAjout(string type, string actuel, string alerte, string max)
+		//{
+		//	bw.Write(IM_AccessAjout);
+		//	bw.Write(type);
+		//	bw.Write(actuel);
+		//	bw.Write(alerte);
+		//	bw.Write(max);
+		//	bw.Flush();
+		//}
 
-		public void ModifierAccess(string type, string alerte, string max)
-		{
-			bw.Write(IM_ModifAccess);
-			bw.Write(type);
-			bw.Write(alerte);
-			bw.Write(max);
-			bw.Flush();
-		}
+		//public void ModifierAccess(string type, string alerte, string max)
+		//{
+		//	bw.Write(IM_ModifAccess);
+		//	bw.Write(type);
+		//	bw.Write(alerte);
+		//	bw.Write(max);
+		//	bw.Flush();
+		//}
 
-		public void QteAccess(string action, string type, string valeur)
-		{
-			bw.Write(IM_QteAccess);
-			bw.Write(action);
-			bw.Write(type);
-			bw.Write(valeur);
-			bw.Flush();
-		}
+		//public void QteAccess(string action, string type, string valeur)
+		//{
+		//	bw.Write(IM_QteAccess);
+		//	bw.Write(action);
+		//	bw.Write(type);
+		//	bw.Write(valeur);
+		//	bw.Flush();
+		//}
 
 		public void TrackingPuro()
 		{

@@ -20,36 +20,11 @@ namespace Client
 		public readonly Object lockPrepare = new Object();
 		public string version { get; } = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-		private SolidColorBrush _colorMini = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorMini { get { return _colorMini; } set { _colorMini = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorSFF = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorSFF { get { return _colorSFF; } set { _colorSFF = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorLap = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorLap { get { return _colorLap; } set { _colorLap = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorLCD22 = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorLCD22 { get { return _colorLCD22; } set { _colorLCD22 = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorLCD27 = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorLCD27 { get { return _colorLCD27; } set { _colorLCD27 = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorNIP = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorNIP { get { return _colorNIP; } set { _colorNIP = value; OnPropertyChanged(); } }
-
-		private SolidColorBrush _colorRecu = new SolidColorBrush(Colors.Black);
-		public SolidColorBrush colorRecu { get { return _colorRecu; } set { _colorRecu = value; OnPropertyChanged(); } }
-
 		private ObservableCollection<ServerName> _serverList = new ObservableCollection<ServerName>(); // liste des server au login
 		private ObservableCollection<InvPostes> _invPostes = new ObservableCollection<InvPostes>();
 		private ObservableCollection<Waybills> _waybills = new ObservableCollection<Waybills>();
 		private ObservableCollection<User> _userList = new ObservableCollection<User>();
 
-		private ObservableCollection<Seuil> _seuil = new ObservableCollection<Seuil>();
-		private ObservableCollection<Seuil> _seuilAdmin = new ObservableCollection<Seuil>();
-
-		private ObservableCollection<Seuil> _seuilAccess = new ObservableCollection<Seuil>();
 
 		//private ObservableCollection<string> _logs = new ObservableCollection<string>();
 		private ObservableCollection<string> _types = new ObservableCollection<string>();
@@ -58,9 +33,6 @@ namespace Client
 		private ObservableCollection<string> _statutList = new ObservableCollection<string> { "En Stock", "Sortie", "Réservé" };
 
 		private ObservableCollection<string> _validTypes = new ObservableCollection<string>();
-
-		private ObservableCollection<string> _semaine = new ObservableCollection<string>();
-		public ObservableCollection<string> semaine { get { return _semaine; } set { _semaine = value; } }
 
 		private ObservableCollection<LogsRapport> _logsRapport = new ObservableCollection<LogsRapport>();
 		public ObservableCollection<LogsRapport> logsRapport { get { return _logsRapport; } set { _logsRapport = value; } }
@@ -73,17 +45,7 @@ namespace Client
 		public ObservableCollection<TypeModel> typesModels { get { return _typesModels; } set { _typesModels = value; } }
 
 
-		private List<Preparation> _prepareList = new List<Preparation>();
-		public List<Preparation> prepareList { get { return _prepareList; } set { _prepareList = value; } }
-
-		private ObservableCollection<Contenu> _transitSelected = new ObservableCollection<Contenu>();
-		public ObservableCollection<Contenu> transitSelected { get { return _transitSelected; } set { _transitSelected = value; } }
-
 		public ObservableCollection<string> choixLCD { get { return _choixLCD; } set { _choixLCD = value; } }
-
-
-		private ObservableCollection<Transit> _transits = new ObservableCollection<Transit>();
-		public ObservableCollection<Transit> transits { get { return _transits; } set { _transits = value; } }
 
 		//public ObservableCollection<string> logs { get { return _logs; } set { _logs = value; } }
 		public ObservableCollection<string> types { get { return _types; } set { _types = value; } }
@@ -183,8 +145,6 @@ namespace Client
 
 		private bool _enableCTX = false;
 
-		public bool tabPrepareSelected = false;
-
 		private bool _transCheck = true;
 		private bool _accesCheck = true;
 
@@ -218,9 +178,6 @@ namespace Client
 		public ObservableCollection<ServerName> serverList { get { return _serverList; } set { _serverList = value; OnPropertyChanged(); } }
 		public ObservableCollection<InvPostes> invPostes { get { return _invPostes; } set { _invPostes = value; } }
 		public ObservableCollection<Waybills> waybills { get { return _waybills; } set { _waybills = value; } }
-		public ObservableCollection<Seuil> seuil { get { return _seuil; } set { _seuil = value; } }
-		public ObservableCollection<Seuil> seuilAccess { get { return _seuilAccess; } set { _seuilAccess = value; } }
-		public ObservableCollection<Seuil> seuilAdmin { get { return _seuilAdmin; } set { _seuilAdmin = value; } }
 
 
 		public ObservableCollection<User> userList { get { return _userList; } set { _userList = value; } }
@@ -230,7 +187,6 @@ namespace Client
 		public ListCollectionView sortMain { get { return CollectionViewSource.GetDefaultView(invPostesView) as ListCollectionView; } } // sorting file size
 		public ListCollectionView invPostesViewLab { get { return test as ListCollectionView; } }
 
-		public ListCollectionView sortSemaine { get { return CollectionViewSource.GetDefaultView(semaine) as ListCollectionView; } }
 
 		public ICollectionView test;
 
@@ -1146,36 +1102,6 @@ namespace Client
 		}
 	}
 
-	public class Seuil : INotifyPropertyChanged
-	{
-		private string _type;
-		private string _actuel;
-		private string _seuil;
-		private string _max;
-		private string _commande;
-		private string _color;
-		private List<string> _modele = new List<string>();
-
-		public List<string> modele { get { return _modele; } set { _modele = value; } }
-		public string type { get { return _type; } set { _type = value; OnPropertyChanged(); } }
-		public string actuel { get { return _actuel; } set { _actuel = value; OnPropertyChanged(); } }
-		public string seuil { get { return _seuil; } set { _seuil = value; OnPropertyChanged(); } }
-		public string max { get { return _max; } set { _max = value; OnPropertyChanged(); } }
-		public string commande { get { return _commande; } set { _commande = value; OnPropertyChanged(); } }
-		public string color { get { return _color; } set { _color = value; OnPropertyChanged(); } }
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChangedEventHandler handler = this.PropertyChanged;
-			if (handler != null)
-			{
-				var e = new PropertyChangedEventArgs(propertyName);
-				handler(this, e);
-			}
-		}
-	}
-
 	public class TypeModel : INotifyPropertyChanged
 	{
 		private string _type;
@@ -1280,53 +1206,6 @@ namespace Client
 		}
 	}
 
-	public class Transit : INotifyPropertyChanged
-	{
-		private string _transit = "";
-		private bool _ready = false;
-		private bool _selected = false;
-		private bool _self = false;
-		//private string _comment = "";
-
-		public string transit { get { return _transit; } set { _transit = value; OnPropertyChanged(); } }
-		public bool ready { get { return _ready; } set { _ready = value; OnPropertyChanged(); } }
-		public bool selected { get { return _selected; } set { _selected = value; OnPropertyChanged(); } }
-		public bool self { get { return _self; } set { _self = value; OnPropertyChanged(); } }
-		//public string comment { get { return _comment; } set { _comment = value; OnPropertyChanged(); } }
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChangedEventHandler handler = this.PropertyChanged;
-			if (handler != null)
-			{
-				var e = new PropertyChangedEventArgs(propertyName);
-				handler(this, e);
-			}
-		}
-	}
-
-	public class Preparation
-	{
-		public string semaine { get; set; }
-
-		private ObservableCollection<Contenu> _info = new ObservableCollection<Contenu>();
-		public ObservableCollection<Contenu> info { get { return _info; } set { _info = value; } }
-	}
-
-	public class PreparationRapport
-	{
-		private string _transit = "";
-		private string _model = "";
-		private string _sn = "";
-		private string _sac = "";
-
-		public string transit { get { return _transit; } set { _transit = value; } }
-		public string model { get { return _model; } set { _model = value; } }
-		public string sn { get { return _sn; } set { _sn = value; } }
-		public string sac { get { return _sac; } set { _sac = value; } }
-	}
-
 	public class LogsRapport : INotifyPropertyChanged
 	{
 		private string _date = "";
@@ -1341,96 +1220,6 @@ namespace Client
 		public string amount { get { return _amount; } set { _amount = value; } }
 		public string info { get { return _info; } set { _info = value; OnPropertyChanged(); } }
 
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChangedEventHandler handler = this.PropertyChanged;
-			if (handler != null)
-			{
-				var e = new PropertyChangedEventArgs(propertyName);
-				handler(this, e);
-			}
-		}
-	}
-
-	public class Contenu : INotifyPropertyChanged
-	{
-		private string _transit = "";
-		private string _mini = "0";
-		private string _sff = "0";
-		private string _laptop = "0";
-		private string _lcd22 = "0";
-		private string _lcd27 = "0";
-		private string _clavier = "0";
-		private string _sourisSansFil = "0";
-		private string _cableSecure = "0";
-		private string _sac = "0";
-		private string _sacBandou = "0";
-		private string _hubUsb = "0";
-		private string _usbcDP = "0";
-		private string _nip = "0";
-		private string _livret = "0";
-		private string _recu = "0";
-		private bool _ready = false;
-		private bool _selected = false;
-		private string _comment = "";
-		private string _rf = "";
-
-		private bool _clavierCheck = false;
-		private bool _sourisSansFilCheck = false;
-		private bool _cableSecureCheck = false;
-		private bool _sacCheck = false;
-		private bool _sacBandouCheck = false;
-		private bool _hubUsbCheck = false;
-		private bool _usbcDPCheck = false;
-		private bool _livretCheck = false;
-
-		public bool clavierCheck { get { return _clavierCheck; } set { _clavierCheck = value; OnPropertyChanged(); } }
-		public bool sourisSansFilCheck { get { return _sourisSansFilCheck; } set { _sourisSansFilCheck = value; OnPropertyChanged(); } }
-		public bool cableSecureCheck { get { return _cableSecureCheck; } set { _cableSecureCheck = value; OnPropertyChanged(); } }
-		public bool sacCheck { get { return _sacCheck; } set { _sacCheck = value; OnPropertyChanged(); } }
-		public bool sacBandouCheck { get { return _sacBandouCheck; } set { _sacBandouCheck = value; OnPropertyChanged(); } }
-		public bool hubUsbCheck { get { return _hubUsbCheck; } set { _hubUsbCheck = value; OnPropertyChanged(); } }
-		public bool usbcDPCheck { get { return _usbcDPCheck; } set { _usbcDPCheck = value; OnPropertyChanged(); } }
-		public bool livretCheck { get { return _livretCheck; } set { _livretCheck = value; OnPropertyChanged(); } }
-
-		public string transit { get { return _transit; } set { _transit = value; OnPropertyChanged(); } }
-		public string mini { get { return _mini; } set { _mini = value; OnPropertyChanged(); } }
-		public string sff { get { return _sff; } set { _sff = value; OnPropertyChanged(); } }
-		public string laptop { get { return _laptop; } set { _laptop = value; OnPropertyChanged(); } }
-		public string lcd22 { get { return _lcd22; } set { _lcd22 = value; OnPropertyChanged(); } }
-		public string lcd27 { get { return _lcd27; } set { _lcd27 = value; OnPropertyChanged(); } }
-		public string clavier { get { return _clavier; } set { _clavier = value; OnPropertyChanged(); } }
-		public string sourisSansFil { get { return _sourisSansFil; } set { _sourisSansFil = value; OnPropertyChanged(); } }
-		public string cableSecure { get { return _cableSecure; } set { _cableSecure = value; OnPropertyChanged(); } }
-		public string sac { get { return _sac; } set { _sac = value; OnPropertyChanged(); } }
-		public string sacBandou { get { return _sacBandou; } set { _sacBandou = value; OnPropertyChanged(); } }
-		public string hubUsb { get { return _hubUsb; } set { _hubUsb = value; OnPropertyChanged(); } }
-		public string usbcDP { get { return _usbcDP; } set { _usbcDP = value; OnPropertyChanged(); } }
-		public string nip { get { return _nip; } set { _nip = value; OnPropertyChanged(); } }
-		public string livret { get { return _livret; } set { _livret = value; OnPropertyChanged(); } }
-		public string recu { get { return _recu; } set { _recu = value; OnPropertyChanged(); } }
-		public bool ready { get { return _ready; } set { _ready = value; OnPropertyChanged(); } }
-		public bool selected { get { return _selected; } set { _selected = value; OnPropertyChanged(); } }
-		public string comment { get { return _comment; } set { _comment = value; OnPropertyChanged(); } }
-		public string rf { get { return _rf; } set { _rf = value; OnPropertyChanged(); } }
-
-		private ObservableCollection<string> _SNmini = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNsff = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNlaptop = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNlcd22 = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNlcd27 = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNnip = new ObservableCollection<string>();
-		private ObservableCollection<string> _SNrecu = new ObservableCollection<string>();
-
-		public ObservableCollection<string> SNmini { get { return _SNmini; } set { _SNmini = value; } }
-		public ObservableCollection<string> SNsff { get { return _SNsff; } set { _SNsff = value; } }
-		public ObservableCollection<string> SNlaptop { get { return _SNlaptop; } set { _SNlaptop = value; } }
-		public ObservableCollection<string> SNlcd22 { get { return _SNlcd22; } set { _SNlcd22 = value; } }
-		public ObservableCollection<string> SNlcd27 { get { return _SNlcd27; } set { _SNlcd27 = value; } }
-		public ObservableCollection<string> SNnip { get { return _SNnip; } set { _SNnip = value; } }
-		public ObservableCollection<string> SNrecu { get { return _SNrecu; } set { _SNrecu = value; } }
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -1511,21 +1300,4 @@ namespace Client
 			return 0;
 		}
 	}
-
-	public class CustomerSorterSemaine : IComparer
-	{
-		public int Compare(object x, object y)
-		{
-			var secondWordX = x.ToString().Split(' ').Skip(1).FirstOrDefault();
-			var secondWordY = y.ToString().Split(' ').Skip(1).FirstOrDefault();
-
-			if (secondWordX == null || secondWordY == null) return 0;
-
-			if (int.TryParse(secondWordX, out int Xint) && int.TryParse(secondWordY, out int Yint))
-            {
-				return Xint.CompareTo(Yint);
-			}
-			else return secondWordX.CompareTo(secondWordY);
-        }
-    }
 }

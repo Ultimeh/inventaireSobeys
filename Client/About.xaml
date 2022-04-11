@@ -57,7 +57,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <TextBox IsHitTestVisible="false" Margin="29,70,28,50" TextWrapping="Wrap"  IsReadOnly="True" Text="Application pour gestion des équipements Desjardins.&#xA;&#xA;---------------------------------&#xA;Programmé par Daniel Harvey&#xA;C# .NET 6.0">
+        <TextBox IsHitTestVisible="false" Margin="29,70,28,50" TextWrapping="Wrap"  IsReadOnly="True" Text="Application pour gestion des équipements Sobeys.&#xA;&#xA;---------------------------------&#xA;Programmé par Daniel Harvey&#xA;C# .NET 6.0">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -114,7 +114,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <Label Content="Inventaire Entrepôt (Client)" Height="42"  VerticalAlignment="Top" FontWeight="Bold" FontStyle="Italic" FontSize="24" HorizontalAlignment="Center" Margin="0,23,0,0">
+        <Label Content="Inventaire Sobeys (Client)" Height="42"  VerticalAlignment="Top" FontWeight="Bold" FontStyle="Italic" FontSize="24" HorizontalAlignment="Center" Margin="0,23,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>

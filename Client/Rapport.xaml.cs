@@ -69,9 +69,9 @@ namespace Client
 			{
 				if (checkLocation.IsChecked == true && !string.IsNullOrWhiteSpace(tb_nom.Text))
 				{
-					link = @"C:\Inventaire Entrepot Settings\Rapport\" + tb_nom.Text + ".xlsx";
+					link = @"C:\Inventaire Sobeys Settings\Rapport\" + tb_nom.Text + ".xlsx";
 				}
-				else link = @"C:\Inventaire Entrepot Settings\Rapport\Rapport " + "(" + App.appData.UserName + ") " + date + ".xlsx";
+				else link = @"C:\Inventaire Sobeys Settings\Rapport\Rapport " + "(" + App.appData.UserName + ") " + date + ".xlsx";
 
 				if (checkEmplacement.IsChecked == true)
 				{
@@ -88,7 +88,7 @@ namespace Client
 
 			if (emplacement)
 			{
-				string path = @"C:\Inventaire Entrepot Settings\Rapport";
+				string path = @"C:\Inventaire Sobeys Settings\Rapport";
 
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{

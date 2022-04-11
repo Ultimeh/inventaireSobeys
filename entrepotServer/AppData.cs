@@ -31,12 +31,10 @@ namespace entrepotServer
 		private List<LogsRapport> _logsRapport = new List<LogsRapport>();
 		public List<LogsRapport> logsRapport { get { return _logsRapport; } set { _logsRapport = value; } }
 
-		private List<SelectedTransit> _selectedTransit = new List<SelectedTransit>();
-		public List<SelectedTransit> selectedTransit { get { return _selectedTransit; } set { _selectedTransit = value; } }
+
 
 		public List<string> yearList = new List<string>();
 
-		public List<string> seuilMoniteur = new List<string>();
 
 		//public List<string> preparationSemaine = new List<string>();
 
@@ -45,23 +43,6 @@ namespace entrepotServer
 
 		private List<Achat> _fichierAchat = new List<Achat>();
 		public List<Achat> fichierAchat { get { return _fichierAchat; } set { _fichierAchat = value; } }
-
-		private List<Preparation> _listPreparation = new List<Preparation>();
-		public List<Preparation> listPreparation { get { return _listPreparation; } set { _listPreparation = value; } }
-
-
-		private List<Seuil> _seuilPoste = new List<Seuil>();
-		public List<Seuil> seuilPoste { get { return _seuilPoste; } set { _seuilPoste = value; } }
-
-		private List<Seuil> _seuilAccess = new List<Seuil>();
-		public List<Seuil> seuilAccess { get { return _seuilAccess; } set { _seuilAccess = value; } }
-
-		private List<seuilMoniteurAdmin> _moniteurSeuil = new List<seuilMoniteurAdmin>();
-		public List<seuilMoniteurAdmin> moniteurSeuil { get { return _moniteurSeuil; } set { _moniteurSeuil = value; } }
-
-
-		private List<Achat> _nip = new List<Achat>();
-		public List<Achat> nip { get { return _nip; } set { _nip = value; } }
 
 		//private List<AchatNIP> _fichierAchatNIP = new List<AchatNIP>();
 		//public List<AchatNIP> fichierAchatNIP { get { return _fichierAchatNIP; } set { _fichierAchatNIP = value; } }
@@ -217,125 +198,6 @@ namespace entrepotServer
 		public string mois { get { return _mois; } set { _mois = value; } }
 		public string jour { get { return _jour; } set { _jour = value; } }
 		public string comment { get { return _comment; } set { _comment = value; } }
-	}
-
-	public class Seuil
-	{
-		private string _type;
-		private string _actuel;
-		private string _alerte = "";
-		private string _max = "";
-
-		public string type { get { return _type; } set { _type = value; } }
-		public string actuel { get { return _actuel; } set { _actuel = value; } }
-		public string alerte { get { return _alerte; } set { _alerte = value; } }
-		public string max { get { return _max; } set { _max = value; } }
-	}
-
-	public class seuilMoniteurAdmin
-	{
-		public string type { get; set; }
-		private List<string> _modele = new List<string>();
-		public string alerte { get; set; }
-		public string max { get; set; }
-
-		public List<string> modele { get { return _modele; } set { _modele = value; } }
-	}
-
-	public class Preparation
-	{
-		public string semaine { get; set; }
-
-		private List<Contenu> _info = new List<Contenu>();
-		public List<Contenu> info { get { return _info; } set { _info = value; } }
-	}
-
-	public class SelectedTransit
-	{
-		private string _transit = "";
-		private int _count = 0;
-
-		public string transit { get { return _transit; } set { _transit = value; } }
-		public int count { get { return _count; } set { _count = value; } }
-	}
-
-	public class Contenu
-	{
-		private string _transit = "";
-		private string _mini = "0";
-		private string _sff = "0";
-		private string _laptop = "0";
-		private string _lcd22 = "0";
-		private string _lcd27 = "0";
-		private string _clavier = "0";
-		private string _sourisSansFil = "0";
-		private string _cableSecure = "0";
-		private string _sac = "0";
-		private string _sacBandou = "0";
-		private string _hubUsb = "0";
-		private string _usbcDP = "0";
-		private string _nip = "0";
-		private string _livret = "0";
-		private string _recu = "0";
-		private bool _ready = false;
-		private bool _selected = false;
-		private string _comment = "";
-		private string _rf = "";
-
-		private bool _clavierCheck = false;
-		private bool _sourisSansFilCheck = false;
-		private bool _cableSecureCheck = false;
-		private bool _sacCheck = false;
-		private bool _sacBandouCheck = false;
-		private bool _hubUsbCheck = false;
-		private bool _usbcDPCheck = false;
-		private bool _livretCheck = false;
-
-		public bool clavierCheck { get { return _clavierCheck; } set { _clavierCheck = value; } }
-		public bool sourisSansFilCheck { get { return _sourisSansFilCheck; } set { _sourisSansFilCheck = value; } }
-		public bool cableSecureCheck { get { return _cableSecureCheck; } set { _cableSecureCheck = value; } }
-		public bool sacCheck { get { return _sacCheck; } set { _sacCheck = value; } }
-		public bool sacBandouCheck { get { return _sacBandouCheck; } set { _sacBandouCheck = value; } }
-		public bool hubUsbCheck { get { return _hubUsbCheck; } set { _hubUsbCheck = value; } }
-		public bool usbcDPCheck { get { return _usbcDPCheck; } set { _usbcDPCheck = value; } }
-		public bool livretCheck { get { return _livretCheck; } set { _livretCheck = value; } }
-
-		public string transit { get { return _transit; } set { _transit = value; } }
-		public string mini { get { return _mini; } set { _mini = value; } }
-		public string sff { get { return _sff; } set { _sff = value; } }
-		public string laptop { get { return _laptop; } set { _laptop = value; } }
-		public string lcd22 { get { return _lcd22; } set { _lcd22 = value;  } }
-		public string lcd27 { get { return _lcd27; } set { _lcd27 = value;  } }
-		public string clavier { get { return _clavier; } set { _clavier = value;  } }
-		public string sourisSansFil { get { return _sourisSansFil; } set { _sourisSansFil = value; } }
-		public string cableSecure { get { return _cableSecure; } set { _cableSecure = value;  } }
-		public string sac { get { return _sac; } set { _sac = value; } }
-		public string sacBandou { get { return _sacBandou; } set { _sacBandou = value; } }
-		public string hubUsb { get { return _hubUsb; } set { _hubUsb = value; } }
-		public string usbcDP { get { return _usbcDP; } set { _usbcDP = value; } }
-		public string nip { get { return _nip; } set { _nip = value; } }
-		public string livret { get { return _livret; } set { _livret = value; } }
-		public string recu { get { return _recu; } set { _recu = value; } }
-		public bool ready { get { return _ready; } set { _ready = value; } }
-		public bool selected { get { return _selected; } set { _selected = value; } }
-		public string comment { get { return _comment; } set { _comment = value; } }
-		public string rf { get { return _rf; } set { _rf = value; } }
-
-		private List<string> _SNmini = new List<string>();
-		private List<string> _SNsff = new List<string>();
-		private List<string> _SNlaptop = new List<string>();
-		private List<string> _SNlcd22 = new List<string>();
-		private List<string> _SNlcd27 = new List<string>();
-		private List<string> _SNnip = new List<string>();
-		private List<string> _SNrecu = new List<string>();
-
-		public List<string> SNmini { get { return _SNmini; } set { _SNmini = value; } }
-		public List<string> SNsff { get { return _SNsff; } set { _SNsff = value; } }
-		public List<string> SNlaptop { get { return _SNlaptop; } set { _SNlaptop = value; } }
-		public List<string> SNlcd22 { get { return _SNlcd22; } set { _SNlcd22 = value; } }
-		public List<string> SNlcd27 { get { return _SNlcd27; } set { _SNlcd27 = value; } }
-		public List<string> SNnip { get { return _SNnip; } set { _SNnip = value; } }
-		public List<string> SNrecu { get { return _SNrecu; } set { _SNrecu = value; } }
 	}
 
 	public class Options

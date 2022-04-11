@@ -127,21 +127,21 @@ namespace entrepotServer
 			msg("Loading Inventaire Desjardins ...");
 			LoadingDesjardins();
 			msg("Loading Inventaire Desjardins NIP ...");
-			LoadingNip();
+			//LoadingNip();
 			msg("Loading Seuils ...");
-			LoadSeuil();
+			//LoadSeuil();
 			msg("Loading Waybills ...");
 			LoadWaybills();
 			SetYearList();
 			msg("Loading Logs ...");
 			LoadLog();
-			LoadPreparation();
-			UpdateColor();
-			nipAsset();
-			UpdateRepair();
+			//LoadPreparation();
+			//UpdateColor();
+			//nipAsset();
+			//UpdateRepair();
 
-			Task.Run(WatcherTask);
-			msg("File Watcher Task Started");
+			//Task.Run(WatcherTask);
+			//msg("File Watcher Task Started");
 
 			Task.Run(checkTime); // thread pour checker le time (rapport fpt, puro API, autoreset)
 			Task.Run(SaveBackup); // thread pour les backups
@@ -453,252 +453,12 @@ namespace entrepotServer
             }
         }
 
-		public void nipAsset()
-		{
-			foreach (var item in appData.nip.ToArray())
-			{
-				foreach (var element in appData.invPostes.ToArray())
-				{
-					if (item.serial == element.serial)
-					{
-						element.asset = item.asset;
-						break;
-					}
-				}
-			}
-
-			SaveDatabase();
-		}
-
-		private void WatcherTask()
-		{
-			AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-
-			while (true)
-			{
-				if (!watcherFound) StartWatcher();
-				//if (watcherFound && !Directory.Exists(@"T:\Rapport Auto\Inventaire")) StartWatcher();
-				if (watcherFound && !Directory.Exists(@"T:\Rapport Auto\Inventaire")) StartWatcher();
-
-				autoResetEvent.WaitOne(5000);
-			}
-		}
-
-		private void StartWatcher()
-		{
-			try
-			{
-				watcher.Path = @"T:\Rapport Auto\Inventaire";
-				//watcher.Path = @"c:\test";
-				watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-				//watcher.Filters.Add("inventaire.csv");
-				//watcher.Filters.Add("*._nip.csv");
-				watcher.Created += new FileSystemEventHandler(watcherEvent);
-				watcher.Renamed += new RenamedEventHandler(watcherEvent);
-
-				watcher.EnableRaisingEvents = true;
-
-				watcherFound = true;
-				msg("Watcher Folder found.");
-			}
-			catch (Exception ex)
-			{
-				watcherFound = false;
-				msg(ex.Message);
-			}
-		}
-
-		private void watcherEvent(object source, FileSystemEventArgs e)
-		{
-			string lien = @"T:\Rapport Auto\Inventaire\inventaire.csv";
-			string lien2 = @"T:\Rapport Auto\Inventaire\";
-
-			lock (appData.lockUpload)
-			{
-				AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-				autoResetEvent.WaitOne(1000);
-
-				int count = 0;
-
-				if (e.Name.Contains("inventaire.csv"))
-				{
-					lock (appData.lockDB)
-					{
-						lock (appData.lockModel)
-						{
-							appData.fichierAchat.Clear();
-							//appData.modeleMoniteur.Clear();
-
-							msg("Loading new Full Inventaire File...");
-
-							while (true)
-							{
-								try
-								{
-									using (StreamReader file = new StreamReader(lien))
-									{
-										string ln;
-										string[] data;
-										string asset = "";
-										string model = "";
-
-										while ((ln = file.ReadLine()) != null)
-										{
-											if (!ln.Contains("EndUser"))
-											{
-												data = ln.Split(",");
-												asset = "";
-
-												if (data[3].ToLower().StartsWith("b")) asset = data[3];
-												else if (!data[3].ToLower().StartsWith("b") && data[2].ToLower().StartsWith("b")) asset = data[2];
-
-												if (data[1] == "Clavier nip")
-												{
-													foreach (var item in appData.nip.ToArray())
-													{
-														if (data[6].ToUpper() == item.serial)
-														{
-															asset = item.asset;
-															break;
-														}
-													}
-												}
-
-												if (data[5].Contains("�")) model = data[5].Replace("�", "ç");
-												else model = data[5];
-
-												appData.fichierAchat.Add(new Achat { type = data[1], model = data[5], asset = asset, serial = data[6].ToUpper() });
-											}
-										}
-
-										file.Close();
-									}
-
-									break;
-								}
-								catch (Exception ex)
-								{
-									autoResetEvent.WaitOne(1000);
-									count++;
-
-									if (count == 30)
-									{
-										msg(ex.Message);
-										break;
-									}
-								}
-							}
-						}
-					}
-
-					autoResetEvent.WaitOne(1000);
-
-					try
-					{
-						File.Delete(lien);
-					}
-					catch { }
-
-					SaveInventaireDesjardins();
-					nipAsset();
-
-					if (appData.nip.Count != 0)
-					{
-						foreach (var item in appData.nip.ToArray())
-						{
-							Parallel.ForEach(appData.fichierAchat.ToArray(), (main, state) =>
-							{
-								if (item.serial == main.serial)
-								{
-									main.asset = item.asset;
-									state.Break();
-								}
-							});
-						}
-					}
-
-					msg("Loading new Full Inventaire Completed");
-				}
-
-				if (e.Name == "nip.csv")
-				{
-					lock (appData.lockDB)
-					{
-						lock (appData.lockModel)
-						{
-							appData.nip.Clear();
-							msg("Loading new NIP File...");
-
-
-							while (true)
-							{
-								try
-								{
-									using (StreamReader file = new StreamReader(lien2 + e.Name))
-									{
-										string ln;
-										string[] valeur;
-
-										while ((ln = file.ReadLine()) != null)
-										{
-											valeur = ln.Split(",");
-											appData.nip.Add(new Achat { type = "Clavier nip", asset = valeur[1], serial = valeur[0].ToUpper() });
-
-											Parallel.ForEach(Program.appData.fichierAchat.ToArray(), (item, state) =>
-											{
-												if (valeur[0].ToUpper() == item.serial)
-												{
-													item.asset = valeur[1];
-													state.Break();
-												}
-											});
-										}
-
-										file.Close();
-									}
-
-									break;
-								}
-								catch (Exception ex)
-								{
-									autoResetEvent.WaitOne(1000);
-									count++;
-
-									if (count == 20)
-									{
-										msg(ex.Message);
-										break;
-									}
-								}
-
-							}
-						}
-					}
-
-					autoResetEvent.WaitOne(1000);
-
-					try
-					{
-						File.Delete(lien2 + e.Name);
-					}
-					catch { }
-
-					msg("Loading new NIP file Completed");
-
-					SaveInventaireDesjardinsNIP();
-					SaveInventaireDesjardins();
-					nipAsset();
-				}
-			}
-		}
-
 		private protected void myHandler(object sender, ConsoleCancelEventArgs args)
 		{
 			Console.WriteLine($"  Key pressed: {args.SpecialKey}");
 			Console.WriteLine("The Server will save data and exit.\n");
 			KickAllClient();
 			SaveDatabase();
-			SavePreparation();
 			SaveUsers();
 			exited = true;
 			Environment.Exit(0);
@@ -764,7 +524,6 @@ namespace entrepotServer
 					SaveDatabaseBackup();
 					SaveWBbackup();
 					wbBackup();
-					SavePreparationBackup();
 					AutoRapport(appData.invPostes, "Rapport.xlsx");
 					autoResetEvent.WaitOne(7200000);// backup a chaque 2 heurs
 				}
@@ -788,7 +547,6 @@ namespace entrepotServer
 				{
 					KickAllClient();
 					UpdateColor();
-					resetSelection();
 
 					if (DateTime.Now.Year.ToString() != year)
 					{
@@ -797,10 +555,8 @@ namespace entrepotServer
 						SaveWB();
 						SetYearList();
 					}
-
-					foreach (var item in appData.selectedTransit.ToArray()) item.count = 0;
 					
-					UpdateRepair();
+					//UpdateRepair();
 				}
 
 				if (day != "samedi" && day != "dimanche")
@@ -1176,117 +932,6 @@ namespace entrepotServer
 			}
 		}
 
-		public void SavePreparation()
-		{
-			lock (lockSave)
-			{
-				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"preparation.prep";
-
-				//var jsonString = File.ReadAllText(path);
-
-				try
-				{
-					var jsonString = JsonSerializer.Serialize(appData.listPreparation, new JsonSerializerOptions { WriteIndented = true });
-					File.WriteAllText(path, jsonString);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		public void SavePreparationBackup()
-		{
-			lock (lockSave)
-			{
-				string path = @"T:\Rapport Auto\backup\preparation.bak";
-				string path2 = backupFolder + "prep " + DateTime.Now.ToString("dd-MM-yyyy H;mm;ss") + ".bak";
-				//var jsonString = File.ReadAllText(path);
-
-				try
-				{
-					var jsonString = JsonSerializer.Serialize(appData.listPreparation, new JsonSerializerOptions { WriteIndented = true });
-					File.WriteAllText(path, jsonString);
-					File.WriteAllText(path2, jsonString);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		private void LoadPreparation()
-		{
-			string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"preparation.prep";
-
-			if (!File.Exists(path)) return;
-
-			msg("---Loading Preparation-- ");
-
-			try
-			{
-				var jsonString = File.ReadAllText(path);
-				appData.listPreparation = JsonSerializer.Deserialize<List<Preparation>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
-
-				msg("---Preparation Loaded--- ");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-
-			resetSelection();
-			//try
-			//{
-			//	XmlSerializer xs = new XmlSerializer(typeof(List<Preparation>));
-			//	using (StreamReader rd = new StreamReader(path))
-			//	{
-			//		appData.listPreparation = xs.Deserialize(rd) as List<Preparation>;
-			//	}
-
-			//	msg("---Preparation Loaded--- ");
-			//}
-			//catch (Exception ex)
-			//{
-			//	Console.WriteLine(ex.Message);
-			//}
-		}
-
-		private void resetSelection()
-        {
-			foreach (var item in appData.listPreparation.ToArray())
-			{
-				foreach (var stuff in item.info)
-				{
-					appData.selectedTransit.Add(new SelectedTransit { transit = stuff.transit });
-					stuff.selected = false;
-				}
-			}
-		}
-
-		public void SaveInventaireDesjardinsNIP()
-		{
-			lock (lockSave)
-			{
-				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardinsNIP.xml";
-
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
-					using (StreamWriter wr = new StreamWriter(path))
-					{
-						xs.Serialize(wr, appData.nip);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
 		public void SaveDatabase()
 		{
 			lock (lockSave)
@@ -1370,28 +1015,6 @@ namespace entrepotServer
 			}
 		}
 
-		public void LoadingNip()
-		{
-			string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardinsNIP.xml";
-
-			if (!File.Exists(path)) return;
-
-			try
-			{
-				XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
-				using (StreamReader rd = new StreamReader(path))
-				{
-					appData.nip = xs.Deserialize(rd) as List<Achat>;
-				}
-
-				msg("---Fichier NIP Desjardins Loaded---");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
-
 		public void LoadWaybills()
 		{
 			if (!File.Exists(pathWay + year + ".wb")) SaveWB();
@@ -1405,136 +1028,6 @@ namespace entrepotServer
 				}
 
 				msg("---Waybills Loaded--- ");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
-
-		public void SaveSeuilPoste()
-		{
-			lock (lockSave)
-			{
-				string folder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils\";
-
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Seuil>));
-					using (StreamWriter wr = new StreamWriter(folder + "seuilPoste.xml"))
-					{
-						xs.Serialize(wr, appData.seuilPoste);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		public void SaveSeuilMoniteur()
-		{
-			lock (lockSave)
-			{
-				string folder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils\";
-
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<seuilMoniteurAdmin>));
-					using (StreamWriter wr = new StreamWriter(folder + "seuilMoniteur.xml"))
-					{
-						xs.Serialize(wr, appData.moniteurSeuil);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		public void SaveSeuilAccess()
-		{
-			lock (lockSave)
-			{
-				string folder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils\";
-
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Seuil>));
-					using (StreamWriter wr = new StreamWriter(folder + "seuilAccess.xml"))
-					{
-						xs.Serialize(wr, appData.seuilAccess);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		public void LoadSeuil()
-		{
-			string folder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils\";
-
-			if (!File.Exists(folder + "seuilPoste.xml"))
-			{
-				appData.seuilPoste.Add(new Seuil { type = "Postes", alerte = "0", max = "0" });
-				appData.seuilPoste.Add(new Seuil { type = "Portables", alerte = "0", max = "0" });
-				appData.seuilPoste.Add(new Seuil { type = "Tablettes", alerte = "0", max = "0" });
-			}
-			else
-			{
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Seuil>));
-					using (StreamReader rd = new StreamReader(folder + "seuilPoste.xml"))
-					{
-						appData.seuilPoste = xs.Deserialize(rd) as List<Seuil>;
-					}
-
-					msg("---Seuil poste Loaded--- ");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-
-			}
-
-			if (File.Exists(folder + "seuilMoniteur.xml"))
-			{
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<seuilMoniteurAdmin>));
-					using (StreamReader rd = new StreamReader(folder + "seuilMoniteur.xml"))
-					{
-						appData.moniteurSeuil = xs.Deserialize(rd) as List<seuilMoniteurAdmin>;
-					}
-
-					msg("---Seuil Moniteur Loaded--- ");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-
-
-
-			if (!File.Exists(folder + "seuilAccess.xml")) return;
-
-			try
-			{
-				XmlSerializer xs = new XmlSerializer(typeof(List<Seuil>));
-				using (StreamReader rd = new StreamReader(folder + "seuilAccess.xml"))
-				{
-					appData.seuilAccess = xs.Deserialize(rd) as List<Seuil>;
-				}
-
-				msg("---Seuil Acess Loaded--- ");
 			}
 			catch (Exception ex)
 			{

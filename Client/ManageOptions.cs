@@ -7,7 +7,7 @@ namespace Client
 {
     class ManageOptions
     {
-        string path = @"c:\Inventaire Entrepot Settings\Options.cfg";
+        string path = @"c:\Inventaire Sobeys Settings\Options.cfg";
 
 		public void loadOptions()
 		{

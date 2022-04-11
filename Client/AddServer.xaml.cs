@@ -13,7 +13,7 @@ namespace Client
         {
             DataContext = App.appData;
             InitializeComponent();
-            serverPort.Text = "1025";
+            serverPort.Text = "1026";
             serverText.Focus();
         }
 

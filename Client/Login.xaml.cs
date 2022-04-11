@@ -138,8 +138,8 @@ namespace Client
 
 		private void checkFolder()
 		{
-			string folder = @"c:\Inventaire Entrepot Settings";
-			string folder2 = @"c:\Inventaire Entrepot Settings\Rapport";
+			string folder = @"c:\Inventaire Sobeys Settings";
+			string folder2 = @"c:\Inventaire Sobeys Settings\Rapport";
 
 			if (!Directory.Exists(folder))
 			{
@@ -186,7 +186,7 @@ namespace Client
 
 		private void serverList_Loaded(object sender, RoutedEventArgs e)
 		{
-			string serversList = @"c:\Inventaire Entrepot Settings\ServerList.xml";
+			string serversList = @"c:\Inventaire Sobeys Settings\ServerList.xml";
 
 			if (File.Exists(serversList))
 			{
@@ -218,7 +218,7 @@ namespace Client
 			try
 			{
 				XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<ServerName>));
-				using (StreamWriter wr = new StreamWriter(@"c:\Inventaire Entrepot Settings\ServerList.xml"))
+				using (StreamWriter wr = new StreamWriter(@"c:\Inventaire Sobeys Settings\ServerList.xml"))
 				{
 					xs.Serialize(wr, App.appData.serverList);
 				}
@@ -320,12 +320,12 @@ namespace Client
         {
 			try
 			{
-				File.Copy(@".\Documentation.docx", @"C:\Inventaire Entrepot Settings\Documentation.docx", true);
+				File.Copy(@".\Documentation.docx", @"C:\Inventaire Sobeys Settings\Documentation.docx", true);
 
 				ProcessStartInfo startInfo = new ProcessStartInfo
 				{
 					UseShellExecute = true,
-					FileName = @"C:\Inventaire Entrepot Settings\Documentation.docx",
+					FileName = @"C:\Inventaire Sobeys Settings\Documentation.docx",
 				};
 
 				Process.Start(startInfo);
