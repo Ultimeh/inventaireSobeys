@@ -21,6 +21,9 @@
     <Grid>
 
 
+        <TextBox x:Name="tb_erreur" HorizontalAlignment="Left" Margin="10,520,0,0" Visibility="Visible" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Foreground="Red" Background="Transparent" TextWrapping="Wrap" BorderThickness="0" VerticalAlignment="Top" Width="387" Height="109"/>
+
+
         <Label x:Name="inv" Content="Ajout Inventaire" HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Margin="5,0,0,0">
             <Label.Style>
                 <Style>
@@ -33,31 +36,35 @@
             </Label.Style>
         </Label>
 
-        <CheckBox x:Name="checkMoniteur" VerticalContentAlignment="Center" Content="Ajout de Moniteur" Margin="81,58,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Checked="checkMoniteur_Checked" Unchecked="checkMoniteur_Unchecked" >
-            <CheckBox.Style>
+        <ComboBox x:Name="cb_specialType" HorizontalAlignment="Left" IsEnabled="False" Margin="101,34,0,0" VerticalAlignment="Top" Width="92" SelectionChanged="cb_specialType_SelectionChanged" />
+
+        <ComboBox x:Name="cb_specialModel" HorizontalAlignment="Left" IsEnabled="False" Margin="101,61,0,0" VerticalAlignment="Top" Width="92" SelectionChanged="cb_specialModel_SelectionChanged"/>
+
+        <TextBox x:Name="tb_SpecialAutre" HorizontalAlignment="Left" Margin="204,36,0,0" IsEnabled="False" TextWrapping="NoWrap" VerticalAlignment="Top" Width="107" Height="18">
+            <TextBox.Style>
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                            <Setter Property="Control.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </CheckBox.Style>
-        </CheckBox>
+            </TextBox.Style>
+        </TextBox>
 
-        <Label x:Name="model" Content="Modèle :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="58" Margin="198,35,0,0">
-            <Label.Style>
+        <TextBox x:Name="tb_SpecialModAutre" HorizontalAlignment="Left" Margin="204,63,0,0" IsEnabled="False" TextWrapping="NoWrap" VerticalAlignment="Top" Width="107" Height="18">
+            <TextBox.Style>
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                            <Setter Property="Control.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Label.Style>
-        </Label>
-
-        <ComboBox x:Name="cb_model" HorizontalAlignment="Left" IsEnabled="False" Margin="203,55,0,0" VerticalAlignment="Top" Width="92" />
+            </TextBox.Style>
+        </TextBox>
 
         <Label x:Name="sn" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="154" Margin="102,83,0,0" Grid.RowSpan="2">
             <Label.Style>
@@ -73,7 +80,7 @@
 
         <TextBox x:Name="tb_serial" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="101,105,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="192" Height="343" AcceptsReturn="True" TextChanged="tb_serial_TextChanged" Loaded="tb_serial_Loaded">
             <TextBox.Style>
-                <Style TargetType="TextBox">
+                <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Background" Value="White"/>
                     <Setter Property="Foreground" Value="black"/>
 
@@ -138,7 +145,7 @@
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="Control.Background" Value="#FF323232"/>
                             <Setter Property="TextBlock.Foreground" Value="White"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -187,8 +194,6 @@
                 </Style>
             </RadioButton.Style>
         </RadioButton>
-
-        <TextBox x:Name="tb_erreur" HorizontalAlignment="Left" Margin="10,520,0,0" Visibility="Visible" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Foreground="Red" Background="Transparent" TextWrapping="Wrap" BorderThickness="0" VerticalAlignment="Top" Width="387" Height="109"/>
 
 
         <Button x:Name="btn_Ajout" Content="Ajouter" HorizontalAlignment="Left" IsEnabled="{Binding enableAjout}" Margin="174,634,0,0" VerticalAlignment="Top" Click="btn_Ajout_Click" Width="60" Height="28">

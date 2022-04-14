@@ -121,14 +121,14 @@ namespace entrepotServer
 
 			checkFolder();
 			LoadUsers();
-			LoadModel();
+			//LoadModel();
 			msg("Loading database ...");
 			LoadDatabase();
-			msg("Loading Inventaire Desjardins ...");
-			LoadingDesjardins();
-			msg("Loading Inventaire Desjardins NIP ...");
+			//msg("Loading Inventaire Desjardins ...");
+			//LoadingDesjardins();
+			//msg("Loading Inventaire Desjardins NIP ...");
 			//LoadingNip();
-			msg("Loading Seuils ...");
+			//msg("Loading Seuils ...");
 			//LoadSeuil();
 			msg("Loading Waybills ...");
 			LoadWaybills();
@@ -145,7 +145,7 @@ namespace entrepotServer
 
 			Task.Run(checkTime); // thread pour checker le time (rapport fpt, puro API, autoreset)
 			Task.Run(SaveBackup); // thread pour les backups
-			msg("Backup / Auto Rapport / FTP Tasks are running ...");
+			msg("Backup / Auto Rapport are running ...");
 
 			//fixWB();
 			//Create the server side connection And 
@@ -170,37 +170,38 @@ namespace entrepotServer
 		}
 
 		//private void fixWB()
-  //      {
+		//      {
 		//	foreach (var item in appData.waybills.ToArray())
-  //          {
+		//          {
 		//		if (!string.IsNullOrEmpty(item.wayb))
-  //              {
+		//              {
 		//			item.wayb = item.wayb.Replace("-", "");
 		//			item.wayb = item.wayb.Replace(" ", "");
 		//		}
 
 		//		if (!string.IsNullOrEmpty(item.wbRetour))  
-  //              {
+		//              {
 		//			item.wbRetour = item.wbRetour.Replace("-", "");
 		//			item.wbRetour = item.wbRetour.Replace(" ", "");
 		//		}
-  //          }
-  //      }
+		//          }
+		//      }
 
 		public async Task puroTracking()
-        {
+		{
 			runAPI = true;
 			msg("Puro tracking started.");
 
+			string value = "";
 			var month = DateTime.Now.ToString("MMMM", ci);
 			string oldMonth;
 			string anner = "";
 			List<Waybills> temp = new List<Waybills>();
 
-			if (month == "janvier") 
-            {
+			if (month == "janvier")
+			{
 				oldMonth = "décembre";
-				anner = DateTime.Now.AddYears(-1).ToString();		
+				anner = DateTime.Now.AddYears(-1).ToString();
 				string path = @".\waybills\" + anner + ".wb";
 
 				try
@@ -224,63 +225,79 @@ namespace entrepotServer
 			string[] split;
 			string newData;
 
-            foreach (var item in appData.waybills.ToArray())
-            {
-                if (item.mois == month || item.mois == oldMonth)
-                {
-                    if (!string.IsNullOrEmpty(item.wayb))
-                    {
-                        waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+			foreach (var item in appData.waybills.ToArray())
+			{
+				if (item.mois == month || item.mois == oldMonth)
+				{
+					if (!string.IsNullOrEmpty(item.wayb))
+					{
+						waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                        for (int i = 0; i < waybillSortie.Count(); i++)
-                        {
-                            split = waybillSortie[i].Split(" - ");
+						for (int i = 0; i < waybillSortie.Count(); i++)
+						{
+							split = waybillSortie[i].Split(" - ");
 
-                            if (split.Count() == 1) waybillSortie[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                            else if (!split[1].ToLower().Contains("shipment delivered")) waybillSortie[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                        }
+							if (split.Count() == 1)
+							{
+								value = await TrackingAPI(split[0]);
+								if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+							}
+							else if (split[1].ToLower() != "shipment delivered")
+							{
+								value = await TrackingAPI(split[0]);
+								if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+							}
+						}
 
-                        newData = string.Join(Environment.NewLine, waybillSortie);
+						newData = string.Join(Environment.NewLine, waybillSortie);
 
-                        if (item.wayb != newData)
-                        {
-                            lock (appData.lockWB)
-                            {
-                                item.wayb = newData;
-                            }
-                        }
-                    }
+						if (item.wayb != newData)
+						{
+							lock (appData.lockWB)
+							{
+								item.wayb = newData;
+							}
+						}
+					}
 
-                    if (!string.IsNullOrEmpty(item.wbRetour))
-                    {
-                        waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+					if (!string.IsNullOrEmpty(item.wbRetour))
+					{
+						waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                        for (int i = 0; i < waybillRetour.Count(); i++)
-                        {
-                            split = waybillRetour[i].Split(" - ");
+						for (int i = 0; i < waybillRetour.Count(); i++)
+						{
+							split = waybillRetour[i].Split(" - ");
 
-                            if (split.Count() == 1) waybillRetour[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                            else if (!split[1].ToLower().Contains("shipment delivered")) waybillRetour[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                        }
+							if (split.Count() == 1)
+							{
+								value = await TrackingAPI(split[0]);
+								if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+							}
+							else if (split[1].ToLower() != "shipment delivered")
+							{
+								value = await TrackingAPI(split[0]);
+								if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+							}
+						}
 
-                        newData = string.Join(Environment.NewLine, waybillRetour);
+						newData = string.Join(Environment.NewLine, waybillRetour);
 
-                        if (item.wbRetour != newData)
-                        {
-                            lock (appData.lockWB)
-                            {
-                                item.wbRetour = newData;
-                            }
-                        }
-                    }
-                }
-            }
+						if (item.wbRetour != newData)
+						{
+							lock (appData.lockWB)
+							{
+								item.wbRetour = newData;
+							}
+						}
+					}
+				}
+			}
 
-            SaveWB();
+			SaveWB();
 
-            if (anner != "")
-            {
-                foreach (var item in temp.ToArray())
+			if (anner != "")
+			{
+				foreach (var item in temp.ToArray())
 				{
 					if (item.mois == oldMonth)
 					{
@@ -292,8 +309,16 @@ namespace entrepotServer
 							{
 								split = waybillSortie[i].Split(" - ");
 
-								if (split.Count() == 1) waybillSortie[i] = split[0] + " - " + await TrackingAPI(split[0]);
-								else if (split[1].ToLower() != "shipment delivered") waybillSortie[i] = split[0] + " - " + await TrackingAPI(split[0]);
+								if (split.Count() == 1)
+								{
+									value = await TrackingAPI(split[0]);
+									if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+								}
+								else if (split[1].ToLower() != "shipment delivered")
+								{
+									value = await TrackingAPI(split[0]);
+									if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+								}
 							}
 
 							newData = string.Join(Environment.NewLine, waybillSortie);
@@ -313,35 +338,40 @@ namespace entrepotServer
 
 							for (int i = 0; i < waybillRetour.Count(); i++)
 							{
-                                split = waybillRetour[i].Split(" - ");
+								split = waybillRetour[i].Split(" - ");
 
-                                if (split.Count() == 1) waybillRetour[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                                else if (split[1].ToLower() != "shipment delivered")
-                                {
-                                    waybillRetour[i] = split[0] + " - " + await TrackingAPI(split[0]);
-                                }
-                            }
+								if (split.Count() == 1)
+								{
+									value = await TrackingAPI(split[0]);
+									if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+								}
+								else if (split[1].ToLower() != "shipment delivered")
+								{
+									value = await TrackingAPI(split[0]);
+									if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+								}
+							}
 
-                            newData = string.Join(Environment.NewLine, waybillRetour);
+							newData = string.Join(Environment.NewLine, waybillRetour);
 
-                            if (item.wbRetour != newData)
-                            {
-                                lock (appData.lockWB)
-                                {
-                                    item.wbRetour = newData;
-                                }
-                            }
-                        }
-                    }
-                }
+							if (item.wbRetour != newData)
+							{
+								lock (appData.lockWB)
+								{
+									item.wbRetour = newData;
+								}
+							}
+						}
+					}
+				}
 
-                SaveWBold(temp, anner);
-            }
+				SaveWBold(temp, anner);
+			}
 
-            appData.dateWB = DateTime.Now.ToString();
+			appData.dateWB = DateTime.Now.ToString();
 
-            lock (appData.lockWrite)
-            {
+			lock (appData.lockWrite)
+			{
 				foreach (var UserKey in users.Keys)
 				{
 					if (users.TryGetValue(UserKey, out UserInfo user))
@@ -366,9 +396,9 @@ namespace entrepotServer
 			runAPI = false;
 		}
 
-        private async Task<string> TrackingAPI(string waybill)
-        {
-            string result;
+		private async Task<string> TrackingAPI(string waybill)
+		{
+			string result;
 			string sEnv;
 			string info = "";
 			string date = "";
@@ -376,82 +406,90 @@ namespace entrepotServer
 			string urlSoap = "http://purolator.com/pws/service/v1/TrackPackagesByPin";
 			var byteArray = Encoding.ASCII.GetBytes("cc983bd6d2b146a8847e5e12a6aa0a5d:|h+JH#D6");
 
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-			HttpContent httpContent;
-			HttpResponseMessage response;
-			HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, url);
-			req.Headers.Add("SOAPAction", urlSoap);
-			req.Method = HttpMethod.Post;
-
-			sEnv = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:v1=""http://purolator.com/pws/datatypes/v1"">" +
-				   "<soapenv:Header><v1:RequestContext><v1:Version>1.2</v1:Version><v1:Language>en</v1:Language><v1:GroupID>?</v1:GroupID><v1:RequestReference>?</v1:RequestReference>" +
-				   "<!--Optional:--><v1:UserToken>?</v1:UserToken></v1:RequestContext></soapenv:Header><soapenv:Body><v1:TrackPackagesByPinRequest><v1:PINs><!--Zero or more repetitions:-->" +
-				   "<v1:PIN><v1:Value>" + waybill + "</v1:Value></v1:PIN></v1:PINs></v1:TrackPackagesByPinRequest></soapenv:Body></soapenv:Envelope>";
-
-			httpContent = new StringContent(sEnv);
-			req.Content = httpContent;
-			req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
-			response = await httpClient.SendAsync(req);
-
-			using (XmlReader reader = XmlReader.Create(new StringReader(await response.Content.ReadAsStringAsync())))
+			try
 			{
-				while (reader.Read())
-				{
-					if (reader.IsStartElement())
-					{
-						//return only when you have START tag  
-						if (reader.Name.ToString() == "ScanDate" && date == "")
-						{
-							date = reader.ReadString();
-						}
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+				HttpContent httpContent;
+				HttpResponseMessage response;
+				HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, url);
+				req.Headers.Add("SOAPAction", urlSoap);
+				req.Method = HttpMethod.Post;
 
-						if (reader.Name.ToString() == "Description")
+				sEnv = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:v1=""http://purolator.com/pws/datatypes/v1"">" +
+					   "<soapenv:Header><v1:RequestContext><v1:Version>1.2</v1:Version><v1:Language>en</v1:Language><v1:GroupID>?</v1:GroupID><v1:RequestReference>?</v1:RequestReference>" +
+					   "<!--Optional:--><v1:UserToken>?</v1:UserToken></v1:RequestContext></soapenv:Header><soapenv:Body><v1:TrackPackagesByPinRequest><v1:PINs><!--Zero or more repetitions:-->" +
+					   "<v1:PIN><v1:Value>" + waybill + "</v1:Value></v1:PIN></v1:PINs></v1:TrackPackagesByPinRequest></soapenv:Body></soapenv:Envelope>";
+
+				httpContent = new StringContent(sEnv);
+				req.Content = httpContent;
+				req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+				response = await httpClient.SendAsync(req);
+
+				using (XmlReader reader = XmlReader.Create(new StringReader(await response.Content.ReadAsStringAsync())))
+				{
+					while (reader.Read())
+					{
+						if (reader.IsStartElement())
 						{
-							info = reader.ReadString();
-							break;
+							//return only when you have START tag  
+							if (reader.Name.ToString() == "ScanDate" && date == "")
+							{
+								date = reader.ReadString();
+							}
+
+							if (reader.Name.ToString() == "Description")
+							{
+								info = reader.ReadString();
+								break;
+							}
 						}
 					}
 				}
+
+				if (info.ToLower().Contains("invalid pin") || info.ToLower().Contains("no scanning details") || string.IsNullOrEmpty(info)) result = "Information non disponible";
+				else result = info + " " + date;
+
+				return result;
 			}
-
-			if (info.ToLower().Contains("invalid pin") || info.ToLower().Contains("no scanning details") || string.IsNullOrEmpty(info)) result = "Information non disponible";
-			else result = info + " " + date;
-
-			return result;
+			catch (Exception ex)
+			{
+				msg("Tracking Puro (" + waybill + "): " + ex.Message);
+				return "";
+			}
 		}
 
-		private void UpdateRepair()
-        {
-			foreach (var item in appData.invPostes.ToArray())
-            {
-				if (item.emplacement == "REPAIR DEPOT")
-                {
-					if (item.RFretour == "ENTR COMP M")
-                    {
-						if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
-						else item.RFretour = "";
+		//private void UpdateRepair()
+		//      {
+		//	foreach (var item in appData.invPostes.ToArray())
+		//          {
+		//		if (item.emplacement == "REPAIR DEPOT")
+		//              {
+		//			if (item.RFretour == "ENTR COMP M")
+		//                  {
+		//				if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
+		//				else item.RFretour = "";
 
-						item.emplacement = "REPAIR DEPOT ENTR COMP M";
-					}
+		//				item.emplacement = "REPAIR DEPOT ENTR COMP M";
+		//			}
 
-					if (item.RFretour == "ENTR C" || item.RFretour == "ENTREPOT CENT.")
-					{
-						if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
-						else item.RFretour = "";
+		//			if (item.RFretour == "ENTR C" || item.RFretour == "ENTREPOT CENT.")
+		//			{
+		//				if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
+		//				else item.RFretour = "";
 
-						item.emplacement = "REPAIR DEPOT ENTR C";
-					}
+		//				item.emplacement = "REPAIR DEPOT ENTR C";
+		//			}
 
-					if (item.RFretour == "LÉVIS" || item.RFretour == "LEVIS")
-					{
-						if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
-						else item.RFretour = "";
+		//			if (item.RFretour == "LÉVIS" || item.RFretour == "LEVIS")
+		//			{
+		//				if (!string.IsNullOrEmpty(item.dateRetour)) item.RFretour = "N/A";
+		//				else item.RFretour = "";
 
-						item.emplacement = "REPAIR DEPOT LÉVIS";
-					}
-				}
-            }
-        }
+		//				item.emplacement = "REPAIR DEPOT LÉVIS";
+		//			}
+		//		}
+		//          }
+		//      }
 
 		private protected void myHandler(object sender, ConsoleCancelEventArgs args)
 		{
@@ -546,7 +584,7 @@ namespace entrepotServer
 				if (timeCompare >= 300 && timeCompare < 305)
 				{
 					KickAllClient();
-					UpdateColor();
+					//UpdateColor();
 
 					if (DateTime.Now.Year.ToString() != year)
 					{
@@ -562,7 +600,7 @@ namespace entrepotServer
 				if (day != "samedi" && day != "dimanche")
                 {
 					if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
-					if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
+					//if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
 					//if (timeCompare >= 1000 && timeCompare < 1005) _ = puroTracking();
 					//if (timeCompare >= 1200 && timeCompare < 1205) _ = puroTracking();
 					//if (timeCompare >= 1400 && timeCompare < 1405) _ = puroTracking();
@@ -587,124 +625,124 @@ namespace entrepotServer
         //    AutoRapport(appData.invPostes, "Rapport.xlsx");
         //}
 
-        private void RapportFTP()
-        {
-            var today = DateTime.Now.ToShortDateString();
+  //      private void RapportFTP()
+  //      {
+  //          var today = DateTime.Now.ToShortDateString();
 
-            foreach (var item in appData.invPostes.ToArray())
-            {
-                if (item.dateEntry == today || (item.dateSortie.Contains(today) && item.statut == "Sortie")) appData.jour.Add(item);
-            }
+  //          foreach (var item in appData.invPostes.ToArray())
+  //          {
+  //              if (item.dateEntry == today || (item.dateSortie.Contains(today) && item.statut == "Sortie")) appData.jour.Add(item);
+  //          }
 
-            foreach (var item in appData.jour.ToArray())
-            {
-                var rf = item.RF.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var rfRetour = item.RFretour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var dateRF = item.dateSortie.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //          foreach (var item in appData.jour.ToArray())
+  //          {
+  //              var rf = item.RF.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var rfRetour = item.RFretour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var dateRF = item.dateSortie.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+  //              var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
-                if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
-                if (rfRetour.Count() != 0) item.RFretour = rfRetour[rfRetour.Count() - 1];
-                if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
-                if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
-                if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
-                if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
-            }
+  //              if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
+  //              if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
+  //              if (rfRetour.Count() != 0) item.RFretour = rfRetour[rfRetour.Count() - 1];
+  //              if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
+  //              if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
+  //              if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
+  //              if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
+  //          }
 
-            AutoRapport(appData.jour, "RapportEntrerSortie.xlsx");
-            appData.jour.Clear();
-            _ = uploadFTP();
-        }
+  //          AutoRapport(appData.jour, "RapportEntrerSortie.xlsx");
+  //          appData.jour.Clear();
+  //          _ = uploadFTP();
+  //      }
 
-        private async Task uploadFTP()
-		{
-			await Task.Delay(2000);
+  //      private async Task uploadFTP()
+		//{
+		//	await Task.Delay(2000);
 
-			int count = 0;
-			string path = @".\Rapport Auto\RapportEntrerSortie.xlsx";
+		//	int count = 0;
+		//	string path = @".\Rapport Auto\RapportEntrerSortie.xlsx";
 
-			if (!File.Exists(path))
-			{
-				msg("RapportEntrerSortie.xlsx don't exist, FTP upload cancelled.");
-				return;
-			}
+		//	if (!File.Exists(path))
+		//	{
+		//		msg("RapportEntrerSortie.xlsx don't exist, FTP upload cancelled.");
+		//		return;
+		//	}
 
-			msg("Attempting connection to FTP server to send the report ...");
+		//	msg("Attempting connection to FTP server to send the report ...");
 				
-			while (true)
-			{
-				try
-				{
-					FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportEntrerSortie.xlsx");
-					request.Method = WebRequestMethods.Ftp.UploadFile;
-					//request.EnableSsl = true;
-					request.UsePassive = false;
-					request.KeepAlive = false;
-					request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
+		//	while (true)
+		//	{
+		//		try
+		//		{
+		//			FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportEntrerSortie.xlsx");
+		//			request.Method = WebRequestMethods.Ftp.UploadFile;
+		//			//request.EnableSsl = true;
+		//			request.UsePassive = false;
+		//			request.KeepAlive = false;
+		//			request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
 
-					//ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateCertificate);
-					msg("Connected to FTP server.");
-					// Copy the contents of the file to the request stream.
-					await using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read);
-					await using Stream requestStream = request.GetRequestStream();
-					msg("Sending file ...");
-					await fileStream.CopyToAsync(requestStream);
-					msg("File transfer completed.");
-					//using FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-					//msg($"Upload File Complete, status {response.StatusDescription}");
-					break;
-				}
-				catch (Exception ex)
-				{
-					count ++;
-					msg(ex.Message);
+		//			//ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateCertificate);
+		//			msg("Connected to FTP server.");
+		//			// Copy the contents of the file to the request stream.
+		//			await using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read);
+		//			await using Stream requestStream = request.GetRequestStream();
+		//			msg("Sending file ...");
+		//			await fileStream.CopyToAsync(requestStream);
+		//			msg("File transfer completed.");
+		//			//using FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+		//			//msg($"Upload File Complete, status {response.StatusDescription}");
+		//			break;
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			count ++;
+		//			msg(ex.Message);
 
-					if (count == 5)
-					{
-						msg("FTP upload cancelled: failed 5 times.");
-						break;
-					}
+		//			if (count == 5)
+		//			{
+		//				msg("FTP upload cancelled: failed 5 times.");
+		//				break;
+		//			}
 
-					await Task.Delay(5000);
-				}
-			}
-		}
+		//			await Task.Delay(5000);
+		//		}
+		//	}
+		//}
 
         //static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         //{
         //    return true;
         //}
 
-        private void UpdateColor()
-		{
-			lock (appData.lockDB)
-			{
-				var date = DateTime.Now;
-				DateTime expire;
+  //      private void UpdateColor()
+		//{
+		//	lock (appData.lockDB)
+		//	{
+		//		var date = DateTime.Now;
+		//		DateTime expire;
 
-				foreach (var item in appData.invPostes.ToArray())
-				{
-					if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && !item.emplacement.Contains("REPAIR") && (item.statut == "En Stock" || item.statut == "Réservé") && item.statut != "Sortie")
-					{
-						var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-						expire = DateTime.Parse(array[array.Count() -1]);
+		//		foreach (var item in appData.invPostes.ToArray())
+		//		{
+		//			if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && !item.emplacement.Contains("REPAIR") && (item.statut == "En Stock" || item.statut == "Réservé") && item.statut != "Sortie")
+		//			{
+		//				var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		//				expire = DateTime.Parse(array[array.Count() -1]);
 
-						if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
-						else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
-						else if (expire < date) item.xcolor = "2";
-						else item.xcolor = "";
-					}
+		//				if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
+		//				else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
+		//				else if (expire < date) item.xcolor = "2";
+		//				else item.xcolor = "";
+		//			}
 
-					if (item.statut == "Sortie" || item.emplacement == "QUANTUM" || item.emplacement.Contains("REPAIR")) item.xcolor = "";
-				}
+		//			if (item.statut == "Sortie" || item.emplacement == "QUANTUM" || item.emplacement.Contains("REPAIR")) item.xcolor = "";
+		//		}
 
-				SaveDatabase();
-			}
-		}
+		//		SaveDatabase();
+		//	}
+		//}
 
 		private void KickAllClient()
 		{
@@ -911,26 +949,26 @@ namespace entrepotServer
 			}
 		}
 
-		public void SaveInventaireDesjardins()
-		{
-			lock (lockSave)
-			{
-				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardins.xml";
+		//public void SaveInventaireDesjardins()
+		//{
+		//	lock (lockSave)
+		//	{
+		//		string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardins.xml";
 
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
-					using (StreamWriter wr = new StreamWriter(path))
-					{
-						xs.Serialize(wr, appData.fichierAchat);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
+		//		try
+		//		{
+		//			XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
+		//			using (StreamWriter wr = new StreamWriter(path))
+		//			{
+		//				xs.Serialize(wr, appData.fichierAchat);
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex.Message);
+		//		}
+		//	}
+		//}
 
 		public void SaveDatabase()
 		{
@@ -966,9 +1004,11 @@ namespace entrepotServer
 			{
 				Console.WriteLine(ex.Message);
 				Console.WriteLine(ex.StackTrace);
+				msg("Database loading error !");
 			}
 
 			ModelList();
+			msg("Databaseloaded correctly.");
 		}
 
 		public void ModelList()
@@ -980,8 +1020,7 @@ namespace entrepotServer
 				if (item.type.Contains("�")) item.type = item.type.Replace("�", "ç");
 
 				if (!type.Contains(item.type)) 
-				{
-					
+				{			
 					type.Add(item.type);
 					appData.typesModels.Add(new TypeModel { type = item.type });
 				}
@@ -993,27 +1032,27 @@ namespace entrepotServer
 			}
 		}
 
-		public void LoadingDesjardins()
-		{
-			string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardins.xml";
+		//public void LoadingDesjardins()
+		//{
+		//	string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"invDesjardins.xml";
 
-			if (!File.Exists(path)) return;
+		//	if (!File.Exists(path)) return;
 
-			try
-			{
-				XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
-				using (StreamReader rd = new StreamReader(path))
-				{
-					appData.fichierAchat = xs.Deserialize(rd) as List<Achat>;
-				}
+		//	try
+		//	{
+		//		XmlSerializer xs = new XmlSerializer(typeof(List<Achat>));
+		//		using (StreamReader rd = new StreamReader(path))
+		//		{
+		//			appData.fichierAchat = xs.Deserialize(rd) as List<Achat>;
+		//		}
 
-				msg("---Fichier Desjardins Loaded---");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
+		//		msg("---Fichier Desjardins Loaded---");
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		Console.WriteLine(ex.Message);
+		//	}
+		//}
 
 		public void LoadWaybills()
 		{
@@ -1073,45 +1112,45 @@ namespace entrepotServer
 			}
 		}
 
-		public void SaveModelMoniteur()
-		{
-			lock (lockSave)
-			{
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<string>));
-					using (StreamWriter wr = new StreamWriter(path3))
-					{
-						xs.Serialize(wr, appData.modeleMoniteur);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
+		//public void SaveModelMoniteur()
+		//{
+		//	lock (lockSave)
+		//	{
+		//		try
+		//		{
+		//			XmlSerializer xs = new XmlSerializer(typeof(List<string>));
+		//			using (StreamWriter wr = new StreamWriter(path3))
+		//			{
+		//				xs.Serialize(wr, appData.modeleMoniteur);
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex.Message);
+		//		}
+		//	}
+		//}
 
-		public void LoadModel()
-		{
-			if (File.Exists(path3))
-			{
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<string>));
-					using (StreamReader rd = new StreamReader(path3))
-					{
-						appData.modeleMoniteur = xs.Deserialize(rd) as List<string>;
-					}
+		//public void LoadModel()
+		//{
+		//	if (File.Exists(path3))
+		//	{
+		//		try
+		//		{
+		//			XmlSerializer xs = new XmlSerializer(typeof(List<string>));
+		//			using (StreamReader rd = new StreamReader(path3))
+		//			{
+		//				appData.modeleMoniteur = xs.Deserialize(rd) as List<string>;
+		//			}
 
-					msg("---Modele moniteurs loaded--- ");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
+		//			msg("---Modele moniteurs loaded--- ");
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex.Message);
+		//		}
+		//	}
+		//}
 
 		public void LoadUsers()  // Load users data
 		{
@@ -1174,11 +1213,11 @@ namespace entrepotServer
 			string folder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"config";
 			string folder2 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database";
 			string folder3 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"backup";
-			string folder4 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"fichier inventaire";
+			//string folder4 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"fichier inventaire";
 			string folder5 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"Rapport Auto";
 			string folder6 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"Logs";
 			string folder7 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"waybills";
-			string folder8 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils";
+			//string folder8 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"seuils";
 
 			if (!Directory.Exists(folder))
 			{
@@ -1219,18 +1258,18 @@ namespace entrepotServer
 				}
 			}
 
-			if (!Directory.Exists(folder4))
-			{
-				try
-				{
-					Directory.CreateDirectory(folder4);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-					return;
-				}
-			}
+			//if (!Directory.Exists(folder4))
+			//{
+			//	try
+			//	{
+			//		Directory.CreateDirectory(folder4);
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//		Console.WriteLine(ex.Message);
+			//		return;
+			//	}
+			//}
 
 			if (!Directory.Exists(folder5))
 			{
@@ -1271,19 +1310,18 @@ namespace entrepotServer
 				}
 			}
 
-			if (!Directory.Exists(folder8))
-			{
-				try
-				{
-					Directory.CreateDirectory(folder8);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-					return;
-				}
-			}
-
+			//if (!Directory.Exists(folder8))
+			//{
+			//	try
+			//	{
+			//		Directory.CreateDirectory(folder8);
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//		Console.WriteLine(ex.Message);
+			//		return;
+			//	}
+			//}
 		}
 
 		public void msg(string mesg)
