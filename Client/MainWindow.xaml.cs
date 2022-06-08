@@ -121,7 +121,7 @@ namespace Client
 
 				im.requestDatabase();
 				im.requestModele();
-				im.ModeleMoniteurRequest();
+				im.ModeleRequest();
 				im.RequestLogs();
 				im.Years();
 				im.WBdate();
@@ -629,7 +629,7 @@ namespace Client
 
 			foreach (InvPostes item in temp)
 			{
-				list.Add(item.type + " " + item.model + " " + item.asset + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone + " " + item.dateCloneValid);
+				list.Add(item.type + " " + item.model + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone);
 			}
 
 			Clipboard.SetText(String.Join(Environment.NewLine, list));
@@ -644,7 +644,7 @@ namespace Client
 
 			foreach (InvPostes item in temp)
 			{
-				list.Add(item.type + " " + item.model + " " + item.asset + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone + " " + item.dateCloneValid);
+				list.Add(item.type + " " + item.model + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone);
 			}
 
 			Clipboard.SetText(String.Join(Environment.NewLine, list));
@@ -818,8 +818,8 @@ namespace Client
 
 			foreach (InvPostes item in ListViewData.SelectedItems)
 			{
-				result = new[] { item.type, item.model, item.asset, item.serial, item.statut, item.RF, item.RFretour, item.emplacement, item.dateEntry, item.dateSortie, item.dateRetour, item.dateEntryLab, item.dateClone, item.dateCloneValid };
-				temp.Add(new InvPostes { type = result[0], model = result[1], asset = result[2], serial = result[3], statut = result[4], RF = result[5], RFretour = result[6], emplacement = result[7], dateEntry = result[8], dateSortie = result[9], dateRetour = result[10], dateEntryLab = result[11], dateClone = result[12], dateCloneValid = result[13] });
+				result = new[] { item.type, item.model, item.serial, item.statut, item.RF, item.RFretour, item.emplacement, item.dateEntry, item.dateSortie, item.dateRetour, item.dateEntryLab, item.dateClone };
+				temp.Add(new InvPostes { type = result[0], model = result[1], serial = result[3], statut = result[4], RF = result[5], RFretour = result[6], emplacement = result[7], dateEntry = result[8], dateSortie = result[9], dateRetour = result[10], dateEntryLab = result[11], dateClone = result[12] });
 			}
 
 			Modify modify = new Modify(im, temp);
@@ -1145,7 +1145,7 @@ namespace Client
 
 			foreach (InvPostes item in temp)
 			{
-				list.Add(item.type + " " + item.model + " " + item.asset + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone + " " + item.dateCloneValid);
+				list.Add(item.type + " " + item.model + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone);
 			}
 
 			Clipboard.SetText(String.Join(Environment.NewLine, list));

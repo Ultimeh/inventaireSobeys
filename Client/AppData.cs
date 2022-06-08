@@ -74,6 +74,16 @@ namespace Client
 		private ObservableCollection<string> _jour = new ObservableCollection<string>();
 		public ObservableCollection<string> jour { get { return _jour; } set { _jour = value; } }
 
+
+		private ObservableCollection<string> _modelPoste = new ObservableCollection<string>();
+		public ObservableCollection<string> modelPoste { get { return _modelPoste; } set { _modelPoste = value; } }
+
+		private ObservableCollection<string> _modelPortable = new ObservableCollection<string>();
+		public ObservableCollection<string> modelPortable { get { return _modelPortable; } set { _modelPortable = value; } }
+
+		private ObservableCollection<string> _modelServeur = new ObservableCollection<string>();
+		public ObservableCollection<string> modelServeur { get { return _modelServeur; } set { _modelServeur = value; } }
+
 		private string _user;
 		private string _IPAddress = "";
 		private string _contextName;
@@ -289,7 +299,7 @@ namespace Client
 
 			if (!string.IsNullOrEmpty(serialSearch))
 			{
-				if (item.serial.Contains(serialSearch.ToUpper()) || item.asset.Contains(serialSearch.ToUpper())) return true;
+				if (item.serial.Contains(serialSearch.ToUpper())) return true;
 				else return false;
 			}
 
@@ -457,7 +467,7 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 6 && !string.IsNullOrEmpty(item.xcolor))
+				if (statutSearch == 6)
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{
@@ -625,7 +635,7 @@ namespace Client
 						return true;
 					}
 
-					if (statutSearch == 6 && !string.IsNullOrEmpty(item.xcolor))
+					if (statutSearch == 6)
 					{
 						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 						{
@@ -793,7 +803,7 @@ namespace Client
 							return true;
 						}
 
-						if (statutSearch == 6 && !string.IsNullOrEmpty(item.xcolor))
+						if (statutSearch == 6)
 						{
 							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 							{
@@ -1126,7 +1136,6 @@ namespace Client
 	{
 		private string _type;
 		private string _model;
-		private string _asset;
 		private string _serial;
 		private string _statut;
 		private string _RF = "";
@@ -1137,8 +1146,6 @@ namespace Client
 		private string _dateEntry = "";
 		private string _dateEntryLab = "";
 		private string _dateClone = "";
-		private string _dateCloneValid = "";
-		private string _xcolor = "";
 		private string _infoAjout = "";
 		private string _comment = "";
 
@@ -1150,7 +1157,6 @@ namespace Client
 
 		public string type { get { return _type; } set { _type = value; OnPropertyChanged(); } }
 		public string model { get { return _model; } set { _model = value; OnPropertyChanged(); } }
-		public string asset { get { return _asset; } set { _asset = value; OnPropertyChanged(); } }
 		public string serial { get { return _serial; } set { _serial = value; OnPropertyChanged(); } }
 		public string statut { get { return _statut; } set { _statut = value; OnPropertyChanged(); } }
 		public string RF { get { return _RF; } set { _RF = value; OnPropertyChanged(); } }
@@ -1161,8 +1167,6 @@ namespace Client
 		public string dateEntry { get { return _dateEntry; } set { _dateEntry = value; OnPropertyChanged(); } }
 		public string dateEntryLab { get { return _dateEntryLab; } set { _dateEntryLab = value; OnPropertyChanged(); } }
 		public string dateClone { get { return _dateClone; } set { _dateClone = value; OnPropertyChanged(); } }
-		public string dateCloneValid { get { return _dateCloneValid; } set { _dateCloneValid = value; OnPropertyChanged(); } }
-		public string xcolor { get { return _xcolor; } set { _xcolor = value; OnPropertyChanged(); } }
 		public string infoAjout { get { return _infoAjout; } set { _infoAjout = value; } }
 		public string comment { get { return _comment; } set { _comment = value; } }
 		public List<string> infoEmp { get { return _infoEmp; } set { _infoEmp = value; } }
@@ -1249,9 +1253,6 @@ namespace Client
 			InvPostes fileX = x as InvPostes;
 			InvPostes fileY = y as InvPostes;
 
-			string[] xMod;
-			string[] yMod;
-
 			if (task == "type")
 			{
 				if (sort) return fileX.type.CompareTo(fileY.type);
@@ -1269,32 +1270,6 @@ namespace Client
 			{
 				if (sort) return fileX.emplacement.CompareTo(fileY.emplacement);
 				else return fileY.emplacement.CompareTo(fileX.emplacement);
-			}
-
-			if (task == "valid")
-			{
-				if (!sort)
-				{
-					if (string.IsNullOrEmpty(fileX.dateCloneValid) || string.IsNullOrEmpty(fileY.dateCloneValid)) return fileX.dateCloneValid.CompareTo(fileY.dateCloneValid);
-					else
-                    {
-						xMod = fileX.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-						yMod = fileY.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-						return DateTime.Compare(DateTime.Parse(xMod[xMod.Count() - 1]), DateTime.Parse(yMod[yMod.Count() - 1]));
-					}
-						
-						
-				}
-				else if (sort)
-				{
-					if (string.IsNullOrEmpty(fileX.dateCloneValid) || string.IsNullOrEmpty(fileY.dateCloneValid)) return fileY.dateCloneValid.CompareTo(fileX.dateCloneValid);
-					else
-                    {
-						xMod = fileX.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-						yMod = fileY.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-						return DateTime.Compare(DateTime.Parse(yMod[yMod.Count() - 1]), DateTime.Parse(xMod[xMod.Count() - 1]));
-					}			
-				}
 			}
 
 			return 0;

@@ -144,5 +144,82 @@ namespace Client
         {
 			im.TrackingPuro();
         }
+
+        private void btn_addModel_Click(object sender, RoutedEventArgs e)
+        {
+			if (cb_type.SelectedIndex == -1) return;
+			if (string.IsNullOrWhiteSpace(tb_addModel.Text)) return;
+
+			string model = tb_addModel.Text.Trim();
+
+			//if (cb_type.Text == "Poste")
+   //         {
+			//	if (!App.appData.modelPoste.Contains(model)) App.appData.modelPoste.Add(model);
+   //             else
+			//	{
+			//		MessageBox.Show("Le modele entré existe déjà.", "Modele existant", MessageBoxButton.OK, MessageBoxImage.Warning);
+			//		return;
+			//	}
+			//}
+
+			//if (cb_type.Text == "Portable")
+			//{
+			//	if (!App.appData.modelPortable.Contains(model)) App.appData.modelPortable.Add(model);
+			//	else
+			//	{
+			//		MessageBox.Show("Le modele entré existe déjà.", "Modele existant", MessageBoxButton.OK, MessageBoxImage.Warning);
+			//		return;
+			//	}
+			//}
+
+			//if (cb_type.Text == "Serveur")
+			//{
+			//	if (!App.appData.modelServeur.Contains(model)) App.appData.modelServeur.Add(model);
+			//	else
+			//	{
+			//		MessageBox.Show("Le modele entré existe déjà.", "Modele existant", MessageBoxButton.OK, MessageBoxImage.Warning);
+			//		return;
+			//	}
+			//}
+
+			im.updateModel(cb_type.Text, model, "add");
+			tb_addModel.Text = "";
+		}
+
+        private void cb_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+			if (cb_type.SelectedIndex == -1) 
+            {
+				tb_addModel.IsEnabled = true;
+				listModel.ItemsSource = null;
+			}
+            else
+            {
+				tb_addModel.IsEnabled = true;
+
+				if (cb_type.Text == "Poste") listModel.ItemsSource = App.appData.modelPoste;
+				if (cb_type.Text == "Portable") listModel.ItemsSource = App.appData.modelPortable;
+				if (cb_type.Text == "Serveur") listModel.ItemsSource = App.appData.modelServeur;
+			}
+        }
+
+        private void tb_addModel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+			if (string.IsNullOrWhiteSpace(tb_addModel.Text)) btn_addModel.IsEnabled = false;
+			else btn_addModel.IsEnabled = true;
+		}
+
+        private void listModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+			if (listModel.SelectedIndex == -1) btn_delModel.IsEnabled = false;
+			else btn_delModel.IsEnabled = true;
+        }
+
+        private void btn_delModel_Click(object sender, RoutedEventArgs e)
+        {
+			if (listModel.SelectedIndex == -1) return;
+
+			im.updateModel(cb_type.Text, listModel.SelectedItem.ToString(), "del");
+		}
     }
 }

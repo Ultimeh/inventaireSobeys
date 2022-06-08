@@ -66,7 +66,7 @@ namespace entrepotServer
 		public const byte IM_BackupList = 26; // demande list des backup
 		public const byte IM_DeleteFiles = 27; // files to delete
 		public const byte IM_ConfirmCLone = 28; // lab clonage fini et valider
-		public const byte IM_ModeleMoniteur = 29; // si ajout a fair en lier avec clonage valider
+		public const byte IM_ModeleRequest = 29; // si ajout a fair en lier avec clonage valider
 		public const byte IM_Waybills = 30; // ajout et retrait de waybill
 		public const byte IM_ServerNotice = 31; // kick notice to user
 		public const byte IM_Comment = 32; // commentaire WB
@@ -414,9 +414,9 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if (item.serial == tooAdd || item.asset == tooAdd)
+											if (item.serial == tooAdd)
 											{
-												doublon.Add(item.serial + " " + item.asset);
+												doublon.Add(item.serial);
 												doublonCheck = false;
 												break;
 											}
@@ -435,8 +435,8 @@ namespace entrepotServer
 
 											if (item == exist.serial || item == exist.asset)
 											{
-												Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, asset = exist.asset, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
-												temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, asset = exist.asset, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
+												Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
+												temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
 
 												lock (Program.appData.lockModel)
 												{
@@ -709,7 +709,7 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if (stuff == item.serial || stuff == item.asset)
+											if (stuff == item.serial)
 											{
 												if (item.statut == "Sortie" || item.statut == "Au Lab" || item.statut == "Réservé") erreur.Add(item.serial);
 												else
@@ -726,7 +726,6 @@ namespace entrepotServer
 													item.statut = statut;
 													item.emplacement = emp;
 													item.RF = newRF;
-													item.xcolor = "";
 													item.infoSortie.Add(dateSortie + " - " + RF + " - " + userInfo.UserName);
 
 													toAdd.Add(item);
@@ -825,9 +824,9 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if (stuff == item.serial || stuff == item.asset)
+											if (stuff == item.serial)
 											{
-												if (item.type != "Moniteur" && (item.statut == "En Stock" || item.statut == "Au Lab" || item.statut == "Réservé"))
+												if (item.statut == "En Stock" || item.statut == "Au Lab")
 												{
 													erreur.Add(stuff);
 												}
@@ -844,10 +843,9 @@ namespace entrepotServer
 
 													if (emp != "R2GO" || emp != "OPER")
 													{
-														if (!string.IsNullOrEmpty(item.dateClone) || !string.IsNullOrEmpty(item.dateCloneValid))
+														if (!string.IsNullOrEmpty(item.dateClone))
 														{
 															item.dateClone = "";
-															item.dateCloneValid = "";
 														}
 													}
 
@@ -896,8 +894,8 @@ namespace entrepotServer
 
 												if (item == exist.serial || item == exist.asset)
 												{
-													Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, asset = exist.asset, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
-													temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, asset = exist.asset, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
+													Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
+													temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
 													found = true;
 
 													lock (Program.appData.lockModel)
@@ -1025,7 +1023,7 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if ((stuff == item.serial || stuff == item.asset))
+											if (stuff == item.serial)
 											{
 												if (item.emplacement != "Sortie") item.emplacement = "Au Lab";
 												else 
@@ -1119,7 +1117,7 @@ namespace entrepotServer
 
 										foreach (var item in listFound.ToArray())
 										{
-											send.Add(item.type + "╚" + item.model + "╚" + item.asset + "╚" + item.serial + "╚" + item.statut + "╚" + item.RF + "╚" + item.RFretour + "╚" + item.emplacement + "╚" + item.dateEntry + "╚" + item.dateSortie + "╚" + item.dateRetour + "╚" + item.dateEntryLab + "╚" + item.dateClone + "╚" + item.dateCloneValid);
+											send.Add(item.type + "╚" + item.model + "╚" + item.serial + "╚" + item.statut + "╚" + item.RF + "╚" + item.RFretour + "╚" + item.emplacement + "╚" + item.dateEntry + "╚" + item.dateSortie + "╚" + item.dateRetour + "╚" + item.dateEntryLab + "╚" + item.dateClone);
 										}
 
 										bw.Write(IM_rapportLab);
@@ -1250,7 +1248,7 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if (stuff == item.serial || stuff == item.asset)
+											if (stuff == item.serial)
 											{
 												if (item.statut == "Sortie")
 												{
@@ -1260,8 +1258,6 @@ namespace entrepotServer
 												{
 													item.infoEmp.Add(time + " - Ancien: " + item.emplacement + ", Nouveau: " + emp + " - "  + userInfo.UserName);
 													item.emplacement = emp;
-
-													if (emp == "QUANTUM" || emp.ToLower().Contains("repair")) item.xcolor = "";
 
 													toSend.Add(item);
 												}
@@ -1356,16 +1352,12 @@ namespace entrepotServer
 
 										foreach (var item in Program.appData.invPostes.ToArray())
 										{
-											if ((stuff == item.serial || stuff == item.asset) && item.emplacement == "Au Lab")
+											if ((stuff == item.serial) && item.emplacement == "Au Lab")
 											{
 												item.emplacement = "R2GO";
-												item.xcolor = "";
 
 												if (!string.IsNullOrEmpty(item.dateClone)) item.dateClone = item.dateClone + Environment.NewLine + date.ToShortDateString();
 												else item.dateClone = date.ToShortDateString();
-
-												if (!string.IsNullOrEmpty(item.dateCloneValid)) item.dateCloneValid = item.dateCloneValid + Environment.NewLine + date.AddDays(25).ToShortDateString();
-												else item.dateCloneValid = date.AddDays(25).ToShortDateString();
 
 												item.infoValidClone.Add(date.ToShortDateString() + " - " + userInfo.UserName);
 
@@ -1488,11 +1480,11 @@ namespace entrepotServer
 							}
 							break;
 
-						case IM_TrackingPuro:
-							{
-								if (!Program.runAPI) _= prog.puroTracking();
-							}
-							break;
+						//case IM_TrackingPuro:
+						//	{
+						//		if (!Program.runAPI) _= prog.puroTracking();
+						//	}
+						//	break;
 
 						case IM_MainComment:
 							{
@@ -1531,21 +1523,22 @@ namespace entrepotServer
 							}
 							break;
 
-						case IM_ModeleMoniteur:
-							{
-								lock (Program.appData.lockModel)
-								{
-									if (Program.appData.modeleMoniteur.Count != 0)
-									{
-										var modele = string.Join("╚", Program.appData.modeleMoniteur);
+                        case IM_ModeleRequest:
+                            {
+                                lock (Program.appData.lockModel)
+                                {
+                                    var poste = JsonSerializer.Serialize(Program.appData.modelPoste);
+                                    var laptop = JsonSerializer.Serialize(Program.appData.modelPortable);
+                                    var serveur = JsonSerializer.Serialize(Program.appData.modelServeur);
 
-										bw.Write(IM_ModeleMoniteur);
-										bw.Write(modele);
-										bw.Flush();
-									}
-								}
-							}
-							break;
+                                    bw.Write(IM_ModeleRequest);
+                                    bw.Write(poste);
+									bw.Write(laptop);
+									bw.Write(serveur);
+									bw.Flush();
+                                }
+                            }
+                            break;
 
 						case IM_Comment:
 							{
@@ -1952,6 +1945,7 @@ namespace entrepotServer
 
 						case IM_UpdateModele:
 							{
+								string type = br.ReadString();
 								string model = br.ReadString();
 								string task = br.ReadString();
 
@@ -1959,17 +1953,19 @@ namespace entrepotServer
 								{
 									if (task == "add")
 									{
-										if (!Program.appData.modeleMoniteur.Contains(model)) Program.appData.modeleMoniteur.Add(model);
+										if (type == "Poste") Program.appData.modelPoste.Add(model);
+										if (type == "Portable") Program.appData.modelPortable.Add(model);
+										if (type == "Serveur") Program.appData.modelServeur.Add(model);
 									}
 
 									if (task == "del")
 									{
-										if (Program.appData.modeleMoniteur.Contains(model)) Program.appData.modeleMoniteur.Remove(model);
+										if (type == "Poste") Program.appData.modelPoste.Remove(model);
+										if (type == "Portable") Program.appData.modelPortable.Remove(model);
+										if (type == "Serveur") Program.appData.modelServeur.Remove(model);
 									}
-
-									prog.SaveModelMoniteur();
 								}
-
+					
 								foreach (var UserKey in prog.users.Keys)
 								{
 									if (prog.users.TryGetValue(UserKey, out UserInfo user))
@@ -1977,6 +1973,7 @@ namespace entrepotServer
 										if (user.LoggedIn)
 										{
 											user.Connection.bw.Write(IM_UpdateModele);
+											user.Connection.bw.Write(type);
 											user.Connection.bw.Write(model);
 											user.Connection.bw.Write(task);
 											user.Connection.bw.Flush();

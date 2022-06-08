@@ -36,35 +36,37 @@
             </Label.Style>
         </Label>
 
-        <ComboBox x:Name="cb_specialType" HorizontalAlignment="Left" IsEnabled="False" Margin="101,34,0,0" VerticalAlignment="Top" Width="92" SelectionChanged="cb_specialType_SelectionChanged" />
-
-        <ComboBox x:Name="cb_specialModel" HorizontalAlignment="Left" IsEnabled="False" Margin="101,61,0,0" VerticalAlignment="Top" Width="92" SelectionChanged="cb_specialModel_SelectionChanged"/>
-
-        <TextBox x:Name="tb_SpecialAutre" HorizontalAlignment="Left" Margin="204,36,0,0" IsEnabled="False" TextWrapping="NoWrap" VerticalAlignment="Top" Width="107" Height="18">
-            <TextBox.Style>
+        <Label x:Name="type" Content="Type :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="41" Margin="102,23,0,0">
+            <Label.Style>
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="Control.Background" Value="#FF323232"/>
-                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </Label.Style>
+        </Label>
 
-        <TextBox x:Name="tb_SpecialModAutre" HorizontalAlignment="Left" Margin="204,63,0,0" IsEnabled="False" TextWrapping="NoWrap" VerticalAlignment="Top" Width="107" Height="18">
-            <TextBox.Style>
+        <ComboBox x:Name="cb_type" IsEnabled="true" Margin="148,25,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="97" SelectionChanged="cb_type_SelectionChanged" >
+            <ComboBoxItem Content="Poste"/>
+            <ComboBoxItem Content="Portable"/>
+            <ComboBoxItem Content="Serveur"/>
+        </ComboBox>
+
+        <Label x:Name="model" Content="Modèle :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="59" Margin="86,50,0,0">
+            <Label.Style>
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="Control.Background" Value="#FF323232"/>
-                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </Label.Style>
+        </Label>
+
+        <ComboBox x:Name="cb_model" IsEnabled="False" Margin="148,52,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="97" />
 
         <Label x:Name="sn" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="154" Margin="102,83,0,0" Grid.RowSpan="2">
             <Label.Style>

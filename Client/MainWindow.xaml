@@ -302,18 +302,6 @@
                                     </GridViewColumn.HeaderContainerStyle>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header=" # Actif" DisplayMemberBinding="{Binding asset}">
-                                    <GridViewColumn.HeaderContainerStyle>
-                                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                            <Setter Property="FontWeight" Value="Normal"/>
-                                            <Setter Property="FontSize" Value="14"/>
-                                            <Setter Property="Background" Value="LightSteelBlue"/>
-                                            <Setter Property="BorderBrush" Value="LightGray"/>
-                                        </Style>
-                                    </GridViewColumn.HeaderContainerStyle>
-                                </GridViewColumn>
-
                                 <GridViewColumn Header=" Numéro de série" DisplayMemberBinding="{Binding serial}">
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -423,18 +411,6 @@
                                 </GridViewColumn>
 
                                 <GridViewColumn Header=" Date Clonage" DisplayMemberBinding="{Binding dateClone}" >
-                                    <GridViewColumn.HeaderContainerStyle>
-                                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                            <Setter Property="FontWeight" Value="Normal"/>
-                                            <Setter Property="FontSize" Value="14"/>
-                                            <Setter Property="Background" Value="LightSteelBlue"/>
-                                            <Setter Property="BorderBrush" Value="LightGray"/>
-                                        </Style>
-                                    </GridViewColumn.HeaderContainerStyle>
-                                </GridViewColumn>
-
-                                <GridViewColumn Header=" Expiration Clonage" DisplayMemberBinding="{Binding dateCloneValid}" >
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left"/>

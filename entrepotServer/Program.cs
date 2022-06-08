@@ -32,14 +32,11 @@ namespace entrepotServer
 		public static AppData appData = new AppData();
 		string year = DateTime.Now.Year.ToString();
 		CultureInfo ci = new CultureInfo("fr-FR");
-		bool watcherFound = false;
 		public const byte IM_ForceQuit = 96;
 		public const byte IM_NewPreparation = 95;
 		public const byte IM_WBdate= 100;
-		private static HttpClient httpClient = new HttpClient();
 
 		string pathWay = @".\waybills\";
-		string path3 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"modelMoniteur.xml";
 		string backupFolder = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"backup" + Path.DirectorySeparatorChar;
 
 		public bool IsAliveRunning = false;
@@ -48,8 +45,6 @@ namespace entrepotServer
 		private static readonly Object LOCKLOG = new object();
 		bool exited = false;
 		public static bool runAPI = false;
-
-		FileSystemWatcher watcher = new FileSystemWatcher();
 
 		static void Main(string[] args)
 		{
@@ -108,7 +103,7 @@ namespace entrepotServer
 			{
 				if (!exited)
 				{
-					System.Console.WriteLine("Unloading fired");
+					Console.WriteLine("Unloading fired");
 					SaveUsers();
 				}
 			};
@@ -124,6 +119,9 @@ namespace entrepotServer
 			//LoadModel();
 			msg("Loading database ...");
 			LoadDatabase();
+
+			msg("Loading Modeles ...");
+			LoadModel();
 			//msg("Loading Inventaire Desjardins ...");
 			//LoadingDesjardins();
 			//msg("Loading Inventaire Desjardins NIP ...");
@@ -187,276 +185,276 @@ namespace entrepotServer
 		//          }
 		//      }
 
-		public async Task puroTracking()
-		{
-			runAPI = true;
-			msg("Puro tracking started.");
+		//public async Task puroTracking()
+		//{
+		//	runAPI = true;
+		//	msg("Puro tracking started.");
 
-			string value = "";
-			var month = DateTime.Now.ToString("MMMM", ci);
-			string oldMonth;
-			string anner = "";
-			List<Waybills> temp = new List<Waybills>();
+		//	string value = "";
+		//	var month = DateTime.Now.ToString("MMMM", ci);
+		//	string oldMonth;
+		//	string anner = "";
+		//	List<Waybills> temp = new List<Waybills>();
 
-			if (month == "janvier")
-			{
-				oldMonth = "décembre";
-				anner = DateTime.Now.AddYears(-1).ToString();
-				string path = @".\waybills\" + anner + ".wb";
+		//	if (month == "janvier")
+		//	{
+		//		oldMonth = "décembre";
+		//		anner = DateTime.Now.AddYears(-1).ToString();
+		//		string path = @".\waybills\" + anner + ".wb";
 
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Waybills>));
-					using (StreamReader rd = new StreamReader(path))
-					{
-						temp = xs.Deserialize(rd) as List<Waybills>;
-					}
+		//		try
+		//		{
+		//			XmlSerializer xs = new XmlSerializer(typeof(List<Waybills>));
+		//			using (StreamReader rd = new StreamReader(path))
+		//			{
+		//				temp = xs.Deserialize(rd) as List<Waybills>;
+		//			}
 
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-			}
-			else oldMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", ci);
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex.Message);
+		//		}
+		//	}
+		//	else oldMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", ci);
 
-			string[] waybillSortie;
-			string[] waybillRetour;
-			string[] split;
-			string newData;
+		//	string[] waybillSortie;
+		//	string[] waybillRetour;
+		//	string[] split;
+		//	string newData;
 
-			foreach (var item in appData.waybills.ToArray())
-			{
-				if (item.mois == month || item.mois == oldMonth)
-				{
-					if (!string.IsNullOrEmpty(item.wayb))
-					{
-						waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		//	foreach (var item in appData.waybills.ToArray())
+		//	{
+		//		if (item.mois == month || item.mois == oldMonth)
+		//		{
+		//			if (!string.IsNullOrEmpty(item.wayb))
+		//			{
+		//				waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-						for (int i = 0; i < waybillSortie.Count(); i++)
-						{
-							split = waybillSortie[i].Split(" - ");
+		//				for (int i = 0; i < waybillSortie.Count(); i++)
+		//				{
+		//					split = waybillSortie[i].Split(" - ");
 
-							if (split.Count() == 1)
-							{
-								value = await TrackingAPI(split[0]);
-								if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
-							}
-							else if (split[1].ToLower() != "shipment delivered")
-							{
-								value = await TrackingAPI(split[0]);
-								if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
-							}
-						}
+		//					if (split.Count() == 1)
+		//					{
+		//						value = await TrackingAPI(split[0]);
+		//						if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+		//					}
+		//					else if (split[1].ToLower() != "shipment delivered")
+		//					{
+		//						value = await TrackingAPI(split[0]);
+		//						if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+		//					}
+		//				}
 
-						newData = string.Join(Environment.NewLine, waybillSortie);
+		//				newData = string.Join(Environment.NewLine, waybillSortie);
 
-						if (item.wayb != newData)
-						{
-							lock (appData.lockWB)
-							{
-								item.wayb = newData;
-							}
-						}
-					}
+		//				if (item.wayb != newData)
+		//				{
+		//					lock (appData.lockWB)
+		//					{
+		//						item.wayb = newData;
+		//					}
+		//				}
+		//			}
 
-					if (!string.IsNullOrEmpty(item.wbRetour))
-					{
-						waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		//			if (!string.IsNullOrEmpty(item.wbRetour))
+		//			{
+		//				waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-						for (int i = 0; i < waybillRetour.Count(); i++)
-						{
-							split = waybillRetour[i].Split(" - ");
+		//				for (int i = 0; i < waybillRetour.Count(); i++)
+		//				{
+		//					split = waybillRetour[i].Split(" - ");
 
-							if (split.Count() == 1)
-							{
-								value = await TrackingAPI(split[0]);
-								if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
-							}
-							else if (split[1].ToLower() != "shipment delivered")
-							{
-								value = await TrackingAPI(split[0]);
-								if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
-							}
-						}
+		//					if (split.Count() == 1)
+		//					{
+		//						value = await TrackingAPI(split[0]);
+		//						if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+		//					}
+		//					else if (split[1].ToLower() != "shipment delivered")
+		//					{
+		//						value = await TrackingAPI(split[0]);
+		//						if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+		//					}
+		//				}
 
-						newData = string.Join(Environment.NewLine, waybillRetour);
+		//				newData = string.Join(Environment.NewLine, waybillRetour);
 
-						if (item.wbRetour != newData)
-						{
-							lock (appData.lockWB)
-							{
-								item.wbRetour = newData;
-							}
-						}
-					}
-				}
-			}
+		//				if (item.wbRetour != newData)
+		//				{
+		//					lock (appData.lockWB)
+		//					{
+		//						item.wbRetour = newData;
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
 
-			SaveWB();
+		//	SaveWB();
 
-			if (anner != "")
-			{
-				foreach (var item in temp.ToArray())
-				{
-					if (item.mois == oldMonth)
-					{
-						if (!string.IsNullOrEmpty(item.wayb))
-						{
-							waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		//	if (anner != "")
+		//	{
+		//		foreach (var item in temp.ToArray())
+		//		{
+		//			if (item.mois == oldMonth)
+		//			{
+		//				if (!string.IsNullOrEmpty(item.wayb))
+		//				{
+		//					waybillSortie = item.wayb.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-							for (int i = 0; i < waybillSortie.Count(); i++)
-							{
-								split = waybillSortie[i].Split(" - ");
+		//					for (int i = 0; i < waybillSortie.Count(); i++)
+		//					{
+		//						split = waybillSortie[i].Split(" - ");
 
-								if (split.Count() == 1)
-								{
-									value = await TrackingAPI(split[0]);
-									if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
-								}
-								else if (split[1].ToLower() != "shipment delivered")
-								{
-									value = await TrackingAPI(split[0]);
-									if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
-								}
-							}
+		//						if (split.Count() == 1)
+		//						{
+		//							value = await TrackingAPI(split[0]);
+		//							if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+		//						}
+		//						else if (split[1].ToLower() != "shipment delivered")
+		//						{
+		//							value = await TrackingAPI(split[0]);
+		//							if (!string.IsNullOrEmpty(value)) waybillSortie[i] = split[0] + " - " + value;
+		//						}
+		//					}
 
-							newData = string.Join(Environment.NewLine, waybillSortie);
+		//					newData = string.Join(Environment.NewLine, waybillSortie);
 
-							if (item.wayb != newData)
-							{
-								lock (appData.lockWB)
-								{
-									item.wayb = newData;
-								}
-							}
-						}
+		//					if (item.wayb != newData)
+		//					{
+		//						lock (appData.lockWB)
+		//						{
+		//							item.wayb = newData;
+		//						}
+		//					}
+		//				}
 
-						if (!string.IsNullOrEmpty(item.wbRetour))
-						{
-							waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		//				if (!string.IsNullOrEmpty(item.wbRetour))
+		//				{
+		//					waybillRetour = item.wbRetour.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-							for (int i = 0; i < waybillRetour.Count(); i++)
-							{
-								split = waybillRetour[i].Split(" - ");
+		//					for (int i = 0; i < waybillRetour.Count(); i++)
+		//					{
+		//						split = waybillRetour[i].Split(" - ");
 
-								if (split.Count() == 1)
-								{
-									value = await TrackingAPI(split[0]);
-									if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
-								}
-								else if (split[1].ToLower() != "shipment delivered")
-								{
-									value = await TrackingAPI(split[0]);
-									if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
-								}
-							}
+		//						if (split.Count() == 1)
+		//						{
+		//							value = await TrackingAPI(split[0]);
+		//							if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+		//						}
+		//						else if (split[1].ToLower() != "shipment delivered")
+		//						{
+		//							value = await TrackingAPI(split[0]);
+		//							if (!string.IsNullOrEmpty(value)) waybillRetour[i] = split[0] + " - " + value;
+		//						}
+		//					}
 
-							newData = string.Join(Environment.NewLine, waybillRetour);
+		//					newData = string.Join(Environment.NewLine, waybillRetour);
 
-							if (item.wbRetour != newData)
-							{
-								lock (appData.lockWB)
-								{
-									item.wbRetour = newData;
-								}
-							}
-						}
-					}
-				}
+		//					if (item.wbRetour != newData)
+		//					{
+		//						lock (appData.lockWB)
+		//						{
+		//							item.wbRetour = newData;
+		//						}
+		//					}
+		//				}
+		//			}
+		//		}
 
-				SaveWBold(temp, anner);
-			}
+		//		SaveWBold(temp, anner);
+		//	}
 
-			appData.dateWB = DateTime.Now.ToString();
+		//	appData.dateWB = DateTime.Now.ToString();
 
-			lock (appData.lockWrite)
-			{
-				foreach (var UserKey in users.Keys)
-				{
-					if (users.TryGetValue(UserKey, out UserInfo user))
-					{
-						if (user.LoggedIn)
-						{
-							user.Connection.bw.Write(IM_WBdate);
-							user.Connection.bw.Write(appData.dateWB);
-							user.Connection.bw.Flush();
-						}
-					}
-				}
-			}
+		//	lock (appData.lockWrite)
+		//	{
+		//		foreach (var UserKey in users.Keys)
+		//		{
+		//			if (users.TryGetValue(UserKey, out UserInfo user))
+		//			{
+		//				if (user.LoggedIn)
+		//				{
+		//					user.Connection.bw.Write(IM_WBdate);
+		//					user.Connection.bw.Write(appData.dateWB);
+		//					user.Connection.bw.Flush();
+		//				}
+		//			}
+		//		}
+		//	}
 
-			try
-			{
-				File.WriteAllText(@".\config\puroTracking.update", appData.dateWB);
-			}
-			catch { }
+		//	try
+		//	{
+		//		File.WriteAllText(@".\config\puroTracking.update", appData.dateWB);
+		//	}
+		//	catch { }
 
-			msg("Puro tracking ended.");
-			runAPI = false;
-		}
+		//	msg("Puro tracking ended.");
+		//	runAPI = false;
+		//}
 
-		private async Task<string> TrackingAPI(string waybill)
-		{
-			string result;
-			string sEnv;
-			string info = "";
-			string date = "";
-			string url = "https://webservices.purolator.com/EWS/V1/Tracking/TrackingService.asmx";
-			string urlSoap = "http://purolator.com/pws/service/v1/TrackPackagesByPin";
-			var byteArray = Encoding.ASCII.GetBytes("cc983bd6d2b146a8847e5e12a6aa0a5d:|h+JH#D6");
+		//private async Task<string> TrackingAPI(string waybill)
+		//{
+		//	string result;
+		//	string sEnv;
+		//	string info = "";
+		//	string date = "";
+		//	string url = "https://webservices.purolator.com/EWS/V1/Tracking/TrackingService.asmx";
+		//	string urlSoap = "http://purolator.com/pws/service/v1/TrackPackagesByPin";
+		//	var byteArray = Encoding.ASCII.GetBytes("cc983bd6d2b146a8847e5e12a6aa0a5d:|h+JH#D6");
 
-			try
-			{
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-				HttpContent httpContent;
-				HttpResponseMessage response;
-				HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, url);
-				req.Headers.Add("SOAPAction", urlSoap);
-				req.Method = HttpMethod.Post;
+		//	try
+		//	{
+		//		httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+		//		HttpContent httpContent;
+		//		HttpResponseMessage response;
+		//		HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, url);
+		//		req.Headers.Add("SOAPAction", urlSoap);
+		//		req.Method = HttpMethod.Post;
 
-				sEnv = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:v1=""http://purolator.com/pws/datatypes/v1"">" +
-					   "<soapenv:Header><v1:RequestContext><v1:Version>1.2</v1:Version><v1:Language>en</v1:Language><v1:GroupID>?</v1:GroupID><v1:RequestReference>?</v1:RequestReference>" +
-					   "<!--Optional:--><v1:UserToken>?</v1:UserToken></v1:RequestContext></soapenv:Header><soapenv:Body><v1:TrackPackagesByPinRequest><v1:PINs><!--Zero or more repetitions:-->" +
-					   "<v1:PIN><v1:Value>" + waybill + "</v1:Value></v1:PIN></v1:PINs></v1:TrackPackagesByPinRequest></soapenv:Body></soapenv:Envelope>";
+		//		sEnv = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:v1=""http://purolator.com/pws/datatypes/v1"">" +
+		//			   "<soapenv:Header><v1:RequestContext><v1:Version>1.2</v1:Version><v1:Language>en</v1:Language><v1:GroupID>?</v1:GroupID><v1:RequestReference>?</v1:RequestReference>" +
+		//			   "<!--Optional:--><v1:UserToken>?</v1:UserToken></v1:RequestContext></soapenv:Header><soapenv:Body><v1:TrackPackagesByPinRequest><v1:PINs><!--Zero or more repetitions:-->" +
+		//			   "<v1:PIN><v1:Value>" + waybill + "</v1:Value></v1:PIN></v1:PINs></v1:TrackPackagesByPinRequest></soapenv:Body></soapenv:Envelope>";
 
-				httpContent = new StringContent(sEnv);
-				req.Content = httpContent;
-				req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
-				response = await httpClient.SendAsync(req);
+		//		httpContent = new StringContent(sEnv);
+		//		req.Content = httpContent;
+		//		req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+		//		response = await httpClient.SendAsync(req);
 
-				using (XmlReader reader = XmlReader.Create(new StringReader(await response.Content.ReadAsStringAsync())))
-				{
-					while (reader.Read())
-					{
-						if (reader.IsStartElement())
-						{
-							//return only when you have START tag  
-							if (reader.Name.ToString() == "ScanDate" && date == "")
-							{
-								date = reader.ReadString();
-							}
+		//		using (XmlReader reader = XmlReader.Create(new StringReader(await response.Content.ReadAsStringAsync())))
+		//		{
+		//			while (reader.Read())
+		//			{
+		//				if (reader.IsStartElement())
+		//				{
+		//					//return only when you have START tag  
+		//					if (reader.Name.ToString() == "ScanDate" && date == "")
+		//					{
+		//						date = reader.ReadString();
+		//					}
 
-							if (reader.Name.ToString() == "Description")
-							{
-								info = reader.ReadString();
-								break;
-							}
-						}
-					}
-				}
+		//					if (reader.Name.ToString() == "Description")
+		//					{
+		//						info = reader.ReadString();
+		//						break;
+		//					}
+		//				}
+		//			}
+		//		}
 
-				if (info.ToLower().Contains("invalid pin") || info.ToLower().Contains("no scanning details") || string.IsNullOrEmpty(info)) result = "Information non disponible";
-				else result = info + " " + date;
+		//		if (info.ToLower().Contains("invalid pin") || info.ToLower().Contains("no scanning details") || string.IsNullOrEmpty(info)) result = "Information non disponible";
+		//		else result = info + " " + date;
 
-				return result;
-			}
-			catch (Exception ex)
-			{
-				msg("Tracking Puro (" + waybill + "): " + ex.Message);
-				return "";
-			}
-		}
+		//		return result;
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		msg("Tracking Puro (" + waybill + "): " + ex.Message);
+		//		return "";
+		//	}
+		//}
 
 		//private void UpdateRepair()
 		//      {
@@ -560,9 +558,9 @@ namespace entrepotServer
 				if ((timeCompare > 700 && timeCompare < 2300) && (day != "samedi" && day != "dimanche"))
 				{
 					SaveDatabaseBackup();
-					SaveWBbackup();
+					//SaveWBbackup();
 					wbBackup();
-					AutoRapport(appData.invPostes, "Rapport.xlsx");
+					//AutoRapport(appData.invPostes, "Rapport.xlsx");
 					autoResetEvent.WaitOne(7200000);// backup a chaque 2 heurs
 				}
 				else autoResetEvent.WaitOne(300000); // recheck au 5 min si le time est ok pour saver backup
@@ -597,15 +595,15 @@ namespace entrepotServer
 					//UpdateRepair();
 				}
 
-				if (day != "samedi" && day != "dimanche")
-                {
-					if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
-					//if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
-					//if (timeCompare >= 1000 && timeCompare < 1005) _ = puroTracking();
-					//if (timeCompare >= 1200 && timeCompare < 1205) _ = puroTracking();
-					//if (timeCompare >= 1400 && timeCompare < 1405) _ = puroTracking();
-					//if (timeCompare >= 1530 && timeCompare < 1535) _ = puroTracking();
-				}
+				//if (day != "samedi" && day != "dimanche")
+    //            {
+				//	if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
+				//	//if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
+				//	//if (timeCompare >= 1000 && timeCompare < 1005) _ = puroTracking();
+				//	//if (timeCompare >= 1200 && timeCompare < 1205) _ = puroTracking();
+				//	//if (timeCompare >= 1400 && timeCompare < 1405) _ = puroTracking();
+				//	//if (timeCompare >= 1530 && timeCompare < 1535) _ = puroTracking();
+				//}
 
                 autoResetEvent.WaitOne(300000); // recheck au 5 min si le time est ok
             }
@@ -916,7 +914,7 @@ namespace entrepotServer
 				{
 					var jsonString = JsonSerializer.Serialize(appData.invPostes);
 					File.WriteAllText(timeCheck, jsonString);
-					File.WriteAllText(@"T:\Rapport Auto\backup\DB.bak", jsonString);
+					//File.WriteAllText(@"T:\Rapport Auto\backup\DB.bak", jsonString);
 				}
 				catch (Exception ex)
 				{
@@ -928,26 +926,26 @@ namespace entrepotServer
 			}
 		}
 
-		public void SaveWBbackup()
-		{
-			lock (lockSave)
-			{
-				try
-				{
-					XmlSerializer xs = new XmlSerializer(typeof(List<Waybills>));
-					using (StreamWriter wr = new StreamWriter(@"T:\Rapport Auto\backup\" + year + ".wb"))
-					{
-						xs.Serialize(wr, appData.waybills);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
+		//public void SaveWBbackup()
+		//{
+		//	lock (lockSave)
+		//	{
+		//		try
+		//		{
+		//			XmlSerializer xs = new XmlSerializer(typeof(List<Waybills>));
+		//			using (StreamWriter wr = new StreamWriter(@"T:\Rapport Auto\backup\" + year + ".wb"))
+		//			{
+		//				xs.Serialize(wr, appData.waybills);
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			Console.WriteLine(ex.Message);
+		//		}
 
-				msg("New backup saved (WB).");
-			}
-		}
+		//		msg("New backup saved (WB).");
+		//	}
+		//}
 
 		//public void SaveInventaireDesjardins()
 		//{
@@ -986,6 +984,106 @@ namespace entrepotServer
 					Console.WriteLine(ex.Message);
 					Console.WriteLine(ex.StackTrace);
 				}
+			}
+		}
+
+		public void SaveModelPoste()
+		{
+			lock (lockSave)
+			{
+				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"poste.model";
+
+				try
+				{
+					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					File.WriteAllText(path, jsonString);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					Console.WriteLine(ex.StackTrace);
+				}
+			}
+		}
+
+		public void SaveModelLaptop()
+		{
+			lock (lockSave)
+			{
+				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"laptop.model";
+
+				try
+				{
+					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					File.WriteAllText(path, jsonString);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					Console.WriteLine(ex.StackTrace);
+				}
+			}
+		}
+
+		public void SaveModelServeur()
+		{
+			lock (lockSave)
+			{
+				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"serveur.model";
+
+				try
+				{
+					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					File.WriteAllText(path, jsonString);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					Console.WriteLine(ex.StackTrace);
+				}
+			}
+		}
+
+		public void LoadModel()
+		{
+			string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"poste.model";
+			string path2 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"laptop.model";
+			string path3 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"serveur.model";
+
+			try
+			{
+				var jsonString = File.ReadAllText(path);
+				appData.modelPoste = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
+				msg("Poste model correctly.");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				msg("Error loading poste model!");
+			}
+
+			try
+			{
+				var jsonString = File.ReadAllText(path2);
+				appData.modelPortable = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
+				msg("Laptop model correctly.");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				msg("Error loading laptop model!");
+			}
+
+			try
+			{
+				var jsonString = File.ReadAllText(path3);
+				appData.modelServeur = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
+				msg("Serveur model correctly.");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				msg("Error loading serveur model!");
 			}
 		}
 

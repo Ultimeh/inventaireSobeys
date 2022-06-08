@@ -181,7 +181,6 @@ namespace Client
 					var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 					var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 					var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-					var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 					if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
 					if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
@@ -189,7 +188,6 @@ namespace Client
 					if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
 					if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
 					if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
-					if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
 				}
 
 				var wb = new XLWorkbook();

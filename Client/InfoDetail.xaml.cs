@@ -64,7 +64,7 @@ namespace Client
 
             foreach (InvPostes item in temp)
             {
-                list.Add(item.type + " " + item.model + " " + item.asset + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone + " " + item.dateCloneValid);
+                list.Add(item.type + " " + item.model + " " + item.serial + " " + item.statut + " " + item.RF + " " + item.dateSortie + " " + item.RFretour + " " + item.dateRetour + " " + item.emplacement + " " + item.dateEntry + " " + item.dateEntryLab + " " + item.dateClone);
             }
 
             Clipboard.SetText(String.Join(Environment.NewLine, list));

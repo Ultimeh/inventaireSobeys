@@ -42,11 +42,7 @@ namespace Client
 			//	return;
 			//}
 
-			if (checkMoniteur.IsChecked == true && cb_model.SelectedIndex == -1)
-			{
-				MessageBox.Show("Aucun Modèle sélectionné." + Environment.NewLine + "Veuillez choisir un 'Modèle' avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
+
 
 
 			if (string.IsNullOrWhiteSpace(tb_serial.Text))
@@ -93,14 +89,6 @@ namespace Client
 
 			serial = string.Join(Environment.NewLine, result);
 
-			if (checkMoniteur.IsChecked == false)
-			{
-				im.sendNew(serial, emp);
-			}
-			else
-			{
-				im.SendNewMoniteur(serial, emp, cb_model.Text);
-			}
 
 			tb_serial.Focus();
 		}
@@ -113,18 +101,6 @@ namespace Client
 			var dist = result.Distinct().ToArray();
 
 			App.appData.countAdd = dist.Count();
-		}
-
-		private void checkMoniteur_Checked(object sender, RoutedEventArgs e)
-		{
-			cb_model.IsEnabled = true;
-			cb_model.ItemsSource = App.appData.modeleMoniteur;
-		}
-
-		private void checkMoniteur_Unchecked(object sender, RoutedEventArgs e)
-		{
-			cb_model.IsEnabled = false;
-			cb_model.SelectedIndex = -1;
 		}
 
 		private void tb_serial_Loaded(object sender, RoutedEventArgs e)
@@ -153,5 +129,22 @@ namespace Client
 			cb_repair.IsEnabled = false;
 			cb_repair.SelectedIndex = -1;
 		}
-	}
+
+        private void cb_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+			if (cb_type.SelectedIndex == -1)
+            {
+				cb_model.IsEnabled = false;
+				return;
+            }
+
+			if (cb_type.Text == "Poste")
+            {
+
+            }
+
+
+			cb_model.IsEnabled = true;
+		}
+    }
 }

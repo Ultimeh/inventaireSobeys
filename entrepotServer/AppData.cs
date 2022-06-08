@@ -61,6 +61,15 @@ namespace entrepotServer
 		private List<TypeModel> _typesModels = new List<TypeModel>();
 		public List<TypeModel> typesModels { get { return _typesModels; } set { _typesModels = value; } }
 
+		private List<string> _modelPoste = new List<string>();
+		public List<string> modelPoste { get { return _modelPoste; } set { _modelPoste = value; } }
+
+		private List<string> _modelPortable = new List<string>();
+		public List<string> modelPortable { get { return _modelPortable; } set { _modelPortable = value; } }
+
+		private List<string> _modelServeur = new List<string>();
+		public List<string> modelServeur { get { return _modelServeur; } set { _modelServeur = value; } }
+
 		//public List<string> types { get { return _types; } set { _types = value; } }
 		//public List<string> modelePoste { get { return _modelePoste; } set { _modelePoste = value; } }
 		//public List<string> modeleLaptop { get { return _modeleLaptop; } set { _modeleLaptop = value; } }
@@ -87,7 +96,6 @@ namespace entrepotServer
 		private string _type;
 		private string _model;
 		private string _serial;
-		private string _asset = "";
 		private string _emplacement = "";
 		private string _statut = "";
 		private string _RF = "";
@@ -97,8 +105,6 @@ namespace entrepotServer
 		private string _dateRetour = "";
 		private string _dateEntryLab = "";
 		private string _dateClone = "";
-		private string _dateCloneValid = "";
-		private string _xcolor = "";
 		private string _infoAjout = "";
 		private string _comment = "";
 
@@ -110,7 +116,6 @@ namespace entrepotServer
 
 		public string type { get { return _type; } set { _type = value; } }
 		public string model { get { return _model; } set { _model = value; } }
-		public string asset { get { return _asset; } set { _asset = value; } }
 		public string serial { get { return _serial; } set { _serial = value; } }
 		public string statut { get { return _statut; } set { _statut = value;} }
 		public string RF { get { return _RF; } set { _RF = value; } }
@@ -121,8 +126,6 @@ namespace entrepotServer
 		public string dateEntry { get { return _dateEntry; } set { _dateEntry = value; } }
 		public string dateEntryLab { get { return _dateEntryLab; } set { _dateEntryLab = value; } }
 		public string dateClone { get { return _dateClone; } set { _dateClone = value; } }
-		public string dateCloneValid { get { return _dateCloneValid; } set { _dateCloneValid = value; } }
-		public string xcolor { get { return _xcolor; } set { _xcolor = value; } }
 		public string infoAjout { get { return _infoAjout; } set { _infoAjout = value; } }
 		public string comment { get { return _comment; } set { _comment = value; } }
 

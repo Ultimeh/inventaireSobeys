@@ -14,7 +14,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Client
 {
@@ -26,7 +25,6 @@ namespace Client
 		private static readonly Object lockModel = new Object();
 		private static readonly Object lockWB = new Object();
 		private static readonly Object lockLog = new Object();
-		private static readonly Object lockAccess = new Object();
 		public TcpClient client;
 		public NetworkStream netStream;
 		SslStream ssl;
@@ -72,7 +70,7 @@ namespace Client
 		public const byte IM_BackupList = 26; // demande list des backup
 		public const byte IM_DeleteFiles = 27; // files to delete
 		public const byte IM_ConfirmCLone = 28; // lab clonage fini et valider
-		public const byte IM_ModeleMoniteur = 29; // si ajout a fair en lier avec clonage valider
+		public const byte IM_ModeleRequest = 29; // si ajout a fair en lier avec clonage valider
 		public const byte IM_Waybills = 30; // ajout et del de waybill
 		public const byte IM_ServerNotice = 31; // kick notice to user
 		public const byte IM_Comment = 32; // commentaire WB
@@ -898,15 +896,18 @@ namespace Client
 							//	}
 							//}
 							//break;
-
-						case IM_ModeleMoniteur:
+							
+						case IM_ModeleRequest:
 							{
-								string modele = br.ReadString();
-								var dataArray = modele.Split("╚");
-									
+								string poste = br.ReadString();
+								string laptop = br.ReadString();
+								string serveur = br.ReadString();
+
 								Application.Current.Dispatcher.Invoke(() =>
 								{
-									App.appData.modeleMoniteur = new ObservableCollection<string>(dataArray);
+									App.appData.modelPoste = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(poste));
+									App.appData.modelPortable = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(laptop));
+									App.appData.modelServeur = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(serveur));
 								});
 							}
 							break;
@@ -1397,7 +1398,7 @@ namespace Client
 									foreach (var item in allData)
 									{
 										result = item.Split("╚");
-										temp.Add(new InvPostes { type = result[0], model = result[1], asset = result[2], serial = result[3], statut = result[4], RF = result[5], RFretour = result[6], emplacement = result[7], dateEntry = result[8], dateSortie = result[9], dateRetour = result[10], dateEntryLab = result[11], dateClone = result[12], dateCloneValid = result[13] });
+										temp.Add(new InvPostes { type = result[0], model = result[1], serial = result[3], statut = result[4], RF = result[5], RFretour = result[6], emplacement = result[7], dateEntry = result[8], dateSortie = result[9], dateRetour = result[10], dateEntryLab = result[11], dateClone = result[12] });
 									}
 								}
 
@@ -1899,8 +1900,6 @@ namespace Client
 
 								string[] ligne;
 								var date = DateTime.Now;
-								DateTime expire;
-								string[] valid;
 
 								lock (lockDB)
 								{
@@ -1912,21 +1911,6 @@ namespace Client
 										{
 											if (ligne[0] == change.serial)
 											{
-												if (!string.IsNullOrEmpty(change.dateCloneValid))
-												{
-													valid = change.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-													if ((ligne[1] == "En Stock" || ligne[1] == "Réservé") && (ligne[7] != "QUANTUM" || !ligne[7].Contains("REPAIR")))
-                                                    {
-														expire = DateTime.Parse(valid[valid.Count() -1]);
-
-														if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) change.xcolor = "1";
-														else if ((expire - date).TotalDays <= 5) change.xcolor = "2";
-														else if (expire < date) change.xcolor = "2";
-													}
-													else change.xcolor = "";
-												}
-
 												Application.Current.Dispatcher.Invoke(() =>
 												{
 													change.statut = ligne[1];
@@ -2102,6 +2086,7 @@ namespace Client
 
                         case IM_UpdateModele:
                             {
+								string type = br.ReadString();
                                 string model = br.ReadString();
                                 string task = br.ReadString();
 
@@ -2109,19 +2094,57 @@ namespace Client
                                 {
                                     if (task == "add")
                                     {
-                                        Application.Current.Dispatcher.Invoke(() =>
+										if (type == "Poste")
                                         {
-                                            if (!App.appData.modeleMoniteur.Contains(model)) App.appData.modeleMoniteur.Add(model);
-                                        });
+											Application.Current.Dispatcher.Invoke(() =>
+											{
+												App.appData.modelPoste.Add(model);
+											});
+										}
+
+										if (type == "Portable")
+										{
+											Application.Current.Dispatcher.Invoke(() =>
+											{
+												App.appData.modelPortable.Add(model);
+											});
+										}
+
+										if (type == "Serveur")
+										{
+											Application.Current.Dispatcher.Invoke(() =>
+											{
+												App.appData.modelServeur.Add(model);
+											});
+										}
                                     }
 
-                                    Application.Current.Dispatcher.Invoke(() =>
+                                    if (task == "del")
                                     {
-                                        if (task == "del")
+                                        if (type == "Poste")
                                         {
-                                            if (App.appData.modeleMoniteur.Contains(model)) App.appData.modeleMoniteur.Remove(model);
+                                            Application.Current.Dispatcher.Invoke(() =>
+                                            {
+                                                App.appData.modelPoste.Remove(model);
+                                            });
                                         }
-                                    });
+
+                                        if (type == "Portable")
+                                        {
+                                            Application.Current.Dispatcher.Invoke(() =>
+                                            {
+                                                App.appData.modelPortable.Remove(model);
+                                            });
+                                        }
+
+                                        if (type == "Serveur")
+                                        {
+                                            Application.Current.Dispatcher.Invoke(() =>
+                                            {
+                                                App.appData.modelServeur.Remove(model);
+                                            });
+                                        }
+                                    }
                                 }
                             }
                             break;
@@ -2153,9 +2176,9 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void ModeleMoniteurRequest()
+		public void ModeleRequest()
 		{
-			bw.Write(IM_ModeleMoniteur);
+			bw.Write(IM_ModeleRequest);
 			bw.Flush();
 		}
 
@@ -2241,9 +2264,10 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void updateModel(string model, string task)
+		public void updateModel(string type, string model, string task)
 		{
 			bw.Write(IM_UpdateModele);
+			bw.Write(type);
 			bw.Write(model);
 			bw.Write(task);
 			bw.Flush();
