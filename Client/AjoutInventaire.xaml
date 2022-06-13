@@ -68,7 +68,7 @@
 
         <ComboBox x:Name="cb_model" IsEnabled="False" Margin="148,52,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="97" />
 
-        <Label x:Name="sn" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="154" Margin="102,83,0,0" Grid.RowSpan="2">
+        <Label x:Name="sn" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="154" Margin="96,83,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -130,8 +130,8 @@
             </Label.Style>
         </Label>
 
-        <RadioButton x:Name="radio_emp" IsChecked="True" GroupName="1" Content="Emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="100,454,0,0" Checked="radio_emp_Checked" Unchecked="radio_emp_Unchecked">
-            <RadioButton.Style>
+        <Label x:Name="radio_emp" Content="Emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="98" Margin="116,448,0,0">
+            <Label.Style>
                 <Style>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
@@ -139,8 +139,8 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </RadioButton.Style>
-        </RadioButton>
+            </Label.Style>
+        </Label>
 
         <TextBox x:Name="tb_emp" HorizontalAlignment="Left" Margin="203,453,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="90">
             <TextBox.Style>
@@ -154,48 +154,6 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-
-        <RadioButton x:Name="radio_repair" GroupName="1" Margin="100,497,0,0" Content="REPAIR DEPOT" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="103" Checked="radio_repair_Checked" Unchecked="radio_repair_Unchecked">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <ComboBox x:Name="cb_repair" IsEnabled="False" HorizontalAlignment="Left" Margin="203,496,0,0" VerticalAlignment="Top" MinWidth="85" Width="auto" Height="20">
-            <ComboBoxItem Content="ENTR C" />
-            <ComboBoxItem Content="ENTR COMP M" />
-            <ComboBoxItem Content="LÉVIS" />
-        </ComboBox>
-
-        <RadioButton x:Name="radio_oper" GroupName="1" Margin="100,474,0,0" Content="OPER" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="57">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <RadioButton x:Name="radio_all" GroupName="1" Margin="168,474,0,0" Content="ALL" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="58">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
 
 
         <Button x:Name="btn_Ajout" Content="Ajouter" HorizontalAlignment="Left" IsEnabled="{Binding enableAjout}" Margin="174,634,0,0" VerticalAlignment="Top" Click="btn_Ajout_Click" Width="60" Height="28">

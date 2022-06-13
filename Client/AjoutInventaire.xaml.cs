@@ -42,8 +42,11 @@ namespace Client
 			//	return;
 			//}
 
-
-
+			if (cb_type.SelectedIndex == -1 || cb_model.SelectedIndex == -1)
+            {
+				MessageBox.Show("Aucun 'Type' ou 'Modèle' sélectionné." + Environment.NewLine + "Veuillez choisir un 'Type' et 'Modèle' avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
 
 			if (string.IsNullOrWhiteSpace(tb_serial.Text))
 			{
@@ -51,33 +54,33 @@ namespace Client
 				return;
 			}
 
-			if (radio_repair.IsChecked == false && radio_oper.IsChecked == false && radio_emp.IsChecked == false && radio_all.IsChecked == false)
+			//if (radio_repair.IsChecked == false && radio_oper.IsChecked == false && radio_emp.IsChecked == false && radio_all.IsChecked == false)
+			//{
+			//	MessageBox.Show("Aucun emplacement." + Environment.NewLine + "Veuillez choisir un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+			//	return;
+			//}
+
+			if (string.IsNullOrWhiteSpace(tb_emp.Text))
 			{
-				MessageBox.Show("Aucun emplacement." + Environment.NewLine + "Veuillez choisir un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show("Le champ 'Emplacement' est vide." + Environment.NewLine + "Veuillez écrire un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;
 			}
 
-			if (string.IsNullOrWhiteSpace(tb_emp.Text) && radio_emp.IsChecked == true)
-			{
-				MessageBox.Show("'Emplacement' est selectionné mais le champ est vide." + Environment.NewLine + "Veuillez écrire un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
-
-			if (radio_repair.IsChecked == true && cb_repair.SelectedIndex == -1)
-			{
-				MessageBox.Show("'REPAIR DEPOT' est selectionné mais aucun choix fait." + Environment.NewLine + "Veuillez inscrire un choix avant d'essayer de nouveau.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
-				return;
-			}
+			////if (radio_repair.IsChecked == true && cb_repair.SelectedIndex == -1)
+			////{
+			////	MessageBox.Show("'REPAIR DEPOT' est selectionné mais aucun choix fait." + Environment.NewLine + "Veuillez inscrire un choix avant d'essayer de nouveau.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+			////	return;
+			////}
 
 			//string type = cb_type.Text;
 			//string model = cb_model.Text;
 			string serial = tb_serial.Text.ToUpper();
 			string emp = "";
 
-			if (radio_repair.IsChecked == true) emp = "REPAIR DEPOT " + cb_repair.Text;
-			if (radio_all.IsChecked == true) emp = "ALL";
-			if (radio_emp.IsChecked == true) emp = tb_emp.Text.ToUpper();
-			if (radio_oper.IsChecked == true) emp = "OPER";
+			//if (radio_repair.IsChecked == true) emp = "REPAIR DEPOT " + cb_repair.Text;
+			//if (radio_all.IsChecked == true) emp = "ALL";
+			//if (radio_emp.IsChecked == true) emp = tb_emp.Text.ToUpper();
+			//if (radio_oper.IsChecked == true) emp = "OPER";
 
 			var temp = serial.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 			//List<string> compare = new List<string>();
@@ -89,6 +92,7 @@ namespace Client
 
 			serial = string.Join(Environment.NewLine, result);
 
+			im.sendNew(serial, emp, cb_type.Text, cb_model.Text);
 
 			tb_serial.Focus();
 		}
@@ -119,17 +123,6 @@ namespace Client
 			tb_emp.Text = "";
 		}
 
-		private void radio_repair_Checked(object sender, RoutedEventArgs e)
-		{
-			cb_repair.IsEnabled = true;
-		}
-
-		private void radio_repair_Unchecked(object sender, RoutedEventArgs e)
-		{
-			cb_repair.IsEnabled = false;
-			cb_repair.SelectedIndex = -1;
-		}
-
         private void cb_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 			if (cb_type.SelectedIndex == -1)
@@ -138,13 +131,11 @@ namespace Client
 				return;
             }
 
-			if (cb_type.Text == "Poste")
-            {
-
-            }
-
-
 			cb_model.IsEnabled = true;
+
+			if (cb_type.Text == "Poste") cb_model.ItemsSource = App.appData.modelPoste;
+			if (cb_type.Text == "Portable") cb_model.ItemsSource = App.appData.modelPortable;
+			if (cb_type.Text == "Serveur") cb_model.ItemsSource = App.appData.modelServeur;
 		}
     }
 }

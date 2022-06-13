@@ -586,10 +586,12 @@ namespace entrepotServer
 
 					if (DateTime.Now.Year.ToString() != year)
 					{
+						SaveWB();
 						year = DateTime.Now.Year.ToString();
 						appData.waybills.Clear();
 						SaveWB();
 						SetYearList();
+						LoadWaybills();
 					}
 					
 					//UpdateRepair();

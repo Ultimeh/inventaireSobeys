@@ -76,7 +76,7 @@ namespace Client
 		public const byte IM_Comment = 32; // commentaire WB
 		public const byte IM_ChangeUserInfo = 33; //client request un password change
 		public const byte IM_RequestWaybills = 34; //login waybills
-		public const byte IM_AjoutMoniteur = 35; // ajout separer pour moniteurs
+
 		public const byte IM_DeleteMain = 36; // delete une entry
 		public const byte IM_DeleteUser = 37; // delete une entry
 		public const byte IM_WByear = 38; // les anners des wb
@@ -2189,22 +2189,16 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void sendNew(string serial, string emplacement)
+		public void sendNew(string serial, string emplacement, string type, string model)
 		{
 			bw.Write(IM_Ajout);
 			bw.Write(serial);
 			bw.Write(emplacement);
-			bw.Flush();
-		}
-
-		public void SendNewMoniteur(string serial, string emplacement, string model)
-		{
-			bw.Write(IM_AjoutMoniteur);
-			bw.Write(serial);
-			bw.Write(emplacement);
+			bw.Write(type);
 			bw.Write(model);
 			bw.Flush();
 		}
+
 
 		public void sendSortie(string serial, string RF, string emp)
 		{

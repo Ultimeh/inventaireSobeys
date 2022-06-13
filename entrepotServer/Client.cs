@@ -61,7 +61,7 @@ namespace entrepotServer
 		public const byte IM_UpdateModele = 21; //update model (ajout ou delete)
 		public const byte IM_Emplacement = 22; //demande de changement d emplacement
 		public const byte IM_Retour = 23; //demande de retour d equipement
-		public const byte IM_RetourAjout = 24; // lors de retour, si equipement existant pas, les ajoutes
+		
 		public const byte IM_EnvoyerLab = 25; // envoyer poste au lab
 		public const byte IM_BackupList = 26; // demande list des backup
 		public const byte IM_DeleteFiles = 27; // files to delete
@@ -72,7 +72,7 @@ namespace entrepotServer
 		public const byte IM_Comment = 32; // commentaire WB
 		public const byte IM_ChangeUserInfo = 33; //client request un password change
 		public const byte IM_RequestWaybills = 34; //login waybills
-		public const byte IM_AjoutMoniteur = 35; // ajout separer pour moniteurs
+
 		public const byte IM_DeleteMain = 36; // delete une entry
 		public const byte IM_DeleteUser = 37;
 		public const byte IM_WByear = 38; // les anners des wb
@@ -390,8 +390,10 @@ namespace entrepotServer
 							{
 								string serial = br.ReadString();
 								string emplacement = br.ReadString();
+								string type = br.ReadString();
+								string model = br.ReadString();
+
 								bool doublonCheck = true;
-								bool add = false;
 								bool found = false;
 								bool foundType = false;
 
@@ -401,7 +403,7 @@ namespace entrepotServer
 
 								var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 								List<string> doublon = new List<string>();
-								List<string> erreur = new List<string>();
+								//List<string> erreur = new List<string>();
 								List<string> itemAdd = new List<string>();
 								List<InvPostes> temp = new List<InvPostes>();
 								bool newStuff = false;
@@ -427,196 +429,34 @@ namespace entrepotServer
 
 									foreach (var item in itemAdd.ToArray())
 									{
-										add = false;
+										foundType = false;
 
-										foreach (var exist in Program.appData.fichierAchat.ToArray())
+										Program.appData.invPostes.Add(new InvPostes { type = type, model = model, serial = item, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
+										temp.Add(new InvPostes { type = type, model = model, serial = item, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
+
+										lock (Program.appData.lockModel)
 										{
-											foundType = false;
-
-											if (item == exist.serial || item == exist.asset)
+											foreach (var types in Program.appData.typesModels.ToArray())
 											{
-												Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
-												temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
 
-												lock (Program.appData.lockModel)
+												if (types.type == type)
 												{
-													foreach (var types in Program.appData.typesModels.ToArray())
+													foundType = true;
+
+													if (!types.modeles.Contains(model))
 													{
-
-														if (types.type == exist.type)
-														{
-															foundType = true;
-
-															if (!types.modeles.Contains(exist.model))
-															{
-																types.modeles.Add(exist.model);
-																newStuff = true;
-															}
-
-															break;
-														}
-													}
-
-													if (!foundType)
-													{
-														Program.appData.typesModels.Add(new TypeModel { type = exist.type, modeles = new List<string> { exist.model } });
+														types.modeles.Add(model);
 														newStuff = true;
 													}
-												}
 
-												add = true;
-												break;
-											}
-										}
-
-										if (!add) erreur.Add(item);
-									}
-
-									if (temp.Count != 0)
-									{
-										prog.SaveDatabase();
-
-										var jsonString = JsonSerializer.Serialize(temp);
-
-										foreach (var UserKey in prog.users.Keys)
-										{
-											if (prog.users.TryGetValue(UserKey, out UserInfo user))
-											{
-												if (user.LoggedIn)
-												{
-													user.Connection.bw.Write(IM_Update);
-													user.Connection.bw.Write(jsonString);
-													user.Connection.bw.Flush();
+													break;
 												}
 											}
-										}
-									}
 
-									if (newStuff) updateClientModel();
-
-									if (erreur.Count != 0) message = "*Avertissement* Aucune Modification pour les numeros de série restant, introuvable dans le fichier globale. Voir avec Patrick Massouh.";
-
-									if (erreur.Count != 0 && doublon.Count == 0)
-									{
-										found = true;
-
-										bw.Write(IM_Doublon);
-										bw.Write(message);
-										bw.Write(String.Join(Environment.NewLine, erreur));
-										bw.Flush();
-									}
-									else if (erreur.Count == 0 && doublon.Count != 0)
-									{
-										message = "*Avertissement* Aucune Modification pour les numeros de série restant car ils existent deja dans l'inventaire.";
-										found = true;
-										bw.Write(IM_Doublon);
-										bw.Write(message);
-										bw.Write(String.Join(Environment.NewLine, doublon));
-										bw.Flush();
-									}
-									else if (erreur.Count != 0 && doublon.Count != 0)
-									{
-										message += Environment.NewLine + "*Avertissement* Les numeros de serie suivant sont deja dans l'inventaire et n'ont pas été mofifiés :" + Environment.NewLine + String.Join(", ", doublon);
-										found = true;
-										bw.Write(IM_Doublon);
-										bw.Write(message);
-										bw.Write(String.Join(Environment.NewLine, erreur));
-										bw.Flush();
-									}
-								}
-
-								bw.Write(IM_AjoutEnd);
-								bw.Write(found);
-								bw.Flush();
-
-								if (temp.Count != 0) UpdateLogs(userInfo.UserName + " - Ajout à l'inventaire: " + temp.Count.ToString() + " entrée(s).", "Ajout d'équipement", temp.Count.ToString(), userInfo.UserName);
-							}
-							break;
-
-						case IM_AjoutMoniteur:
-							{
-								string serial = br.ReadString();
-								string emplacement = br.ReadString();
-								string model = br.ReadString();
-								bool doublonCheck = true;
-								bool add = true;
-								bool found = false;
-								bool foundType = false;
-
-								string message = "";
-
-								var dateEntry = DateTime.Now.ToShortDateString();
-
-								var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-								List<string> doublon = new List<string>();
-								List<string> erreur = new List<string>();
-								List<string> itemAdd = new List<string>();
-								List<InvPostes> temp = new List<InvPostes>();
-								bool newStuff = false;
-
-								lock (Program.appData.lockDB)
-								{
-									foreach (var tooAdd in result)
-									{
-										doublonCheck = true;
-
-										foreach (var item in Program.appData.invPostes.ToArray())
-										{
-											if (item.serial == tooAdd)
+											if (!foundType)
 											{
-												doublon.Add(item.serial);
-												doublonCheck = false;
-												break;
-											}
-										}
-
-										if (doublonCheck) itemAdd.Add(tooAdd);
-									}
-
-									foreach (var item in itemAdd.ToArray())
-									{
-										add = true;
-
-										foreach (var exist in Program.appData.fichierAchat.ToArray())
-										{
-											foundType = false;
-
-											if (item == exist.serial)
-											{
-												erreur.Add(item);
-												add = false;
-												break;
-											}
-										}
-
-										if (add)
-										{
-											Program.appData.invPostes.Add(new InvPostes { type = "Moniteur", model = model, serial = item, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
-											temp.Add(new InvPostes { type = "Moniteur", model = model, serial = item, dateEntry = dateEntry, statut = "En Stock", emplacement = emplacement, infoAjout = userInfo.UserName });
-
-											lock (Program.appData.lockModel)
-											{
-												foreach (var types in Program.appData.typesModels.ToArray())
-												{
-													if (types.type == "Moniteur")
-													{
-														foundType = true;
-
-														if (!types.modeles.Contains(model))
-														{
-															types.modeles.Add(model);
-															newStuff = true;
-														}
-
-														break;
-													}
-												}
-
-												if (!foundType)
-												{
-													Program.appData.typesModels.Add(new TypeModel { type = "Moniteur", modeles = new List<string> { model } });
-													newStuff = true;
-												}
+												Program.appData.typesModels.Add(new TypeModel { type = type, modeles = new List<string> { model } });
+												newStuff = true;
 											}
 										}
 									}
@@ -643,18 +483,18 @@ namespace entrepotServer
 
 									if (newStuff) updateClientModel();
 
-									if (erreur.Count != 0) message = "*Avertissement* Aucune Modification pour les numeros de série restant, car ils ne sont probablement pas de Moniteurs. Entrez des moniteurs SEULEMENT si l'option Moniteur est coché.";
+									//if (erreur.Count != 0) message = "*Avertissement* Aucune Modification pour les numeros de série restant, introuvable dans le fichier globale. Voir avec Patrick Massouh.";
 
-									if (erreur.Count != 0 && doublon.Count == 0)
-									{
-										found = true;
+									//if (erreur.Count != 0 && doublon.Count == 0)
+									//{
+									//	found = true;
 
-										bw.Write(IM_Doublon);
-										bw.Write(message);
-										bw.Write(String.Join(Environment.NewLine, erreur));
-										bw.Flush();
-									}
-									else if (erreur.Count == 0 && doublon.Count != 0)
+									//	bw.Write(IM_Doublon);
+									//	bw.Write(message);
+									//	bw.Write(String.Join(Environment.NewLine, erreur));
+									//	bw.Flush();
+									//}
+									if (doublon.Count != 0)
 									{
 										message = "*Avertissement* Aucune Modification pour les numeros de série restant car ils existent deja dans l'inventaire.";
 										found = true;
@@ -663,15 +503,15 @@ namespace entrepotServer
 										bw.Write(String.Join(Environment.NewLine, doublon));
 										bw.Flush();
 									}
-									else if (erreur.Count != 0 && doublon.Count != 0)
-									{
-										message += Environment.NewLine + "*Avertissement* Les numeros de serie suivant sont deja dans l'inventaire et n'ont pas été mofifiés :" + Environment.NewLine + String.Join(", ", doublon);
-										found = true;
-										bw.Write(IM_Doublon);
-										bw.Write(message);
-										bw.Write(String.Join(Environment.NewLine, erreur));
-										bw.Flush();
-									}
+									//else if (erreur.Count != 0 && doublon.Count != 0)
+									//{
+									//	message += Environment.NewLine + "*Avertissement* Les numeros de serie suivant sont deja dans l'inventaire et n'ont pas été mofifiés :" + Environment.NewLine + String.Join(", ", doublon);
+									//	found = true;
+									//	bw.Write(IM_Doublon);
+									//	bw.Write(message);
+									//	bw.Write(String.Join(Environment.NewLine, erreur));
+									//	bw.Flush();
+									//}
 								}
 
 								bw.Write(IM_AjoutEnd);
@@ -680,7 +520,7 @@ namespace entrepotServer
 
 								if (temp.Count != 0) UpdateLogs(userInfo.UserName + " - Ajout à l'inventaire: " + temp.Count.ToString() + " entrée(s).", "Ajout d'équipement", temp.Count.ToString(), userInfo.UserName);
 							}
-							break;
+							break;				
 
 						case IM_Sortie:
 							{
