@@ -556,8 +556,10 @@ namespace Client
 		{
 			//im.RequestWB(DateTime.Now.Year.ToString());
 			App.appData.countAdd = 0;
+			App.appData.wbClosed = false;
 			WaybillsLog waybillsLog = new WaybillsLog(im);
-			waybillsLog.ShowDialog();
+			//this.IsEnabled = false;
+			waybillsLog.Show();
 		}
 
 		private void tb_dateSortie_TextChanged(object sender, TextChangedEventArgs e)
@@ -880,8 +882,10 @@ namespace Client
 
 			var selected = ListViewData.SelectedItem as InvPostes;
 
-			InfoDetail infoDetail = new InfoDetail(selected, im);
-			infoDetail.ShowDialog();
+			InfoDetail infoDetail = new InfoDetail(selected, im, new Random().Next(int.MinValue, int.MaxValue));
+			infoDetail.Show();
+
+			e.Handled = true;
 		}
 
         private void ListViewData_KeyUp(object sender, KeyEventArgs e)

@@ -496,6 +496,9 @@ namespace entrepotServer
 			KickAllClient();
 			SaveDatabase();
 			SaveUsers();
+			SaveModelPoste();
+			SaveModelLaptop();
+			SaveModelServeur();
 			exited = true;
 			Environment.Exit(0);
 		}
@@ -997,7 +1000,7 @@ namespace entrepotServer
 
 				try
 				{
-					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					var jsonString = JsonSerializer.Serialize(appData.modelPoste, new JsonSerializerOptions { WriteIndented = true });
 					File.WriteAllText(path, jsonString);
 				}
 				catch (Exception ex)
@@ -1016,7 +1019,7 @@ namespace entrepotServer
 
 				try
 				{
-					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					var jsonString = JsonSerializer.Serialize(appData.modelPortable, new JsonSerializerOptions { WriteIndented = true });
 					File.WriteAllText(path, jsonString);
 				}
 				catch (Exception ex)
@@ -1035,7 +1038,7 @@ namespace entrepotServer
 
 				try
 				{
-					var jsonString = JsonSerializer.Serialize(appData.invPostes, new JsonSerializerOptions { WriteIndented = true });
+					var jsonString = JsonSerializer.Serialize(appData.modelServeur, new JsonSerializerOptions { WriteIndented = true });
 					File.WriteAllText(path, jsonString);
 				}
 				catch (Exception ex)

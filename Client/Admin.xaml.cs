@@ -150,6 +150,8 @@ namespace Client
 			if (cb_type.SelectedIndex == -1) return;
 			if (string.IsNullOrWhiteSpace(tb_addModel.Text)) return;
 
+			btn_addModel.IsEnabled = false;
+
 			string model = tb_addModel.Text.Trim();
 
 			//if (cb_type.Text == "Poste")
@@ -184,6 +186,8 @@ namespace Client
 
 			im.updateModel(cb_type.Text, model, "add");
 			tb_addModel.Text = "";
+
+			btn_addModel.IsEnabled = true;
 		}
 
         private void cb_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -196,10 +200,10 @@ namespace Client
             else
             {
 				tb_addModel.IsEnabled = true;
-
-				if (cb_type.Text == "Poste") listModel.ItemsSource = App.appData.modelPoste;
-				if (cb_type.Text == "Portable") listModel.ItemsSource = App.appData.modelPortable;
-				if (cb_type.Text == "Serveur") listModel.ItemsSource = App.appData.modelServeur;
+				
+				if (cb_type.SelectedIndex == 0) listModel.ItemsSource = App.appData.modelPoste;
+				if (cb_type.SelectedIndex == 1) listModel.ItemsSource = App.appData.modelPortable;
+				if (cb_type.SelectedIndex == 2) listModel.ItemsSource = App.appData.modelServeur;
 			}
         }
 

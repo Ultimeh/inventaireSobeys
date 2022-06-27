@@ -75,7 +75,7 @@ namespace Client
 			//string type = cb_type.Text;
 			//string model = cb_model.Text;
 			string serial = tb_serial.Text.ToUpper();
-			string emp = "";
+			string emp = tb_emp.Text.ToUpper().Trim();
 
 			//if (radio_repair.IsChecked == true) emp = "REPAIR DEPOT " + cb_repair.Text;
 			//if (radio_all.IsChecked == true) emp = "ALL";
@@ -133,9 +133,9 @@ namespace Client
 
 			cb_model.IsEnabled = true;
 
-			if (cb_type.Text == "Poste") cb_model.ItemsSource = App.appData.modelPoste;
-			if (cb_type.Text == "Portable") cb_model.ItemsSource = App.appData.modelPortable;
-			if (cb_type.Text == "Serveur") cb_model.ItemsSource = App.appData.modelServeur;
+			if (cb_type.SelectedIndex == 0) cb_model.ItemsSource = App.appData.modelPoste;
+			if (cb_type.SelectedIndex == 1) cb_model.ItemsSource = App.appData.modelPortable;
+			if (cb_type.SelectedIndex == 2) cb_model.ItemsSource = App.appData.modelServeur;
 		}
     }
 }

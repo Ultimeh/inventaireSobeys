@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="Info Détails" Height="350" Width="1568" MinHeight="300" MinWidth="1000" BorderThickness="1.45" WindowStyle="None" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="Info Détails" Height="626" Width="1568" MinHeight="500" MinWidth="1010" BorderThickness="1.45" WindowStyle="None" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}">
@@ -19,6 +19,10 @@
     </Window.Style>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="345*"/>
+            <RowDefinition Height="278*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="174*"/>
             <ColumnDefinition Width="235*"/>
@@ -121,18 +125,6 @@
                     </GridViewColumn>
 
                     <GridViewColumn Header=" Modèle" DisplayMemberBinding="{Binding model}">
-                        <GridViewColumn.HeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="FontWeight" Value="Normal"/>
-                                <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="Background" Value="LightSteelBlue"/>
-                                <Setter Property="BorderBrush" Value="LightGray"/>
-                            </Style>
-                        </GridViewColumn.HeaderContainerStyle>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header=" # Actif" DisplayMemberBinding="{Binding asset}">
                         <GridViewColumn.HeaderContainerStyle>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -264,18 +256,6 @@
                         </GridViewColumn.HeaderContainerStyle>
                     </GridViewColumn>
 
-                    <GridViewColumn Header=" Expiration Clonage" DisplayMemberBinding="{Binding dateCloneValid}" >
-                        <GridViewColumn.HeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                                <Setter Property="FontWeight" Value="Normal"/>
-                                <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="Background" Value="LightSteelBlue"/>
-                                <Setter Property="BorderBrush" Value="LightGray"/>
-                            </Style>
-                        </GridViewColumn.HeaderContainerStyle>
-                    </GridViewColumn>
-
                 </GridView>
             </ListView.View>
 
@@ -333,7 +313,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <TextBox x:Name="tb_comment" TextWrapping="wrap" AcceptsReturn="True" Grid.Column="0" Margin="10,204,5,34" Loaded="tb_comment_Loaded" TextChanged="tb_comment_TextChanged">
+        <TextBox x:Name="tb_comment" TextWrapping="wrap" AcceptsReturn="True" Grid.Column="0" Margin="10,204,5,32" Loaded="tb_comment_Loaded" TextChanged="tb_comment_TextChanged">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -346,7 +326,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <Button x:Name="btn_comment" Content="Enregistrer" HorizontalAlignment="Center" IsEnabled="False" Width="108" Margin="0,0,0,10" Click="btn_comment_Click" Height="19" VerticalAlignment="Bottom">
+        <Button x:Name="btn_comment" Content="Enregistrer" HorizontalAlignment="Center" IsEnabled="False" Width="108"  Click="btn_comment_Click" Height="19" VerticalAlignment="Bottom" Margin="0,0,0,8">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -376,7 +356,6 @@
             </Button.Style>
         </Button>
 
-
         <TextBlock Text="Info Sortie :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="72" Margin="2,140,0,0" Grid.ColumnSpan="1" Grid.Column="1">
             <TextBlock.Style>
                 <Style>
@@ -389,7 +368,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="infoSortie" Margin="2,157,5,9" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.ColumnSpan="1" Grid.Column="1" >
+        <ListBox x:Name="infoSortie" Margin="2,157,5,7" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.ColumnSpan="1" Grid.Column="1" >
 
             <ListBox.Style>
                 <Style>
@@ -415,7 +394,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="infoRetour" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="2" Margin="2,156,5,9"  >
+        <ListBox x:Name="infoRetour" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="2" Margin="2,156,5,7"  >
             <ListBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -440,7 +419,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="infoEmplacement" Margin="1,156,4,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="3" >
+        <ListBox x:Name="infoEmplacement" Margin="1,156,4,7" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="3" >
             <ListBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -465,7 +444,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="infoEnvoieLab" Margin="1,156,5,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="4" >
+        <ListBox x:Name="infoEnvoieLab" Margin="1,156,5,7" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="4" >
             <ListBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -490,7 +469,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="infoConfirm" Margin="1,156,10,10" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="5" >
+        <ListBox x:Name="infoConfirm" Margin="1,156,10,7" SelectionMode="Extended" MouseLeftButtonDown="listModel_MouseLeftButtonDown" Grid.Column="5" >
             <ListBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -502,6 +481,138 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
+
+        <ListView x:Name="ListBills" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" Margin="10,4,184,10" SelectionMode="Single" MouseLeftButtonDown="ListBills_MouseLeftButtonDown" Grid.ColumnSpan="4" Grid.Row="1" Loaded="ListBills_Loaded" KeyUp="ListBills_KeyUp" >
+
+            <ListView.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FFECECEC"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+
+            <ListView.Resources>
+                <ContextMenu x:Key="ItemContextMenu">
+                    <MenuItem x:Name="copyRFwb" Header="Copier le RF" FontSize="12" Foreground="Black" Click="copyRFwb_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="copyBills" Header="Copier les Waybills" FontSize="12" Foreground="Black" Click="copyBills_Click"/>
+                    <MenuItem x:Name="copyRFetBills" Header="Copier le RF et les Waybills" FontSize="12" Foreground="Black" Click="copyRFetBills_Click" />
+                    <Separator/>
+                    <MenuItem x:Name="copyBillsRetour" Header="Copier les Waybills de Retour" FontSize="12" Foreground="Black" Click="copyBillsRetour_Click"/>
+                    <MenuItem x:Name="copyRFetBillsRetour" Header="Copier le RF et les Waybills de Retour" FontSize="12" Foreground="Black" Click="copyRFetBillsRetour_Click" />
+                    <Separator/>
+                    <MenuItem x:Name="copyRFAllBill" Header="Copier le RF les Waybills (Sortie et Retour)" FontSize="12" Foreground="Black" Click="copyRFAllBill_Click"/>
+                    <MenuItem x:Name="copyAllBill" Header="Copier les Waybills (Sortie et Retour)" FontSize="12" Foreground="Black" Click="copyAllBill_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="puro" Header="Ouvrir tracking de Puro ..." FontSize="12" Foreground="Black" Click="puro_Click"/>
+                    <MenuItem x:Name="puroRetour" Header="Ouvrir tracking de Puro (WB de Retour) ..." FontSize="12" Foreground="Black" Click="puroRetour_Click"/>
+                </ContextMenu>
+
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Border BorderThickness="0,0,0,1" BorderBrush="LightGray" Background="LightSteelBlue">
+                                    <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Segoe UI" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+
+                <Style TargetType="ToolTip">
+                    <Setter Property="HasDropShadow" Value="True"/>
+
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+                </Style>
+
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+
+                    <GridViewColumn Header=" RF" DisplayMemberBinding="{Binding RF}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Waybills" DisplayMemberBinding="{Binding wayb}" Width="275" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" WB de Retour" DisplayMemberBinding="{Binding wbRetour}" Width="275">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header=" Commentaire" DisplayMemberBinding="{Binding comment}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Background" Value="LightSteelBlue"/>
+                                <Setter Property="BorderBrush" Value="LightGray"/>
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Setters>
+                        <Setter Property="Foreground" Value="black"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Mois: " Foreground="DarkBlue"/>
+                                    <TextBlock Text="{Binding mois}"/>
+                                    <TextBlock Text="    Jour: " Foreground="DarkBlue"/>
+                                    <TextBlock Text="{Binding jour}"/>
+                                </StackPanel>
+                            </Setter.Value>
+                        </Setter>
+                    </Style.Setters>
+
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
 
     </Grid>
 

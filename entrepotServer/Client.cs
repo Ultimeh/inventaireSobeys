@@ -61,7 +61,7 @@ namespace entrepotServer
 		public const byte IM_UpdateModele = 21; //update model (ajout ou delete)
 		public const byte IM_Emplacement = 22; //demande de changement d emplacement
 		public const byte IM_Retour = 23; //demande de retour d equipement
-		
+		public const byte IM_CheckWB = 24; // infoDetail WB info
 		public const byte IM_EnvoyerLab = 25; // envoyer poste au lab
 		public const byte IM_BackupList = 26; // demande list des backup
 		public const byte IM_DeleteFiles = 27; // files to delete
@@ -970,6 +970,110 @@ namespace entrepotServer
 							}
 							break;
 
+						case IM_CheckWB:
+							{
+								int id = br.ReadInt32();
+								string rf = br.ReadString();
+
+								var dataRF = rf.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+								string year = DateTime.Now.Year.ToString();
+
+								List<Waybills> temp = new List<Waybills>();
+								List<Waybills> WBsend = new List<Waybills>();
+
+								lock (Program.appData.lockWB)
+								{
+									temp = new List<Waybills>(Program.appData.waybills);
+								}
+
+								bool rfCheck = false;
+								int count = 0;
+
+								for (int i = 0; i < dataRF.Count(); i++)
+								{
+									foreach (var item in temp.ToArray())
+									{
+										if (item.RF == dataRF[i] || item.wbRetour == dataRF[i])
+										{
+											if (!WBsend.Contains(item)) WBsend.Add(item);
+											dataRF[i] = "";
+											count++;
+											break;
+										}
+									}
+								}
+
+								if (dataRF.Count() == count) rfCheck = true;
+
+								if (rfCheck)
+								{
+									var jsonString = JsonSerializer.Serialize(WBsend);
+
+									bw.Write(IM_CheckWB);
+									bw.Write(jsonString);
+									bw.Write(id);
+									bw.Flush();
+								}
+
+								count = 0;
+
+								if (!rfCheck)
+								{
+									DirectoryInfo d = new DirectoryInfo(@".\waybills\");
+									FileInfo[] Files = d.GetFiles("*.wb");
+
+									foreach (FileInfo file in Files)
+									{
+										if (!file.Name.Contains(year))
+										{
+											try
+											{
+												XmlSerializer xs = new XmlSerializer(typeof(List<Waybills>));
+
+												using (StreamReader rd = new StreamReader(file.FullName))
+												{
+													temp = xs.Deserialize(rd) as List<Waybills>;
+												}
+
+												if (!rfCheck)
+												{
+													foreach (var stuff in dataRF)
+													{
+														if (stuff != "")
+														{
+															foreach (var item in temp.ToArray())
+															{
+																if (item.RF == stuff || item.wbRetour == stuff) WBsend.Add(item);
+																{
+																	if (!WBsend.Contains(item)) WBsend.Add(item);
+																	rfCheck = true;
+																	count++;
+																	break;
+																}
+															}
+														}
+													}
+												}
+											}
+											catch (Exception ex)
+											{
+												Console.WriteLine(ex.Message);
+											}
+										}
+
+										if (dataRF.Count() == count) break;
+									}
+
+									var jsonString = JsonSerializer.Serialize(WBsend);
+
+									bw.Write(IM_CheckWB);
+									bw.Write(jsonString);
+									bw.Write(id);
+									bw.Flush();
+								}
+							}
+							break;
+
 						//case IM_RetourSpecial:
 						//	{
 						//		string type = br.ReadString();
@@ -994,16 +1098,16 @@ namespace entrepotServer
 						//				exist = false;
 
 						//				foreach (var item in Program.appData.invPostes.ToArray())
-      //                                  {
+						//                                  {
 						//					if (item.serial == stuff || item.asset == stuff)
-      //                                      {
+						//                                      {
 						//						exist = true;
 						//						break;
-      //                                      }
-      //                                  }
+						//                                      }
+						//                                  }
 
 						//				if (!exist)
-      //                                  {
+						//                                  {
 						//					if (RF != "") checkup = dateEntry;
 						//					else checkup = "";
 
@@ -1553,13 +1657,6 @@ namespace entrepotServer
 											bw.Write(year);
 											bw.Flush();
 										}
-										else
-										{
-											bw.Write(IM_RequestWaybills);
-											bw.Write(" ");
-											bw.Write(" ");
-											bw.Flush();
-										}
 									}
 									else
 									{
@@ -1793,16 +1890,44 @@ namespace entrepotServer
 								{
 									if (task == "add")
 									{
-										if (type == "Poste") Program.appData.modelPoste.Add(model);
-										if (type == "Portable") Program.appData.modelPortable.Add(model);
-										if (type == "Serveur") Program.appData.modelServeur.Add(model);
+										if (type == "Poste") 
+                                        {
+											Program.appData.modelPoste.Add(model);
+											prog.SaveModelPoste();
+										}
+
+										if (type == "Portable") 
+                                        {
+											Program.appData.modelPortable.Add(model);
+											prog.SaveModelLaptop();
+										}
+
+										if (type == "Serveur") 
+                                        {
+											Program.appData.modelServeur.Add(model);
+											prog.SaveModelServeur();
+										}
 									}
 
 									if (task == "del")
 									{
-										if (type == "Poste") Program.appData.modelPoste.Remove(model);
-										if (type == "Portable") Program.appData.modelPortable.Remove(model);
-										if (type == "Serveur") Program.appData.modelServeur.Remove(model);
+										if (type == "Poste")
+										{
+											Program.appData.modelPoste.Remove(model);
+											prog.SaveModelPoste();
+										}
+
+										if (type == "Portable")
+										{
+											Program.appData.modelPortable.Remove(model);
+											prog.SaveModelLaptop();
+										}
+
+										if (type == "Serveur")
+										{
+											Program.appData.modelServeur.Remove(model);
+											prog.SaveModelServeur();
+										}
 									}
 								}
 					

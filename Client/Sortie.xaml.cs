@@ -41,9 +41,9 @@ namespace Client
 				return;
 			}
 
-			if (string.IsNullOrEmpty(tb_RF.Text) || !tb_RF.Text.ToLower().StartsWith("rf") && !tb_RF.Text.ToLower().StartsWith("inc") && !tb_RF.Text.ToLower().StartsWith("c"))
+			if (string.IsNullOrWhiteSpace(tb_RF.Text))
 			{
-				MessageBox.Show("Numero de demande (RF, Case, ou INC) est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show("Numero de demande est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;
 			}
 

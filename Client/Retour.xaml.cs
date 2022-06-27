@@ -53,13 +53,13 @@ namespace Client
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(tb_RF.Text))
-            {
-                MessageBox.Show("Numero de RF de retour est obligatoire (RF, Case, INC ou Provenance pour Repair Depot).", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+			if (string.IsNullOrWhiteSpace(tb_RF.Text))
+			{
+				MessageBox.Show("Numero de demande est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
 
-            if (string.IsNullOrWhiteSpace(tb_autre.Text))
+			if (string.IsNullOrWhiteSpace(tb_autre.Text))
             {
 				MessageBox.Show("Le champ 'Emplacement' est vide." + Environment.NewLine + "Veuillez écrire un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;

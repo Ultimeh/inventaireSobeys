@@ -207,7 +207,7 @@ namespace Client
 			}
 			else
 			{
-				App.appData.serverList.Add(new ServerName { Server = "inv-entrepot", Port = 1025 });
+				App.appData.serverList.Add(new ServerName { Server = "inv-entrepot", Port = 1026 });
 
 				serverList.SelectedIndex = 0;
 			}

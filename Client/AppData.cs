@@ -128,6 +128,7 @@ namespace Client
 		private int _modelSearch = 0;
 		private int _statutSearch = 0;
 
+		private bool _wbClosed = true;
 		public bool netChange = false;
 		public bool loginList = true;
 		private bool _quit = false;
@@ -162,8 +163,6 @@ namespace Client
 		private Visibility _admin = Visibility.Collapsed;
 		private Visibility _visEnt = Visibility.Collapsed;
 		private Visibility _visLab = Visibility.Collapsed;
-		private Visibility _visSeuil = Visibility.Collapsed;
-		private Visibility _visPrep = Visibility.Collapsed;
 
 		private Options _settings = new Options();
 		public Options settings { get { return _settings; } set { _settings = value; OnPropertyChanged(); } }
@@ -230,13 +229,12 @@ namespace Client
 		public bool enableCTX { get { return _enableCTX; } set { _enableCTX = value; OnPropertyChanged(); } }
 		public bool accesCheck { get { return _accesCheck; } set { _accesCheck = value; OnPropertyChanged(); } }
 		public bool transCheck { get { return _transCheck; } set { _transCheck = value; OnPropertyChanged(); } }
+		public bool wbClosed { get { return _wbClosed; } set { _wbClosed = value; OnPropertyChanged(); } }
 
 		public Visibility rapport { get { return _rapport; } set { _rapport = value; OnPropertyChanged(); } }
 		public Visibility admin { get { return _admin; } set { _admin = value; OnPropertyChanged(); } }
 		public Visibility visEnt { get { return _visEnt; } set { _visEnt = value; OnPropertyChanged(); } }
 		public Visibility visLab { get { return _visLab; } set { _visLab = value; OnPropertyChanged(); } }
-		public Visibility visSeuil { get { return _visSeuil; } set { _visSeuil = value; OnPropertyChanged(); } }
-		public Visibility visPrep { get { return _visPrep; } set { _visPrep = value; OnPropertyChanged(); } }
 
 		public bool serverAnswer { get { return _serverAnswer; } set { _serverAnswer = value; } }
 		public bool confirmUserInfo { get { return _confirmUserInfo; } set { _confirmUserInfo = value; } }
@@ -902,8 +900,6 @@ namespace Client
 				visEnt = Visibility.Collapsed;
 				visLab = Visibility.Collapsed;
 				rapport = Visibility.Collapsed;
-				visSeuil = Visibility.Collapsed;
-				visPrep = Visibility.Collapsed;
 				(main as MainWindow).tabControl.SelectedIndex = -1;
 				(main as MainWindow).btn_LabClone.IsEnabled = false;
 				CloseAdmin();
@@ -919,8 +915,6 @@ namespace Client
 				visLab = Visibility.Visible;
 				admin = Visibility.Collapsed;
 				rapport = Visibility.Visible;
-				visSeuil = Visibility.Visible;
-				visPrep = Visibility.Collapsed;
 				if ((main as MainWindow).tabControl.SelectedIndex == -1) (main as MainWindow).tabControl.SelectedIndex = 0;
 				(main as MainWindow).btn_LabClone.IsEnabled = false;
 				CloseAdmin();
@@ -936,8 +930,6 @@ namespace Client
 				rapport = Visibility.Visible;
 				visLab = Visibility.Collapsed;
 				admin = Visibility.Collapsed;
-				visSeuil = Visibility.Visible;
-				visPrep = Visibility.Visible;
 				(main as MainWindow).tabControl.SelectedIndex = 0;
 				(main as MainWindow).btn_LabClone.IsEnabled = false;
 				CloseAdmin();
@@ -952,8 +944,6 @@ namespace Client
 				visEnt = Visibility.Collapsed;
 				visLab = Visibility.Visible;
 				rapport = Visibility.Collapsed;
-				visSeuil = Visibility.Collapsed;
-				visPrep = Visibility.Collapsed;
 				(main as MainWindow).tabControl.SelectedIndex = 1;
 				(main as MainWindow).btn_LabClone.IsEnabled = true;
 				CloseAdmin();
@@ -969,8 +959,6 @@ namespace Client
 				visEnt = Visibility.Visible;
 				visLab = Visibility.Visible;
 				rapport = Visibility.Visible;
-				visSeuil = Visibility.Collapsed;
-				visPrep = Visibility.Collapsed;
 				(main as MainWindow).tabControl.SelectedIndex = 1;
 				(main as MainWindow).btn_LabClone.IsEnabled = true;
 				CloseAdmin();
@@ -982,8 +970,6 @@ namespace Client
 				visEnt = Visibility.Visible;
 				visLab = Visibility.Visible;
 				rapport = Visibility.Visible;
-				visSeuil = Visibility.Visible;
-				visPrep = Visibility.Visible;
 				isAdmin = true;
 				enableAjout = true;
 				enableLab = true;
@@ -1142,7 +1128,7 @@ namespace Client
 		private string _dateSortie = "";
 		private string _RFretour = "";
 		private string _dateRetour = "";
-		private string _emplacement;
+		private string _emplacement = "";
 		private string _dateEntry = "";
 		private string _dateEntryLab = "";
 		private string _dateClone = "";

@@ -65,7 +65,7 @@ namespace Client
 		public const byte IM_UpdateModele = 21; //update model (ajout ou delete)
 		public const byte IM_Emplacement = 22; //demande de changement d emplacement
 		public const byte IM_Retour = 23; //demande de retour d equipement
-		public const byte IM_RetourAjout = 24; // lors de retour, si equipement existant pas, les ajoutes
+		public const byte IM_CheckWB = 24; // infoDetail WB info
 		public const byte IM_EnvoyerLab = 25; // envoyer poste au lab
 		public const byte IM_BackupList = 26; // demande list des backup
 		public const byte IM_DeleteFiles = 27; // files to delete
@@ -1831,6 +1831,67 @@ namespace Client
 							}
 							break;
 
+						case IM_CheckWB:
+							{
+								string wb = br.ReadString();
+								int id = br.ReadInt32();
+
+								Application.Current.Dispatcher.Invoke(() =>
+								{
+									foreach (Window window in Application.Current.Windows)
+									{
+										if (window.GetType() == typeof(InfoDetail))
+										{
+											if ((window as InfoDetail).ID == id)
+											{
+												(window as InfoDetail).ListBills.ItemsSource = JsonSerializer.Deserialize<ObservableCollection<Waybills>>(wb);
+												break;
+											}
+										}
+									}
+								});
+
+								//List<Waybills> tempWB = new List<Waybills>();
+								//    List<string> mois = new List<string>();
+								//    tempWB = JsonSerializer.Deserialize<List<Waybills>>(dataLine);
+								//    mois.Add("Tous");
+
+								//    foreach (var item in tempWB.ToArray())
+								//    {
+								//        if (!mois.Contains(item.mois)) mois.Add(item.mois);
+								//    }
+
+								//    Application.Current.Dispatcher.Invoke(() =>
+								//    {
+								//        App.appData.waybills = new ObservableCollection<Waybills>(tempWB);
+								//        App.appData.mois = new ObservableCollection<string>(mois);
+								//    });
+
+
+								//Application.Current.Dispatcher.Invoke(() =>
+								//{
+								//    foreach (Window window in Application.Current.Windows)
+								//    {
+								//        if (window.GetType() == typeof(WaybillsLog))
+								//        {
+								//            (window as WaybillsLog).ListBills.ItemsSource = App.appData.waybills;
+								//            (window as WaybillsLog).cb_mois.ItemsSource = App.appData.mois;
+
+								//            (window as WaybillsLog).cb_mois.SelectedIndex = 0;
+								//            (window as WaybillsLog).cb_jour.SelectedIndex = -1;
+
+								//            App.appData.countWB = (window as WaybillsLog).ListBills.Items.Count;
+								//            (window as WaybillsLog).wbScrool.ScrollToBottom();
+
+								//            break;
+								//        }
+								//    }
+
+								//    App.appData.setWBfilter();
+								//});
+							}
+							break;
+
 						case IM_RequestWaybills:
 							{
 								string dataLine = br.ReadString();
@@ -2273,6 +2334,14 @@ namespace Client
 			bw.Write(serial);
 			bw.Write(rf);
 			bw.Write(emp);
+			bw.Flush();
+		}
+
+		public void CheckWB(int ID, string RF)
+		{
+			bw.Write(IM_CheckWB);
+			bw.Write(ID);
+			bw.Write(RF);
 			bw.Flush();
 		}
 
