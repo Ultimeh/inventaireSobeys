@@ -93,9 +93,10 @@ namespace entrepotServer
 
 	public class InvPostes
 	{
-		private string _type;
-		private string _model;
-		private string _serial;
+		private string _type = "";
+		private string _model = "";
+		private string _magasin = "";
+		private string _serial = "";
 		private string _emplacement = "";
 		private string _statut = "";
 		private string _RF = "";
@@ -105,6 +106,8 @@ namespace entrepotServer
 		private string _dateRetour = "";
 		private string _dateEntryLab = "";
 		private string _dateClone = "";
+		private string _dateCloneValid = "";
+		private string _xcolor = "";
 		private string _infoAjout = "";
 		private string _comment = "";
 
@@ -116,6 +119,7 @@ namespace entrepotServer
 
 		public string type { get { return _type; } set { _type = value; } }
 		public string model { get { return _model; } set { _model = value; } }
+		public string magasin { get { return _magasin; } set { _magasin = value; } }
 		public string serial { get { return _serial; } set { _serial = value; } }
 		public string statut { get { return _statut; } set { _statut = value;} }
 		public string RF { get { return _RF; } set { _RF = value; } }
@@ -126,6 +130,8 @@ namespace entrepotServer
 		public string dateEntry { get { return _dateEntry; } set { _dateEntry = value; } }
 		public string dateEntryLab { get { return _dateEntryLab; } set { _dateEntryLab = value; } }
 		public string dateClone { get { return _dateClone; } set { _dateClone = value; } }
+		public string dateCloneValid { get { return _dateCloneValid; } set { _dateCloneValid = value; } }
+		public string xcolor { get { return _xcolor; } set { _xcolor = value; } }
 		public string infoAjout { get { return _infoAjout; } set { _infoAjout = value; } }
 		public string comment { get { return _comment; } set { _comment = value; } }
 

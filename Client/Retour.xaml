@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="Retour d'équipement" Height="720" Width="400"  HorizontalAlignment="Left" VerticalAlignment="Top"  WindowStyle="None" BorderThickness="1.45" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="mainWindow_MouseLeftButtonDown">
+        Title="Retour de drives" Height="720" Width="400"  HorizontalAlignment="Left" VerticalAlignment="Top"  WindowStyle="None" BorderThickness="1.45" BorderBrush="DimGray" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="mainWindow_MouseLeftButtonDown">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}">
@@ -20,7 +20,7 @@
 
     <Grid>
 
-        <Label x:Name="retour" Content="Retour d'équipemement" HorizontalAlignment="Left" VerticalAlignment="Top" Width="166" Margin="5,0,0,0">
+        <Label x:Name="retour" Content="Retour de Drives" HorizontalAlignment="Left" VerticalAlignment="Top" Width="166" Margin="5,0,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -95,7 +95,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <Label x:Name="rf" Content="RF de retour :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="109,391,0,0">
+        <Label x:Name="rf" Content="Case # :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="109,391,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -107,7 +107,7 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="191,396,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="107" Height="18">
+        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="196,396,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="102" Height="18">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -152,7 +152,44 @@
             </Button.Style>
         </Button>
 
-        <TextBox x:Name="tb_autre" IsEnabled="False" HorizontalAlignment="Left" Margin="171,515,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="127" Height="18">
+        <Label x:Name="emp" Content="Emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="87" Margin="109,437,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_autre" HorizontalAlignment="Left" Margin="196,442,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="102" Height="18">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Label x:Name="lbl_magasin" Content="Magasin :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="87" Margin="109,414,0,0">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_magasin" HorizontalAlignment="Left" Margin="196,419,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="4" VerticalAlignment="Top" Width="102" Height="18">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>

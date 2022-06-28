@@ -1373,5 +1373,26 @@ namespace Client
 			App.appData.validList.Clear();
 			cb_specialType.SelectedIndex = -1;
 		}
+
+        private void btn_nom_Click(object sender, RoutedEventArgs e)
+        {
+			string data = tb_nom.Text.ToUpper().Trim();
+
+			im.Magasin(tb_magasin.Text, data);
+
+			tb_nom.Text = "";
+			tb_magasin.Text = "";
+		}
+
+        private void tb_nom_TextChanged(object sender, TextChangedEventArgs e)
+        {
+			if (string.IsNullOrWhiteSpace(tb_nom.Text) || string.IsNullOrWhiteSpace(tb_magasin.Text)) btn_nom.IsEnabled = false;
+			else btn_nom.IsEnabled = true;
+        }
+
+        private void cb_type_Loaded(object sender, RoutedEventArgs e)
+        {
+			cb_type.SelectedIndex = 0;
+        }
     }
 }

@@ -373,7 +373,7 @@
                     <RowDefinition Height="220*"/>
                 </Grid.RowDefinitions>
 
-                <Label x:Name="rf" Content="Demande (RF) :" VerticalAlignment="Top" Margin="0,10,121,0" HorizontalAlignment="Right" Width="128">
+                <Label x:Name="rf" Content="Demande (Case) :" VerticalAlignment="Top" Margin="0,10,121,0" HorizontalAlignment="Right" Width="128">
                     <Label.Style>
                         <Style>
                             <Style.Triggers>
@@ -385,7 +385,7 @@
                     </Label.Style>
                 </Label>
 
-                <TextBox x:Name="tb_RF" Margin="0,15,60,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" HorizontalAlignment="Right" Width="99">
+                <TextBox x:Name="tb_RF" Margin="0,15,10,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" HorizontalAlignment="Right" Width="138">
                     <TextBox.Style>
                         <Style>
                             <Style.Triggers>

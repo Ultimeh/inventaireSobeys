@@ -59,6 +59,12 @@ namespace Client
 				return;
 			}
 
+			if (string.IsNullOrWhiteSpace(tb_magasin.Text))
+			{
+				MessageBox.Show("Numero de magasin est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
+
 			if (string.IsNullOrWhiteSpace(tb_autre.Text))
             {
 				MessageBox.Show("Le champ 'Emplacement' est vide." + Environment.NewLine + "Veuillez écrire un emplacement avant de continuer.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -79,9 +85,7 @@ namespace Client
 
             serial = string.Join(Environment.NewLine, result);
 
-			string data = tb_autre.Text.ToUpper();
-
-            im.RequestRetour(serial, tb_RF.Text.ToUpper().Trim(), data);
+            im.RequestRetour(serial, tb_RF.Text.ToUpper().Trim(), tb_magasin.Text, tb_autre.Text.ToUpper().Trim());
 
             tb_serial.Focus();
         }

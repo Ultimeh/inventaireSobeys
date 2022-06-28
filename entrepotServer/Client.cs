@@ -72,7 +72,7 @@ namespace entrepotServer
 		public const byte IM_Comment = 32; // commentaire WB
 		public const byte IM_ChangeUserInfo = 33; //client request un password change
 		public const byte IM_RequestWaybills = 34; //login waybills
-
+		public const byte IM_SetMagasin = 35; // donne les magasin
 		public const byte IM_DeleteMain = 36; // delete une entry
 		public const byte IM_DeleteUser = 37;
 		public const byte IM_WByear = 38; // les anners des wb
@@ -526,7 +526,6 @@ namespace entrepotServer
 							{
 								string serial = br.ReadString();
 								string RF = br.ReadString();
-								string emp = br.ReadString();
 
 								var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 								List<string> erreur = new List<string>();
@@ -564,8 +563,9 @@ namespace entrepotServer
 
 													item.dateSortie = fullDate;
 													item.statut = statut;
-													item.emplacement = emp;
+													item.emplacement = "Shipping";
 													item.RF = newRF;
+													if (item.type == "Serveur") item.xcolor = "";
 													item.infoSortie.Add(dateSortie + " - " + RF + " - " + userInfo.UserName);
 
 													toAdd.Add(item);
@@ -635,216 +635,86 @@ namespace entrepotServer
 
 									if (toAdd.Count != 0) UpdateLogs(userInfo.UserName + " - Sortie de " + toAdd.Count.ToString() + " équipement(s) sur le " + RF + ".", "Sortie d'équipement", toAdd.Count.ToString(), userInfo.UserName);
 								}
-							}
-							break;
+                            }
+                            break;
 
-						case IM_Retour:
-							{
-								string serial = br.ReadString();
-								string RF = br.ReadString();
-								string emp = br.ReadString();
+                        case IM_Retour:
+                            {
+                                string serial = br.ReadString();
+                                string RF = br.ReadString();
+                                string magasin = br.ReadString();
+                                string emp = br.ReadString();
 
-								var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-								List<string> erreur = new List<string>();
-								List<string> notHere = new List<string>();
-								List<InvPostes> temp = new List<InvPostes>();
-								List<InvPostes> info = new List<InvPostes>();
-								List<string> problem = new List<string>();
-								bool newStuff = false;
-								bool error = false;
-								var dateEntry = DateTime.Now.ToShortDateString();
-								string message2 = "";
-								bool add = true;
+                                var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                                List<InvPostes> temp = new List<InvPostes>();
+                                var dateEntry = DateTime.Now.ToShortDateString();
 
-								lock (Program.appData.lockDB)
-								{
-									foreach (var stuff in result)
-									{
-										add = true;
-
-										foreach (var item in Program.appData.invPostes.ToArray())
-										{
-											if (stuff == item.serial)
-											{
-												if (item.statut == "En Stock" || item.statut == "Au Lab")
-												{
-													erreur.Add(stuff);
-												}
-                                                else
-												{
-													if (string.IsNullOrEmpty(item.RFretour)) item.RFretour = RF;
-													else item.RFretour = item.RFretour + Environment.NewLine + RF;
-
-													if (string.IsNullOrEmpty(item.dateRetour)) item.dateRetour = dateEntry;
-													else item.dateRetour = item.dateRetour + Environment.NewLine + dateEntry;
-
-													item.statut = "En Stock";
-													item.emplacement = emp;
-
-													if (emp != "R2GO" || emp != "OPER")
-													{
-														if (!string.IsNullOrEmpty(item.dateClone))
-														{
-															item.dateClone = "";
-														}
-													}
-
-													item.infoRetour.Add(dateEntry + " - " + RF + " - " + userInfo.UserName);
-													info.Add(item);
-												}
-
-                                                add = false;
-												break;
-											}
-										}
-
-										if (add) notHere.Add(stuff);
-									}
-
-									if (info.Count != 0)
+                                lock (Program.appData.lockDB)
+                                {
+                                    foreach (var stuff in result)
                                     {
-										var jsonString = JsonSerializer.Serialize(info);
+										Program.appData.invPostes.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RF = RF, emplacement = emp, dateEntry = dateEntry });
+										temp.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RF = RF, emplacement = emp, dateEntry = dateEntry });
+									}
+                                }
 
-										foreach (var UserKey in prog.users.Keys)
+                                prog.SaveDatabase();
+
+                                if (temp.Count != 0)
+                                {
+                                    var jsonString = JsonSerializer.Serialize(temp);
+
+                                    foreach (var UserKey in prog.users.Keys)
+                                    {
+                                        if (prog.users.TryGetValue(UserKey, out UserInfo user))
+                                        {
+                                            if (user.LoggedIn)
+                                            {
+                                                user.Connection.bw.Write(IM_Update);
+                                                user.Connection.bw.Write(jsonString);
+                                                user.Connection.bw.Flush();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                bw.Write(IM_AjoutEnd);
+                                bw.Write(false);
+                                bw.Flush();
+
+								lock (Program.appData.lockModel)
+								{
+									bool foundType = false;
+
+									foreach (var types in Program.appData.typesModels.ToArray())
+									{
+										if (types.type == "Drive") 
 										{
-											if (prog.users.TryGetValue(UserKey, out UserInfo user))
-											{
-												if (user.LoggedIn)
-												{
-													user.Connection.bw.Write(IM_UpdateExisting);
-													user.Connection.bw.Write(jsonString);
-													user.Connection.bw.Flush();
-												}
-											}
+											foundType = true;
+											break;
 										}
 									}
 
-									if (notHere.Count != 0)
-									{
-										bool foundType = false;
-										bool found = false;
-
-										foreach (var item in notHere)
-										{
-											found = false;
-
-											foreach (var exist in Program.appData.fichierAchat.ToArray())
-											{
-												foundType = false;
-
-												if (item == exist.serial || item == exist.asset)
-												{
-													Program.appData.invPostes.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
-													temp.Add(new InvPostes { type = exist.type, model = exist.model, serial = exist.serial, dateEntry = dateEntry, statut = "En Stock", emplacement = emp, RFretour = RF, dateRetour = dateEntry, infoAjout = userInfo.UserName, infoRetour = new List<string>() { dateEntry + " - " + RF + " - " + userInfo.UserName } });
-													found = true;
-
-													lock (Program.appData.lockModel)
-													{
-														foreach (var types in Program.appData.typesModels.ToArray())
-														{
-
-															if (types.type == exist.type)
-															{
-																foundType = true;
-
-																if (!types.modeles.Contains(exist.model))
-																{
-																	types.modeles.Add(exist.model);
-																	newStuff = true;
-																}
-
-																break;
-															}
-														}
-
-														if (!foundType)
-														{
-															Program.appData.typesModels.Add(new TypeModel { type = exist.type, modeles = new List<string> { exist.model } });
-															newStuff = true;
-														}
-													}
-
-													break;
-												}
-											}
-
-											if (!found) problem.Add(item);
-										}
+									if (!foundType) 
+                                    {
+										Program.appData.typesModels.Add(new TypeModel { type = "Drive" });
+										updateClientModel();
 									}
-
-									prog.SaveDatabase();
-
-									if (temp.Count != 0)
-									{
-										var jsonString = JsonSerializer.Serialize(temp);
-
-										foreach (var UserKey in prog.users.Keys)
-										{
-											if (prog.users.TryGetValue(UserKey, out UserInfo user))
-											{
-												if (user.LoggedIn)
-												{
-													user.Connection.bw.Write(IM_Update);
-													user.Connection.bw.Write(jsonString);
-													user.Connection.bw.Flush();
-												}
-											}
-										}
-									}
-
-									if (newStuff) updateClientModel();
-
-									if (erreur.Count != 0 && problem.Count == 0)
-									{
-										message2 = "*Avertissement* Modification effectué, mais les numeros de série suivant n'étaient pas en état 'Sortie' dans l'inventraire: ";
-										error = true;
-
-										bw.Write(IM_Doublon);
-										bw.Write(message2 + String.Join(",", erreur));
-										bw.Write("");
-										bw.Flush();
-									}
-
-									if (erreur.Count == 0 && problem.Count != 0)
-									{
-										message2 = "*Avertissement* Auncune modification, les numéros de série restant sont introuvable dans l'inventaire et le fichier globale, voir avec Patrick Massouh.";
-										error = true;
-
-										bw.Write(IM_Doublon);
-										bw.Write(message2);
-										bw.Write(String.Join(Environment.NewLine, problem));
-										bw.Flush();
-									}
-
-									if (erreur.Count != 0 && problem.Count != 0)
-									{
-										string message = "*Avertissement* Modification effectué, mais les numeros de série suivant n'étaient pas en etat 'Sortie' dans l'inventraire :";
-										message2 = "*Avertissement* Auncune modification, les numéros de série restant sont introuvable dans l'inventaire et le fichier globale, voir avec Patrick Massouh.";
-										error = true;
-
-										bw.Write(IM_Doublon);
-										bw.Write(message2 + Environment.NewLine + message + String.Join(",", erreur));
-										bw.Write(String.Join(Environment.NewLine, problem));
-										bw.Flush();
-									}
-
-									bw.Write(IM_AjoutEnd);
-									bw.Write(error);
-									bw.Flush();
-
-									if (temp.Count != 0 || info.Count != 0) UpdateLogs(userInfo.UserName + " - Retour de " + (temp.Count + info.Count).ToString() + " équipement(s) sur le " + RF + ".", "Retour d'équipement", (temp.Count + info.Count).ToString(), userInfo.UserName);
 								}
-							}
-							break;
 
-						case IM_EnvoyerLab:
-							{
-								string serial = br.ReadString();
-								bool check = br.ReadBoolean();
+								if (temp.Count != 0 || result.Count() != 0) UpdateLogs(userInfo.UserName + " - Retour de " + (temp.Count + result.Count()).ToString() + " Drives(s) sur le " + RF + ".", "Retour de Drive", (temp.Count + result.Count()).ToString(), userInfo.UserName);
+                            }
 
-								var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                            break;
 
-								List<string> notHere = new List<string>();
+                        case IM_EnvoyerLab:
+                            {
+                                string serial = br.ReadString();
+                                //bool check = br.ReadBoolean();
+
+                                var result = serial.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                                List<string> notHere = new List<string>();
 								List<string> sortie = new List<string>();
 
 								List<InvPostes> listFound = new List<InvPostes>();
@@ -951,21 +821,68 @@ namespace entrepotServer
 									bw.Write(erreur);
 									bw.Flush();
 
-									if (check && listFound.Count != 0)
-									{
-										List<string> send = new List<string>();
+									//if (check && listFound.Count != 0)
+									//{
+									//	List<string> send = new List<string>();
 
-										foreach (var item in listFound.ToArray())
-										{
-											send.Add(item.type + "╚" + item.model + "╚" + item.serial + "╚" + item.statut + "╚" + item.RF + "╚" + item.RFretour + "╚" + item.emplacement + "╚" + item.dateEntry + "╚" + item.dateSortie + "╚" + item.dateRetour + "╚" + item.dateEntryLab + "╚" + item.dateClone);
-										}
+									//	foreach (var item in listFound.ToArray())
+									//	{
+									//		send.Add(item.type + "╚" + item.model + "╚" + item.serial + "╚" + item.statut + "╚" + item.RF + "╚" + item.RFretour + "╚" + item.emplacement + "╚" + item.dateEntry + "╚" + item.dateSortie + "╚" + item.dateRetour + "╚" + item.dateEntryLab + "╚" + item.dateClone + "╚" + item.dateCloneValid + "╚" + item.magasin);
+									//	}
 
-										bw.Write(IM_rapportLab);
-										bw.Write(String.Join("§σ§", send));
-										bw.Flush();
-									}
+									//	bw.Write(IM_rapportLab);
+									//	bw.Write(String.Join("§σ§", send));
+									//	bw.Flush();
+									//}
 
 									if (listFound.Count != 0) UpdateLogs(userInfo.UserName + " - Envoie au Lab pour clonage: " + listFound.Count.ToString() + " équipement(s).", "Envoie au Lab", listFound.Count.ToString(), userInfo.UserName);
+								}
+							}
+							break;
+
+						case IM_SetMagasin:
+							{
+								string magasin = br.ReadString();
+								string info = br.ReadString();
+
+
+								var serialData = info.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+								List<InvPostes> temp = new List<InvPostes>();
+
+								lock (Program.appData.lockDB)
+								{
+									foreach (var serial in serialData)
+                                    {
+										foreach (var item in Program.appData.invPostes.ToArray())
+										{
+											if (item.serial == serial)
+                                            {
+												item.magasin = magasin;
+												temp.Add(item);
+												break;
+                                            }
+										}
+									}
+								}
+
+								if (temp.Count != 0)
+								{
+									prog.SaveDatabase();
+									var jsonString = JsonSerializer.Serialize(temp);
+
+									foreach (var UserKey in prog.users.Keys)
+									{
+										if (prog.users.TryGetValue(UserKey, out UserInfo user))
+										{
+											if (user.LoggedIn)
+											{
+												user.Connection.bw.Write(IM_UpdateExisting);
+												user.Connection.bw.Write(jsonString);
+												user.Connection.bw.Flush();
+											}
+										}
+									}
 								}
 							}
 							break;
@@ -1202,7 +1119,7 @@ namespace entrepotServer
 												{
 													item.infoEmp.Add(time + " - Ancien: " + item.emplacement + ", Nouveau: " + emp + " - "  + userInfo.UserName);
 													item.emplacement = emp;
-
+													if (emp == "QUANTUM" && item.type == "Serveur") item.xcolor = "";
 													toSend.Add(item);
 												}
 
@@ -1302,6 +1219,9 @@ namespace entrepotServer
 
 												if (!string.IsNullOrEmpty(item.dateClone)) item.dateClone = item.dateClone + Environment.NewLine + date.ToShortDateString();
 												else item.dateClone = date.ToShortDateString();
+
+												if (!string.IsNullOrEmpty(item.dateCloneValid)) item.dateCloneValid = item.dateCloneValid + Environment.NewLine + date.AddDays(42).ToShortDateString();
+												else item.dateCloneValid = date.AddDays(42).ToShortDateString();
 
 												item.infoValidClone.Add(date.ToShortDateString() + " - " + userInfo.UserName);
 
@@ -1654,6 +1574,13 @@ namespace entrepotServer
 
 											bw.Write(IM_RequestWaybills);
 											bw.Write(jsonString);
+											bw.Write(year);
+											bw.Flush();
+										}
+										else
+                                        {
+											bw.Write(IM_RequestWaybills);
+											bw.Write("");
 											bw.Write(year);
 											bw.Flush();
 										}

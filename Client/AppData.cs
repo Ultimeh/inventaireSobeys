@@ -373,7 +373,8 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 2 && item.statut.Contains("Réservé"))
+
+				if (statutSearch == 2 && item.statut.Contains("Sortie"))
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{
@@ -396,7 +397,7 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 3 && item.statut.Contains("Sortie"))
+				if (statutSearch == 3 && !string.IsNullOrEmpty(item.dateClone) && item.statut == "En Stock")
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{
@@ -419,7 +420,7 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 4 && !string.IsNullOrEmpty(item.dateClone) && item.statut == "En Stock")
+				if (statutSearch == 4 && item.emplacement == "QUANTUM")
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{
@@ -442,30 +443,7 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 5 && item.emplacement == "QUANTUM")
-				{
-					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
-					{
-						if (item.emplacement.ToLower().Contains(empSearch.ToLower()) && item.dateSortie.Contains(sortieSearch)) return true;
-						else return false;
-					}
-
-					if (!string.IsNullOrEmpty(empSearch) && string.IsNullOrEmpty(sortieSearch))
-					{
-						if (item.emplacement.ToLower().Contains(empSearch.ToLower())) return true;
-						else return false;
-					}
-
-					if (!string.IsNullOrEmpty(sortieSearch) && string.IsNullOrEmpty(empSearch))
-					{
-						if (item.dateSortie.Contains(sortieSearch)) return true;
-						else return false;
-					}
-
-					return true;
-				}
-
-				if (statutSearch == 6)
+				if (statutSearch == 5)
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{
@@ -539,7 +517,7 @@ namespace Client
 						return true;
 					}
 
-					if (statutSearch == 2 && item.statut.Contains("Réservé"))
+					if (statutSearch == 2 && item.statut.Contains("Sortie"))
 					{
 						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 						{
@@ -562,30 +540,7 @@ namespace Client
 						return true;
 					}
 
-					if (statutSearch == 3 && item.statut.Contains("Sortie"))
-					{
-						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
-						{
-							if (item.emplacement.ToLower().Contains(empSearch.ToLower()) && item.dateSortie.Contains(sortieSearch)) return true;
-							else return false;
-						}
-
-						if (!string.IsNullOrEmpty(empSearch) && string.IsNullOrEmpty(sortieSearch))
-						{
-							if (item.emplacement.ToLower().Contains(empSearch.ToLower())) return true;
-							else return false;
-						}
-
-						if (!string.IsNullOrEmpty(sortieSearch) && string.IsNullOrEmpty(empSearch))
-						{
-							if (item.dateSortie.Contains(sortieSearch)) return true;
-							else return false;
-						}
-
-						return true;
-					}
-
-					if (statutSearch == 4 && !string.IsNullOrEmpty(item.dateClone))
+					if (statutSearch == 3 && !string.IsNullOrEmpty(item.dateClone))
 					{
 						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 						{
@@ -610,7 +565,7 @@ namespace Client
 						//return true;
 					}
 
-					if (statutSearch == 5 && item.emplacement == "QUANTUM")
+					if (statutSearch == 4 && item.emplacement == "QUANTUM")
 					{
 						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 						{
@@ -633,7 +588,7 @@ namespace Client
 						return true;
 					}
 
-					if (statutSearch == 6)
+					if (statutSearch == 5 && item.type == "Serveur" && !string.IsNullOrEmpty(item.xcolor))
 					{
 						if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 						{
@@ -707,7 +662,8 @@ namespace Client
 							return true;
 						}
 
-						if (statutSearch == 2 && item.statut.Contains("Réservé"))
+
+						if (statutSearch == 2 && item.statut.Contains("Sortie"))
 						{
 							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 							{
@@ -730,30 +686,7 @@ namespace Client
 							return true;
 						}
 
-						if (statutSearch == 3 && item.statut.Contains("Sortie"))
-						{
-							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
-							{
-								if (item.emplacement.ToLower().Contains(empSearch.ToLower()) && item.dateSortie.Contains(sortieSearch)) return true;
-								else return false;
-							}
-
-							if (!string.IsNullOrEmpty(empSearch) && string.IsNullOrEmpty(sortieSearch))
-							{
-								if (item.emplacement.ToLower().Contains(empSearch.ToLower())) return true;
-								else return false;
-							}
-
-							if (!string.IsNullOrEmpty(sortieSearch) && string.IsNullOrEmpty(empSearch))
-							{
-								if (item.dateSortie.Contains(sortieSearch)) return true;
-								else return false;
-							}
-
-							return true;
-						}
-
-						if (statutSearch == 4 && !string.IsNullOrEmpty(item.dateClone))
+						if (statutSearch == 3 && !string.IsNullOrEmpty(item.dateClone))
 						{
 							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 							{
@@ -778,7 +711,7 @@ namespace Client
 							//return true;
 						}
 
-						if (statutSearch == 5 && item.emplacement == "QUANTUM")
+						if (statutSearch == 4 && item.emplacement == "QUANTUM")
 						{
 							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 							{
@@ -801,7 +734,7 @@ namespace Client
 							return true;
 						}
 
-						if (statutSearch == 6)
+						if (statutSearch == 5 && item.type == "Serveur" && !string.IsNullOrEmpty(item.xcolor))
 						{
 							if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 							{
@@ -1120,10 +1053,11 @@ namespace Client
 
 	public class InvPostes : INotifyPropertyChanged
 	{
-		private string _type;
-		private string _model;
-		private string _serial;
-		private string _statut;
+		private string _type = "";
+		private string _model = "";
+		private string _magasin = "";
+		private string _serial = "";
+		private string _statut = "";
 		private string _RF = "";
 		private string _dateSortie = "";
 		private string _RFretour = "";
@@ -1132,6 +1066,8 @@ namespace Client
 		private string _dateEntry = "";
 		private string _dateEntryLab = "";
 		private string _dateClone = "";
+		private string _dateCloneValid = "";
+		private string _xcolor = "";
 		private string _infoAjout = "";
 		private string _comment = "";
 
@@ -1143,6 +1079,7 @@ namespace Client
 
 		public string type { get { return _type; } set { _type = value; OnPropertyChanged(); } }
 		public string model { get { return _model; } set { _model = value; OnPropertyChanged(); } }
+		public string magasin { get { return _magasin; } set { _magasin = value; OnPropertyChanged(); } }
 		public string serial { get { return _serial; } set { _serial = value; OnPropertyChanged(); } }
 		public string statut { get { return _statut; } set { _statut = value; OnPropertyChanged(); } }
 		public string RF { get { return _RF; } set { _RF = value; OnPropertyChanged(); } }
@@ -1153,6 +1090,8 @@ namespace Client
 		public string dateEntry { get { return _dateEntry; } set { _dateEntry = value; OnPropertyChanged(); } }
 		public string dateEntryLab { get { return _dateEntryLab; } set { _dateEntryLab = value; OnPropertyChanged(); } }
 		public string dateClone { get { return _dateClone; } set { _dateClone = value; OnPropertyChanged(); } }
+		public string dateCloneValid { get { return _dateCloneValid; } set { _dateCloneValid = value; OnPropertyChanged(); } }
+		public string xcolor { get { return _xcolor; } set { _xcolor = value; OnPropertyChanged(); } }
 		public string infoAjout { get { return _infoAjout; } set { _infoAjout = value; } }
 		public string comment { get { return _comment; } set { _comment = value; } }
 		public List<string> infoEmp { get { return _infoEmp; } set { _infoEmp = value; } }

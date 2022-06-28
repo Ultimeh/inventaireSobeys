@@ -56,11 +56,7 @@ namespace Client
 
 			serial = string.Join(Environment.NewLine, result);
 
-			bool check = false;
-
-			if (checkRapport.IsChecked == true) check = true;
-
-			im.EnvoieLab(serial, check);
+			im.EnvoieLab(serial);
 
 			tb_serial.Focus();
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -47,7 +49,13 @@ namespace Client
 				return;
 			}
 
-			if (cb_sortie.SelectedIndex == -1)
+			if (string.IsNullOrWhiteSpace(tb_magasin.Text))
+			{
+				MessageBox.Show("Choisir entre 'Cage' ou 'Shipping' du menu déroullant est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
+
+			if (string.IsNullOrWhiteSpace(tb_serial.Text))
 			{
 				MessageBox.Show("Choisir entre 'Cage' ou 'Shipping' du menu déroullant est obligatoire pour la sortie d'equipement.", "Inventaire Entrepot", MessageBoxButton.OK, MessageBoxImage.Warning);
 				return;
@@ -63,19 +71,10 @@ namespace Client
 			App.appData.enableAjout = false;
 			serial = string.Join(Environment.NewLine, result);
 
-			im.sendSortie(serial, tb_RF.Text.ToUpper().Trim(), cb_sortie.Text);
+			im.sendSortie(serial, tb_RF.Text.ToUpper().Trim());
 			tb_serial.Focus();
 		}
 
-		private void cb_sortie_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (cb_sortie.SelectedIndex == -1)
-			{
-				btn_Sortie.IsEnabled = false;
-			}
-			else btn_Sortie.IsEnabled = true;
-
-		}
 
 		private void tb_serial_TextChanged(object sender, TextChangedEventArgs e)
 		{
@@ -91,5 +90,39 @@ namespace Client
 		{
 			tb_serial.Focus();
 		}
-	}
+
+        private void tb_magasin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+			if (string.IsNullOrWhiteSpace(tb_magasin.Text)) btn_valid.IsEnabled = false;
+			else btn_valid.IsEnabled = true;
+        }
+
+        private async void btn_valid_Click(object sender, RoutedEventArgs e)
+        {
+			btn_valid.IsEnabled = false;
+			await Task.Run(MagasinValid);
+			btn_valid.IsEnabled = true;
+        }
+
+		private void MagasinValid()
+        {
+			InvPostes[] temp;
+			List<string> serial = new List<string>();
+
+			lock (IMClient.lockDB)
+            {
+				temp = App.appData.invPostes.ToArray();
+            }
+
+			foreach (var item in temp)
+            {
+				if (item.magasin == tb_magasin.Text.Trim() && item.statut == "En Stock") serial.Add(item.serial);
+            }
+
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				tb_serial.Text = String.Join(Environment.NewLine, serial);
+			});
+		}
+    }
 }

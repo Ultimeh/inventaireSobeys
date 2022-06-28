@@ -21,7 +21,7 @@ namespace Client
 	{
 		//Stopwatch timeOut = new Stopwatch();
 		Window main;
-		private static readonly Object lockDB = new Object();
+		public static readonly Object lockDB = new Object();
 		private static readonly Object lockModel = new Object();
 		private static readonly Object lockWB = new Object();
 		private static readonly Object lockLog = new Object();
@@ -76,6 +76,8 @@ namespace Client
 		public const byte IM_Comment = 32; // commentaire WB
 		public const byte IM_ChangeUserInfo = 33; //client request un password change
 		public const byte IM_RequestWaybills = 34; //login waybills
+
+		public const byte IM_SetMagasin = 35; // donne les magasin
 
 		public const byte IM_DeleteMain = 36; // delete une entry
 		public const byte IM_DeleteUser = 37; // delete une entry
@@ -1899,21 +1901,24 @@ namespace Client
 
 								lock (lockWB)
 								{
-									List<Waybills> tempWB = new List<Waybills>();
-									List<string> mois = new List<string>();
-									tempWB = JsonSerializer.Deserialize<List<Waybills>>(dataLine);
-									mois.Add("Tous");
+									if (dataLine != "")
+                                    {
+										List<Waybills> tempWB = new List<Waybills>();
+										List<string> mois = new List<string>();
+										tempWB = JsonSerializer.Deserialize<List<Waybills>>(dataLine);
+										mois.Add("Tous");
 
-									foreach (var item in tempWB.ToArray())
-									{
-										if (!mois.Contains(item.mois)) mois.Add(item.mois);
+										foreach (var item in tempWB.ToArray())
+										{
+											if (!mois.Contains(item.mois)) mois.Add(item.mois);
+										}
+
+										Application.Current.Dispatcher.Invoke(() =>
+										{
+											App.appData.waybills = new ObservableCollection<Waybills>(tempWB);
+											App.appData.mois = new ObservableCollection<string>(mois);
+										});
 									}
-
-									Application.Current.Dispatcher.Invoke(() =>
-									{
-										App.appData.waybills = new ObservableCollection<Waybills>(tempWB);
-										App.appData.mois = new ObservableCollection<string>(mois);
-									});
 								}
 
 								Application.Current.Dispatcher.Invoke(() =>
@@ -2261,12 +2266,11 @@ namespace Client
 		}
 
 
-		public void sendSortie(string serial, string RF, string emp)
+		public void sendSortie(string serial, string RF)
 		{
 			bw.Write(IM_Sortie);
 			bw.Write(serial);
 			bw.Write(RF);
-			bw.Write(emp);
 			bw.Flush();
 		}
 
@@ -2328,11 +2332,12 @@ namespace Client
 			bw.Flush();
 		}
 
-		public void RequestRetour(string serial, string rf, string emp)
+		public void RequestRetour(string serial, string rf, string magasin, string emp)
 		{
 			bw.Write(IM_Retour);
 			bw.Write(serial);
 			bw.Write(rf);
+			bw.Write(magasin);
 			bw.Write(emp);
 			bw.Flush();
 		}
@@ -2356,11 +2361,11 @@ namespace Client
 		//	bw.Flush();
 		//}
 
-		public void EnvoieLab(string serial, bool check)
+		public void EnvoieLab(string serial)
 		{
 			bw.Write(IM_EnvoyerLab);
 			bw.Write(serial);
-			bw.Write(check);
+			//bw.Write(check);
 			bw.Flush();
 		}
 
@@ -2421,6 +2426,14 @@ namespace Client
 		public void RequestLogs()
 		{
 			bw.Write(IM_RequestLogs);
+			bw.Flush();
+		}
+
+		public void Magasin(string magasin, string info)
+		{
+			bw.Write(IM_SetMagasin);
+			bw.Write(magasin);
+			bw.Write(info);
 			bw.Flush();
 		}
 

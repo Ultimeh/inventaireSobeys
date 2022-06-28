@@ -122,19 +122,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBox x:Name="tb_erreur" HorizontalAlignment="Center" VerticalScrollBarVisibility="Auto" Margin="0,474,0,0" Visibility="Visible" IsReadOnly="True" Foreground="Red" Background="Transparent" TextWrapping="Wrap" BorderThickness="0" VerticalAlignment="Top" Width="377" Height="60"/>
-
-        <CheckBox x:Name="checkRapport" Content="Créer un Rapport" HorizontalAlignment="Center" Margin="0,539,0,0" VerticalAlignment="Top">
-            <CheckBox.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </CheckBox.Style>
-        </CheckBox>
+        <TextBox x:Name="tb_erreur" HorizontalAlignment="Center" VerticalScrollBarVisibility="Auto" Margin="0,474,0,0" Visibility="Visible" IsReadOnly="True" Foreground="Red" Background="Transparent" TextWrapping="Wrap" BorderThickness="0" VerticalAlignment="Top" Width="377" Height="80"/>
 
         <Button x:Name="btn_Lab" Content="Envoyer au Lab" HorizontalAlignment="Center" IsEnabled="{Binding enableAjout}" Margin="0,559,0,0" VerticalAlignment="Top" Width="138" Height="28" Click="btn_Lab_Click">
             <Button.Style>

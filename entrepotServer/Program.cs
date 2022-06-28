@@ -137,7 +137,7 @@ namespace entrepotServer
 			//UpdateColor();
 			//nipAsset();
 			//UpdateRepair();
-
+			UpdateColor();
 			//Task.Run(WatcherTask);
 			//msg("File Watcher Task Started");
 
@@ -489,6 +489,34 @@ namespace entrepotServer
 		//          }
 		//      }
 
+		private void UpdateColor()
+		{
+			lock (appData.lockDB)
+			{
+				var date = DateTime.Now;
+				DateTime expire;
+
+				foreach (var item in appData.invPostes.ToArray())
+				{
+					if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && item.type == "Serveur" && item.statut == "En Stock")
+					{
+						var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+						expire = DateTime.Parse(array[array.Count() - 1]);
+
+						if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
+						else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
+						else if (expire < date) item.xcolor = "2";
+						else item.xcolor = "";
+					}
+
+					if (item.type == "Serveur" && (item.statut == "Sortie" || item.emplacement == "QUANTUM")) item.xcolor = "";
+				}
+
+				SaveDatabase();
+			}
+		}
+
+
 		private protected void myHandler(object sender, ConsoleCancelEventArgs args)
 		{
 			Console.WriteLine($"  Key pressed: {args.SpecialKey}");
@@ -585,7 +613,7 @@ namespace entrepotServer
 				if (timeCompare >= 300 && timeCompare < 305)
 				{
 					KickAllClient();
-					//UpdateColor();
+					UpdateColor();
 
 					if (DateTime.Now.Year.ToString() != year)
 					{

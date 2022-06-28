@@ -32,7 +32,7 @@
             </Label.Style>
         </Label>
 
-        <Label x:Name="sortie" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="189" Margin="109,44,0,0">
+        <Label x:Name="magasin" Content="# Magasin :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="71" Margin="109,31,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -44,7 +44,50 @@
             </Label.Style>
         </Label>
 
-        <Label x:Name="lbl_count" Content="{Binding countAdd}" VerticalContentAlignment="Bottom" Margin="297,0,0,216" FontSize="14" VerticalAlignment="Bottom" Height="29" HorizontalAlignment="Left" Width="68">
+        <TextBox x:Name="tb_magasin" HorizontalAlignment="Left" MaxLength="4" Margin="178,36,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="58" Height="18" TextChanged="tb_magasin_TextChanged">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="btn_valid" Content="Valider" HorizontalAlignment="Left" Margin="241,36,0,0" VerticalAlignment="Top" Width="57" Height="18" Click="btn_valid_Click">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="9">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="LightSkyBlue"/>
+                            <Setter Property="Foreground" Value="black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="DarkGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Label x:Name="sortie" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="189" Margin="109,64,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -56,7 +99,19 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_serial" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="113,67,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" Height="358" AcceptsReturn="True" TextChanged="tb_serial_TextChanged" Loaded="tb_serial_Loaded">
+        <Label x:Name="lbl_count" Content="{Binding countAdd}" VerticalContentAlignment="Bottom" Margin="297,0,0,196" FontSize="14" VerticalAlignment="Bottom" Height="29" HorizontalAlignment="Left" Width="68">
+            <Label.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
+        <TextBox x:Name="tb_serial" HorizontalAlignment="Left" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="113,87,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" Height="358" AcceptsReturn="True" TextChanged="tb_serial_TextChanged" Loaded="tb_serial_Loaded">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Background" Value="White"/>
@@ -94,7 +149,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <Label x:Name="rf" Content="Demande (RF) :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="109,425,0,0">
+        <Label x:Name="rf" Content="Demande :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="128" Margin="107,445,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -106,7 +161,7 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="199,430,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="99" Height="18">
+        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="173,450,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="125" Height="18">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -118,11 +173,6 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-
-        <ComboBox x:Name="cb_sortie" HorizontalAlignment="Center" IsEnabled="true" Margin="0,453,0,0" VerticalAlignment="Top" Width="81" SelectionChanged="cb_sortie_SelectionChanged" >
-            <ComboBoxItem Content="Cage"/>
-            <ComboBoxItem Content="Shipping"/>
-        </ComboBox>
 
         <TextBox x:Name="tb_erreur" HorizontalAlignment="Center" VerticalScrollBarVisibility="Auto" Margin="0,480,0,0" Visibility="Visible" IsReadOnly="True" Foreground="Red" Background="Transparent" TextWrapping="Wrap" BorderThickness="0" VerticalAlignment="Top" Width="387" Height="124"/>
 

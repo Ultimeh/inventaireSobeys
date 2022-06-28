@@ -314,6 +314,18 @@
                                     </GridViewColumn.HeaderContainerStyle>
                                 </GridViewColumn>
 
+                                <GridViewColumn Header=" Magasin" DisplayMemberBinding="{Binding magasin}">
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="FontWeight" Value="Normal"/>
+                                            <Setter Property="FontSize" Value="14"/>
+                                            <Setter Property="Background" Value="LightSteelBlue"/>
+                                            <Setter Property="BorderBrush" Value="LightGray"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                </GridViewColumn>
+
                                 <GridViewColumn Header=" Numéro de série" DisplayMemberBinding="{Binding serial}">
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -423,6 +435,18 @@
                                 </GridViewColumn>
 
                                 <GridViewColumn Header=" Date Clonage" DisplayMemberBinding="{Binding dateClone}" >
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="FontWeight" Value="Normal"/>
+                                            <Setter Property="FontSize" Value="14"/>
+                                            <Setter Property="Background" Value="LightSteelBlue"/>
+                                            <Setter Property="BorderBrush" Value="LightGray"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header=" Expiration Clonage" DisplayMemberBinding="{Binding dateCloneValid}" >
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -549,7 +573,7 @@
                         </Button.Style>
                     </Button>
 
-                    <Button x:Name="btn_Retour" Content="Retour d'équipement" HorizontalAlignment="Right" Margin="0,0,287,35" IsEnabled="{Binding enableEntrepot}" Width="259" Click="btn_Retour_Click" Height="28" VerticalAlignment="Bottom">
+                    <Button x:Name="btn_Retour" Content="Retour drives" HorizontalAlignment="Right" Margin="0,0,287,35" IsEnabled="{Binding enableEntrepot}" Width="259" Click="btn_Retour_Click" Height="28" VerticalAlignment="Bottom">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -708,7 +732,7 @@
                                 </TextBox.Style>
                             </TextBox>
 
-                            <TextBlock Text="RF :" Margin="114,7,231,93">
+                            <TextBlock Text="Demande :" Margin="114,7,305,93">
                                 <TextBlock.Style>
                                     <Style>
                                         <Style.Triggers>
@@ -745,7 +769,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <ComboBox x:Name="cb_type" ItemsSource="{Binding types}" IsEnabled="true" Margin="327,24,0,0" SelectedIndex="{Binding typeSearch}" SelectedItem="{Binding selectedType}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92" SelectionChanged="cb_type_SelectionChanged"/>
+                            <ComboBox x:Name="cb_type" ItemsSource="{Binding types}" IsEnabled="true" Margin="327,24,0,0" SelectedIndex="{Binding typeSearch}" SelectedItem="{Binding selectedType}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92" SelectionChanged="cb_type_SelectionChanged" Loaded="cb_type_Loaded"/>
 
                             <TextBlock Text="Modèle :" Margin="423,7,13,0" Height="19" VerticalAlignment="Top">
                                 <TextBlock.Style>
@@ -776,10 +800,10 @@
                             <ComboBox x:Name="cb_statut" IsEnabled="true" Margin="377,68,0,0" SelectedIndex="{Binding statutSearch}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92" SelectionChanged="cb_statut_SelectionChanged" >
                                 <ComboBoxItem Content="Tous"/>
                                 <ComboBoxItem Content="En Stock"/>
-                                <ComboBoxItem Content="Réservé"/>
                                 <ComboBoxItem Content="Sortie"/>
                                 <ComboBoxItem Content="Cloné"/>
                                 <ComboBoxItem Content="Quantum"/>
+                                <ComboBoxItem Content="Expiration"/>
                             </ComboBox>
 
                             <TextBlock Text="Date clonage :" Margin="5,47,340,0" Height="19" VerticalAlignment="Top">
@@ -940,8 +964,7 @@
 
                 <Grid>
 
-
-                    <Label x:Name="lbl_countLab" Content="{Binding countLab}" Margin="286,0,0,7" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="68">
+                    <Label x:Name="lbl_countLab" Content="{Binding countLab}" Margin="0,0,6,5" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Width="68">
                         <Label.Style>
                             <Style>
                                 <Style.Triggers>
@@ -953,7 +976,7 @@
                         </Label.Style>
                     </Label>
 
-                    <TextBlock Text="Numéro de série :" Margin="364,0,0,5" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="96">
+                    <TextBlock Text="Numéro de série :" Margin="552,0,0,5" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="96">
                         <TextBlock.Style>
                             <Style>
                                 <Style.Triggers>
@@ -965,7 +988,7 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <TextBox x:Name="tb_labSN" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" Margin="461,0,0,5" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" TextChanged="tb_labSN_TextChanged">
+                    <TextBox x:Name="tb_labSN" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" Margin="649,0,0,5" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" TextChanged="tb_labSN_TextChanged">
                         <TextBox.Style>
                             <Style>
                                 <Style.Triggers>
@@ -978,7 +1001,9 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <TextBlock Text="Modèle :" Margin="626,0,0,5" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="49">
+
+
+                    <TextBlock Text="Modèle :" Margin="809,0,0,5" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="49">
                         <TextBlock.Style>
                             <Style>
                                 <Style.Triggers>
@@ -990,7 +1015,7 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <TextBox x:Name="tb_labMod" Text="{Binding searchMODlab, UpdateSourceTrigger=PropertyChanged}" Margin="676,0,0,5" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" TextChanged="tb_labMod_TextChanged">
+                    <TextBox x:Name="tb_labMod" Text="{Binding searchMODlab, UpdateSourceTrigger=PropertyChanged}" Margin="859,0,0,5" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140" TextChanged="tb_labMod_TextChanged">
                         <TextBox.Style>
                             <Style>
                                 <Style.Triggers>
@@ -1003,7 +1028,7 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <ListView x:Name="ListLab" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding invPostesViewLab}" Margin="286,10,10,28" SelectionMode="Extended"  MouseLeftButtonDown="ListLab_MouseLeftButtonDown" >
+                    <ListView x:Name="ListLab" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding invPostesViewLab}" Margin="552,10,10,28" SelectionMode="Extended"  MouseLeftButtonDown="ListLab_MouseLeftButtonDown" >
 
                         <ListView.Style>
                             <Style>
@@ -1172,7 +1197,7 @@
                                 </Label.Style>
                             </Label>
 
-                            <Label x:Name="cloneLab" Content="Numéro de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="116" Margin="30,10,0,0">
+                            <Label x:Name="cloneLab" Content="Numéros de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="116" Margin="30,10,0,0">
                                 <Label.Style>
                                     <Style>
                                         <Style.Triggers>
@@ -1184,7 +1209,7 @@
                                 </Label.Style>
                             </Label>
 
-                            <TextBox x:Name="tb_serialLab" VerticalScrollBarVisibility="Auto" Margin="0,36,0,97" TextWrapping="Wrap" IsEnabled="{Binding enableLab}" AcceptsReturn="True" HorizontalAlignment="Center" Width="184" TextChanged="tb_serialLab_TextChanged" Loaded="tb_serialLab_Loaded">
+                            <TextBox x:Name="tb_serialLab" VerticalScrollBarVisibility="Auto" Margin="0,36,0,125" TextWrapping="Wrap" IsEnabled="{Binding enableLab}" AcceptsReturn="True" HorizontalAlignment="Center" Width="184" TextChanged="tb_serialLab_TextChanged" Loaded="tb_serialLab_Loaded">
                                 <TextBox.Style>
                                     <Style TargetType="TextBox">
                                         <Setter Property="Background" Value="White"/>
@@ -1258,7 +1283,136 @@
                         </Grid>
                     </GroupBox>
 
+                    <GroupBox Margin="281,10,0,10" BorderBrush="DimGray" HorizontalAlignment="Left" Width="266" BorderThickness="1.5" >
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" # Magasin">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                                                    <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </GroupBox.Header>
+
+                        <Grid>
+
+                            <TextBlock Text="# Magasin :" Margin="35,0,0,540" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="64">
+                                <TextBlock.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                                                <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <TextBox x:Name="tb_magasin" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Margin="104,0,0,540" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" TextChanged="tb_nom_TextChanged">
+                                <TextBox.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                                                <Setter Property="ItemsControl.Background" Value="#FF323232"/>
+                                                <Setter Property="TextBlock.Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <Label Content="Numéros de série :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="159" Margin="30,53,0,0">
+                                <Label.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
+                                                <Setter Property="TextBlock.Foreground" Value="LightGray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+
+                            <TextBox x:Name="tb_nom" VerticalScrollBarVisibility="Auto" Margin="0,79,0,33" TextWrapping="Wrap" IsEnabled="{Binding enableLab}" AcceptsReturn="True" HorizontalAlignment="Center" Width="184" TextChanged="tb_nom_TextChanged">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Foreground" Value="black"/>
+
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding settings.DarkMode}" Value="true"/>
+                                                    <Condition Binding="{Binding snColor}" Value="false"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                <Setter Property="Background" Value="#FF323232"/>
+                                            </MultiDataTrigger>
+
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding settings.DarkMode}" Value="true"/>
+                                                    <Condition Binding="{Binding snColor}" Value="true"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Setter Property="Background" Value="#FF323232"/>
+                                            </MultiDataTrigger>
+
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding settings.DarkMode}" Value="false"/>
+                                                    <Condition Binding="{Binding snColor}" Value="true"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </MultiDataTrigger>
+
+
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <Button x:Name="btn_nom" Content="Ajouter/Modifier #Magasin" IsEnabled="False" HorizontalAlignment="Center" Width="158" Height="28" VerticalAlignment="Top" Click="btn_nom_Click" Margin="0,552,0,0">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border Background="{TemplateBinding Background}" CornerRadius="14">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="LightBlue"/>
+                                                <Setter Property="Foreground" Value="black"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Background" Value="LightSkyBlue"/>
+                                                <Setter Property="Foreground" Value="black"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="DarkGray"/>
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                        </Grid>
+                    </GroupBox>
+
                 </Grid>
+
             </TabItem>
 
             <TabItem x:Name="tabValid" FontSize="12" Width="125" Margin="4,1,-4,-1">
