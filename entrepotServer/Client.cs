@@ -653,8 +653,8 @@ namespace entrepotServer
                                 {
                                     foreach (var stuff in result)
                                     {
-										Program.appData.invPostes.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RF = RF, emplacement = emp, dateEntry = dateEntry });
-										temp.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RF = RF, emplacement = emp, dateEntry = dateEntry });
+										Program.appData.invPostes.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RFretour = RF, emplacement = emp, dateEntry = dateEntry });
+										temp.Add(new InvPostes { type = "Drive", serial = stuff, magasin = magasin, RFretour = RF, emplacement = emp, dateEntry = dateEntry });
 									}
                                 }
 

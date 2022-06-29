@@ -350,7 +350,7 @@
                                     </GridViewColumn.HeaderContainerStyle>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header=" RF de Sortie" DisplayMemberBinding="{Binding RF}">
+                                <GridViewColumn Header=" Case de Sortie" DisplayMemberBinding="{Binding RF}">
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -374,7 +374,7 @@
                                     </GridViewColumn.HeaderContainerStyle>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header=" RF de Retour" DisplayMemberBinding="{Binding RFretour}">
+                                <GridViewColumn Header=" Case de Retour" DisplayMemberBinding="{Binding RFretour}">
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -1314,7 +1314,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <TextBox x:Name="tb_magasin" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Margin="104,0,0,540" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" TextChanged="tb_nom_TextChanged">
+                            <TextBox x:Name="tb_magasin" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Margin="104,0,0,540" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" TextChanged="tb_nom_TextChanged" PreviewTextInput="tb_magasin_PreviewTextInput">
                                 <TextBox.Style>
                                     <Style>
                                         <Style.Triggers>

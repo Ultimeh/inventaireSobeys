@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Client
 {

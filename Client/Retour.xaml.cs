@@ -104,5 +104,10 @@ namespace Client
 		{
 			tb_serial.Focus();
 		}
-	}
+
+        private void tb_magasin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+			e.Handled = !char.IsDigit(e.Text.ToCharArray()[0]);
+		}
+    }
 }

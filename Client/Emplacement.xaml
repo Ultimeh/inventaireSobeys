@@ -56,7 +56,7 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_serial" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="113,67,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" Height="318" AcceptsReturn="True" TextChanged="tb_serial_TextChanged" Loaded="tb_serial_Loaded">
+        <TextBox x:Name="tb_serial" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="113,67,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" Height="408" AcceptsReturn="True" TextChanged="tb_serial_TextChanged" Loaded="tb_serial_Loaded">
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Setter Property="Background" Value="White"/>
@@ -153,7 +153,7 @@
             </Button.Style>
         </Button>
 
-        <Label x:Name="lblemp" Content="Choix d'emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="131" Margin="109,385,0,0">
+        <Label x:Name="lblemp" Content="Emplacement :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Margin="108,475,0,0">
             <Label.Style>
                 <Style>
                     <Style.Triggers>
@@ -165,86 +165,7 @@
             </Label.Style>
         </Label>
 
-        <RadioButton x:Name="radio_r2go" GroupName="1" Margin="113,411,0,0" Content="R2GO" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="59" Checked="radio_r2go_Checked" Unchecked="radio_r2go_Unchecked">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <TextBox x:Name="tb_r2go" IsEnabled="False" HorizontalAlignment="Left" Margin="168,411,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="45" Height="18">
-            <TextBox.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="ItemsControl.Background" Value="#FF323232"/>
-                            <Setter Property="TextBlock.Foreground" Value="White"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-
-        <RadioButton x:Name="radio_oper" GroupName="1" Margin="241,411,0,0" Content="OPER" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="57">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <RadioButton x:Name="radio_repair" GroupName="1" Margin="113,434,0,0" Content="REPAIR DEPOT" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="103" Checked="radio_repair_Checked" Unchecked="radio_repair_Unchecked">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <ComboBox x:Name="cb_repair" IsEnabled="False" HorizontalAlignment="Left" Margin="214,433,0,0"  VerticalAlignment="Top" MinWidth="83" Width="auto" Height="20">
-            <ComboBoxItem Content="ENTR C" />
-            <ComboBoxItem Content="ENTR COMP M" />
-            <ComboBoxItem Content="LÉVIS" />
-        </ComboBox>
-
-        <RadioButton x:Name="radio_quantum" GroupName="1" Margin="113,457,0,0" Content="QUANTUM (Aliénation)" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="147">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <RadioButton x:Name="radio_autre" GroupName="1" Margin="113,480,0,0" Content="Autre :" VerticalContentAlignment="Center" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="58" Checked="radio_autre_Checked" Unchecked="radio_autre_Unchecked">
-            <RadioButton.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding settings.DarkMode}" Value="true">
-                            <Setter Property="TextBlock.Foreground" Value="LightGray"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </RadioButton.Style>
-        </RadioButton>
-
-        <TextBox x:Name="tb_autre" IsEnabled="False" HorizontalAlignment="Left" Margin="171,480,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="126" Height="18">
+        <TextBox x:Name="tb_autre" HorizontalAlignment="Left" Margin="196,480,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="15" VerticalAlignment="Top" Width="101" Height="18">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>

@@ -467,6 +467,8 @@ namespace Client
 
 		private void btn_LabClone_Click(object sender, RoutedEventArgs e)
 		{
+			tb_erreur.Text = "";
+
 			App.appData.snColor = false;
 
 			if (string.IsNullOrWhiteSpace(tb_serialLab.Text))
@@ -821,7 +823,7 @@ namespace Client
 			foreach (InvPostes item in ListViewData.SelectedItems)
 			{
 				result = new[] { item.type, item.model, item.serial, item.statut, item.RF, item.RFretour, item.emplacement, item.dateEntry, item.dateSortie, item.dateRetour, item.dateEntryLab, item.dateClone };
-				temp.Add(new InvPostes { type = result[0], model = result[1], serial = result[3], statut = result[4], RF = result[5], RFretour = result[6], emplacement = result[7], dateEntry = result[8], dateSortie = result[9], dateRetour = result[10], dateEntryLab = result[11], dateClone = result[12] });
+				temp.Add(new InvPostes { type = result[0], model = result[1], serial = result[2], statut = result[3], RF = result[4], RFretour = result[5], emplacement = result[6], dateEntry = result[7], dateSortie = result[8], dateRetour = result[9], dateEntryLab = result[10], dateClone = result[11] });
 			}
 
 			Modify modify = new Modify(im, temp);
@@ -1394,5 +1396,10 @@ namespace Client
         {
 			cb_type.SelectedIndex = 0;
         }
+
+        private void tb_magasin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+			e.Handled = !char.IsDigit(e.Text.ToCharArray()[0]);
+		}
     }
 }

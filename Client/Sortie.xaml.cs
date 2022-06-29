@@ -114,15 +114,29 @@ namespace Client
 				temp = App.appData.invPostes.ToArray();
             }
 
+			string magasin = "";
+
+
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				magasin = tb_magasin.Text.Trim();
+			});
+
+
 			foreach (var item in temp)
             {
-				if (item.magasin == tb_magasin.Text.Trim() && item.statut == "En Stock") serial.Add(item.serial);
+				if (item.magasin == magasin && item.statut == "En Stock") serial.Add(item.serial);
             }
 
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				tb_serial.Text = String.Join(Environment.NewLine, serial);
 			});
+		}
+
+        private void tb_magasin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+			e.Handled = !char.IsDigit(e.Text.ToCharArray()[0]);
 		}
     }
 }

@@ -577,7 +577,7 @@ namespace entrepotServer
 		private void SaveBackup()
         {
 			AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-			autoResetEvent.WaitOne(60000);
+			autoResetEvent.WaitOne(900000);
 			int timeCompare;
 			string day;
 
@@ -591,7 +591,7 @@ namespace entrepotServer
 					SaveDatabaseBackup();
 					//SaveWBbackup();
 					wbBackup();
-					//AutoRapport(appData.invPostes, "Rapport.xlsx");
+					AutoRapport(appData.invPostes, "Entrepot Sobeys.xlsx");
 					autoResetEvent.WaitOne(7200000);// backup a chaque 2 heurs
 				}
 				else autoResetEvent.WaitOne(300000); // recheck au 5 min si le time est ok pour saver backup
@@ -873,12 +873,12 @@ namespace entrepotServer
 
 				ws.Cell(1, 1).Value = "Type";
 				ws.Cell(1, 2).Value = "Modèle";
-				ws.Cell(1, 3).Value = "# Actif";
+				ws.Cell(1, 3).Value = "Magasin";
 				ws.Cell(1, 4).Value = "Numéro de série";
 				ws.Cell(1, 5).Value = "Statut";
-				ws.Cell(1, 6).Value = "RF de Sortie";
+				ws.Cell(1, 6).Value = "Case de Sortie";
 				ws.Cell(1, 7).Value = "Date de Sortie";
-				ws.Cell(1, 8).Value = "RF de Retour";
+				ws.Cell(1, 8).Value = "Case de Retour";
 				ws.Cell(1, 9).Value = "Date de Retour";
 				ws.Cell(1, 10).Value = "Emplacement";
 				ws.Cell(1, 11).Value = "Date d'entrée";
@@ -889,10 +889,13 @@ namespace entrepotServer
 				ws.Columns().AdjustToContents();
 				//ws.Rows().AdjustToContents();
 				ws.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
-				wb.SaveAs(@"T:\Rapport Auto\" + name);
+				//wb.SaveAs(@"T:\Rapport Auto\" + name);
+				////wb.SaveAs(@".\Rapport Auto\" + name);
 				//wb.SaveAs(@".\Rapport Auto\" + name);
-				wb.SaveAs(@".\Rapport Auto\" + name);
 				//wb.SaveAs(@"C:\test\" + name);
+
+				if (name == "Entrepot Sobeys.xlsx") wb.SaveAs(@"C:\Users\inventaire\CompuCom\Projet Sobeys - Rapport\" + name);
+				else wb.SaveAs(@".\Rapport Auto\" + name);
 			}
 			catch (Exception ex)
 			{
@@ -942,12 +945,11 @@ namespace entrepotServer
 			lock (lockSave)
 			{
 				string timeCheck = backupFolder + "Backup " + DateTime.Now.ToString("dd-MM-yyyy H;mm;ss") + ".db" ;
+				string jsonString = "";
 
 				try
 				{
-					var jsonString = JsonSerializer.Serialize(appData.invPostes);
-					File.WriteAllText(timeCheck, jsonString);
-					//File.WriteAllText(@"T:\Rapport Auto\backup\DB.bak", jsonString);
+					jsonString = JsonSerializer.Serialize(appData.invPostes);
 				}
 				catch (Exception ex)
 				{
@@ -955,7 +957,30 @@ namespace entrepotServer
 					Console.WriteLine(ex.StackTrace);
 				}
 
-				msg("New backup saved (DB).");
+				if (jsonString != "")
+				{
+					try
+					{
+						File.WriteAllText(timeCheck, jsonString);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine(ex.Message);
+						Console.WriteLine(ex.StackTrace);
+					}
+
+					try
+					{
+						File.WriteAllText(@"C:\Users\inventaire\CompuCom\Projet Sobeys - Backup\database.db", jsonString);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine(ex.Message);
+						Console.WriteLine(ex.StackTrace);
+					}
+
+					msg("New backup saved (DB).");
+				}
 			}
 		}
 

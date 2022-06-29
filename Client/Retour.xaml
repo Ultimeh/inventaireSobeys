@@ -107,7 +107,7 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="196,396,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="102" Height="18">
+        <TextBox x:Name="tb_RF" HorizontalAlignment="Left" Margin="173,396,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="125" Height="18">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>
@@ -189,7 +189,7 @@
             </Label.Style>
         </Label>
 
-        <TextBox x:Name="tb_magasin" HorizontalAlignment="Left" Margin="196,419,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="4" VerticalAlignment="Top" Width="102" Height="18">
+        <TextBox x:Name="tb_magasin" HorizontalAlignment="Left" Margin="196,419,0,0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Disabled" MaxLength="4" VerticalAlignment="Top" Width="102" Height="18" PreviewTextInput="tb_magasin_PreviewTextInput">
             <TextBox.Style>
                 <Style>
                     <Style.Triggers>

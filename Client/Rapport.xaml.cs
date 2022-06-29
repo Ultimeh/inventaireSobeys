@@ -62,7 +62,7 @@ namespace Client
 
 			if (radio_share.IsChecked == true)
 			{
-				link = @".\Rapport " + "(" + App.appData.UserName + ") " + date + ".xlsx";
+				link = @".\Rapports\Rapport " + "(" + App.appData.UserName + ") " + date + ".xlsx";
 				message = "Generation du Rapport Terminer!";
 			}
 			else if (radio_local.IsChecked == true)
@@ -138,12 +138,12 @@ namespace Client
 
 				ws.Cell(1, 1).Value = "Type";
 				ws.Cell(1, 2).Value = "Modèle";
-				ws.Cell(1, 3).Value = "# Actif";
+				ws.Cell(1, 3).Value = "Magasin";
 				ws.Cell(1, 4).Value = "Numéro de série";
 				ws.Cell(1, 5).Value = "Statut";
-				ws.Cell(1, 6).Value = "RF de Sortie";
+				ws.Cell(1, 6).Value = "Case de Sortie";
 				ws.Cell(1, 7).Value = "Date de Sortie";
-				ws.Cell(1, 8).Value = "RF de Retour";
+				ws.Cell(1, 8).Value = "Case de Retour";
 				ws.Cell(1, 9).Value = "Date de Retour";
 				ws.Cell(1, 10).Value = "Emplacement";
 				ws.Cell(1, 11).Value = "Date d'entrée";
@@ -181,6 +181,7 @@ namespace Client
 					var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 					var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 					var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+					var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 					if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
 					if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
@@ -188,6 +189,7 @@ namespace Client
 					if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
 					if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
 					if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
+					if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
 				}
 
 				var wb = new XLWorkbook();
@@ -222,12 +224,12 @@ namespace Client
 
 				ws.Cell(1, 1).Value = "Type";
 				ws.Cell(1, 2).Value = "Modèle";
-				ws.Cell(1, 3).Value = "# Actif";
+				ws.Cell(1, 3).Value = "Magasin";
 				ws.Cell(1, 4).Value = "Numéro de série";
 				ws.Cell(1, 5).Value = "Statut";
-				ws.Cell(1, 6).Value = "RF de Sortie";
+				ws.Cell(1, 6).Value = "Case de Sortie";
 				ws.Cell(1, 7).Value = "Date de Sortie";
-				ws.Cell(1, 8).Value = "RF de Retour";
+				ws.Cell(1, 8).Value = "Case de Retour";
 				ws.Cell(1, 9).Value = "Date de Retour";
 				ws.Cell(1, 10).Value = "Emplacement";
 				ws.Cell(1, 11).Value = "Date d'entrée";

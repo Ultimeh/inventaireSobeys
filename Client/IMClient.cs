@@ -550,7 +550,7 @@ namespace Client
 							{
 								string serial = br.ReadString();
 
-								var result = serial.Split(", ");
+								var result = serial.Split(",");
 
 								lock (lockDB)
 								{

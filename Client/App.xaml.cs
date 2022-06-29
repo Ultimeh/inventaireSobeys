@@ -12,7 +12,7 @@ namespace Client
 		
 		protected override void OnStartup(StartupEventArgs e)
         {
-	     	const string appName = "Inventaire Entrepot";
+	     	const string appName = "Inventaire Sobeys";
 			bool createdNew;
 
 			_mutex = new Mutex(true, appName, out createdNew);
