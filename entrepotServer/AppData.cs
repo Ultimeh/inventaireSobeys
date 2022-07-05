@@ -20,10 +20,7 @@ namespace entrepotServer
 
 		private List<InvPostes> _invPostes = new List<InvPostes>();
 
-		private List<InvPostes> _jour = new List<InvPostes>();
 		public List<InvPostes> invPostes { get { return _invPostes; } set { _invPostes = value; } }
-
-		public List<InvPostes> jour { get { return _jour; } set { _jour = value; } }
 
 		//public List<string> logs = new List<string>();
 

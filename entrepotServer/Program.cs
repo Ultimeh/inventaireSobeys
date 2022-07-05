@@ -6,15 +6,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace entrepotServer
@@ -656,12 +652,20 @@ namespace entrepotServer
         {
             var today = DateTime.Now.ToShortDateString();
 
-            foreach (var item in appData.invPostes.ToArray())
+			InvPostes[] temp;
+			List<InvPostes> jour = new List<InvPostes>();
+
+			lock (appData.lockDB)
             {
-                if ((item.dateSortie.Contains(today) && item.statut == "Sortie")) appData.jour.Add(item);
+				temp = appData.invPostes.ToArray();
             }
 
-            foreach (var item in appData.jour.ToArray())
+            foreach (var item in temp)
+            {
+                if (item.dateSortie == today && item.statut == "Sortie") jour.Add(item);
+            }
+
+            foreach (var item in jour.ToArray())
             {
                 var rf = item.RF.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 var rfRetour = item.RFretour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -680,8 +684,7 @@ namespace entrepotServer
                 if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
             }
 
-            AutoRapport(appData.jour, "RapportSortieSobeys.xlsx");
-            appData.jour.Clear();
+            AutoRapport(jour, "RapportSortieSobeys.xlsx");
             //_ = uploadFTP();
         }
 
@@ -742,33 +745,6 @@ namespace entrepotServer
         //static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         //{
         //    return true;
-        //}
-
-        //      private void UpdateColor()
-        //{
-        //	lock (appData.lockDB)
-        //	{
-        //		var date = DateTime.Now;
-        //		DateTime expire;
-
-        //		foreach (var item in appData.invPostes.ToArray())
-        //		{
-        //			if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && !item.emplacement.Contains("REPAIR") && (item.statut == "En Stock" || item.statut == "Réservé") && item.statut != "Sortie")
-        //			{
-        //				var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        //				expire = DateTime.Parse(array[array.Count() -1]);
-
-        //				if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
-        //				else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
-        //				else if (expire < date) item.xcolor = "2";
-        //				else item.xcolor = "";
-        //			}
-
-        //			if (item.statut == "Sortie" || item.emplacement == "QUANTUM" || item.emplacement.Contains("REPAIR")) item.xcolor = "";
-        //		}
-
-        //		SaveDatabase();
-        //	}
         //}
 
         private void KickAllClient()
