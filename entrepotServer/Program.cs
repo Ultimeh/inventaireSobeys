@@ -628,15 +628,11 @@ namespace entrepotServer
 					//UpdateRepair();
 				}
 
-				//if (day != "samedi" && day != "dimanche")
-    //            {
-				//	if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
-				//	//if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
-				//	//if (timeCompare >= 1000 && timeCompare < 1005) _ = puroTracking();
-				//	//if (timeCompare >= 1200 && timeCompare < 1205) _ = puroTracking();
-				//	//if (timeCompare >= 1400 && timeCompare < 1405) _ = puroTracking();
-				//	//if (timeCompare >= 1530 && timeCompare < 1535) _ = puroTracking();
-				//}
+                if (day != "samedi" && day != "dimanche")
+                {
+                    //if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
+                    if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
+                }
 
                 autoResetEvent.WaitOne(300000); // recheck au 5 min si le time est ok
             }
@@ -656,126 +652,126 @@ namespace entrepotServer
         //    AutoRapport(appData.invPostes, "Rapport.xlsx");
         //}
 
-  //      private void RapportFTP()
-  //      {
-  //          var today = DateTime.Now.ToShortDateString();
+        private void RapportFTP()
+        {
+            var today = DateTime.Now.ToShortDateString();
 
-  //          foreach (var item in appData.invPostes.ToArray())
-  //          {
-  //              if (item.dateEntry == today || (item.dateSortie.Contains(today) && item.statut == "Sortie")) appData.jour.Add(item);
-  //          }
+            foreach (var item in appData.invPostes.ToArray())
+            {
+                if ((item.dateSortie.Contains(today) && item.statut == "Sortie")) appData.jour.Add(item);
+            }
 
-  //          foreach (var item in appData.jour.ToArray())
-  //          {
-  //              var rf = item.RF.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var rfRetour = item.RFretour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var dateRF = item.dateSortie.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-  //              var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            foreach (var item in appData.jour.ToArray())
+            {
+                var rf = item.RF.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var rfRetour = item.RFretour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var dateRF = item.dateSortie.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var dateRetour = item.dateRetour.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var dateClone = item.dateClone.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var dateEnvoieLab = item.dateEntryLab.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var dateCloneValid = item.dateCloneValid.ToUpper().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-  //              if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
-  //              if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
-  //              if (rfRetour.Count() != 0) item.RFretour = rfRetour[rfRetour.Count() - 1];
-  //              if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
-  //              if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
-  //              if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
-  //              if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
-  //          }
+                if (rf.Count() != 0) item.RF = rf[rf.Count() - 1];
+                if (dateRF.Count() != 0) item.dateSortie = dateRF[dateRF.Count() - 1];
+                if (rfRetour.Count() != 0) item.RFretour = rfRetour[rfRetour.Count() - 1];
+                if (dateRetour.Count() != 0) item.dateRetour = dateRetour[dateRetour.Count() - 1];
+                if (dateClone.Count() != 0) item.dateClone = dateClone[dateClone.Count() - 1];
+                if (dateEnvoieLab.Count() != 0) item.dateEntryLab = dateEnvoieLab[dateEnvoieLab.Count() - 1];
+                if (dateCloneValid.Count() != 0) item.dateCloneValid = dateCloneValid[dateCloneValid.Count() - 1];
+            }
 
-  //          AutoRapport(appData.jour, "RapportEntrerSortie.xlsx");
-  //          appData.jour.Clear();
-  //          _ = uploadFTP();
-  //      }
+            AutoRapport(appData.jour, "RapportSortieSobeys.xlsx");
+            appData.jour.Clear();
+            //_ = uploadFTP();
+        }
 
-  //      private async Task uploadFTP()
-		//{
-		//	await Task.Delay(2000);
+        private async Task uploadFTP()
+        {
+            await Task.Delay(2000);
 
-		//	int count = 0;
-		//	string path = @".\Rapport Auto\RapportEntrerSortie.xlsx";
+            int count = 0;
+            string path = @".\Rapport Auto\RapportSortieSobeys.xlsx";
 
-		//	if (!File.Exists(path))
-		//	{
-		//		msg("RapportEntrerSortie.xlsx don't exist, FTP upload cancelled.");
-		//		return;
-		//	}
+            if (!File.Exists(path))
+            {
+                msg("RapportSortieSobeys.xlsx don't exist, FTP upload cancelled.");
+                return;
+            }
 
-		//	msg("Attempting connection to FTP server to send the report ...");
-				
-		//	while (true)
-		//	{
-		//		try
-		//		{
-		//			FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportEntrerSortie.xlsx");
-		//			request.Method = WebRequestMethods.Ftp.UploadFile;
-		//			//request.EnableSsl = true;
-		//			request.UsePassive = false;
-		//			request.KeepAlive = false;
-		//			request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
+            msg("Attempting connection to FTP server to send the report ...");
 
-		//			//ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateCertificate);
-		//			msg("Connected to FTP server.");
-		//			// Copy the contents of the file to the request stream.
-		//			await using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read);
-		//			await using Stream requestStream = request.GetRequestStream();
-		//			msg("Sending file ...");
-		//			await fileStream.CopyToAsync(requestStream);
-		//			msg("File transfer completed.");
-		//			//using FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-		//			//msg($"Upload File Complete, status {response.StatusDescription}");
-		//			break;
-		//		}
-		//		catch (Exception ex)
-		//		{
-		//			count ++;
-		//			msg(ex.Message);
+            while (true)
+            {
+                try
+                {
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportSortieSobeys.xlsx");
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    //request.EnableSsl = true;
+                    request.UsePassive = false;
+                    request.KeepAlive = false;
+                    request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
 
-		//			if (count == 5)
-		//			{
-		//				msg("FTP upload cancelled: failed 5 times.");
-		//				break;
-		//			}
+                    //ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateCertificate);
+                    msg("Connected to FTP server.");
+                    // Copy the contents of the file to the request stream.
+                    await using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read);
+                    await using Stream requestStream = request.GetRequestStream();
+                    msg("Sending file ...");
+                    await fileStream.CopyToAsync(requestStream);
+                    msg("File transfer completed.");
+                    //using FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    //msg($"Upload File Complete, status {response.StatusDescription}");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    count++;
+                    msg(ex.Message);
 
-		//			await Task.Delay(5000);
-		//		}
-		//	}
-		//}
+                    if (count == 5)
+                    {
+                        msg("FTP upload cancelled: failed 5 times.");
+                        break;
+                    }
+
+                    await Task.Delay(5000);
+                }
+            }
+        }
 
         //static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         //{
         //    return true;
         //}
 
-  //      private void UpdateColor()
-		//{
-		//	lock (appData.lockDB)
-		//	{
-		//		var date = DateTime.Now;
-		//		DateTime expire;
+        //      private void UpdateColor()
+        //{
+        //	lock (appData.lockDB)
+        //	{
+        //		var date = DateTime.Now;
+        //		DateTime expire;
 
-		//		foreach (var item in appData.invPostes.ToArray())
-		//		{
-		//			if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && !item.emplacement.Contains("REPAIR") && (item.statut == "En Stock" || item.statut == "Réservé") && item.statut != "Sortie")
-		//			{
-		//				var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-		//				expire = DateTime.Parse(array[array.Count() -1]);
+        //		foreach (var item in appData.invPostes.ToArray())
+        //		{
+        //			if (!string.IsNullOrEmpty(item.dateCloneValid) && item.emplacement != "QUANTUM" && !item.emplacement.Contains("REPAIR") && (item.statut == "En Stock" || item.statut == "Réservé") && item.statut != "Sortie")
+        //			{
+        //				var array = item.dateCloneValid.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        //				expire = DateTime.Parse(array[array.Count() -1]);
 
-		//				if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
-		//				else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
-		//				else if (expire < date) item.xcolor = "2";
-		//				else item.xcolor = "";
-		//			}
+        //				if ((expire - date).TotalDays <= 15 && !((expire - date).TotalDays <= 5)) item.xcolor = "1";
+        //				else if ((expire - date).TotalDays <= 5) item.xcolor = "2";
+        //				else if (expire < date) item.xcolor = "2";
+        //				else item.xcolor = "";
+        //			}
 
-		//			if (item.statut == "Sortie" || item.emplacement == "QUANTUM" || item.emplacement.Contains("REPAIR")) item.xcolor = "";
-		//		}
+        //			if (item.statut == "Sortie" || item.emplacement == "QUANTUM" || item.emplacement.Contains("REPAIR")) item.xcolor = "";
+        //		}
 
-		//		SaveDatabase();
-		//	}
-		//}
+        //		SaveDatabase();
+        //	}
+        //}
 
-		private void KickAllClient()
+        private void KickAllClient()
 		{
 			foreach (var UserKey in users.Keys)
 			{
