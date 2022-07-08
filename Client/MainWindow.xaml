@@ -19,7 +19,7 @@
     </Window.Style>
 
     <Grid>
-        <Label Margin="190,0,108,0" Height="30" VerticalAlignment="Top" MouseDoubleClick="Label_MouseDoubleClick" />
+        <Label Margin="210,0,108,0" Height="30" VerticalAlignment="Top" MouseDoubleClick="Label_MouseDoubleClick" />
 
         <DockPanel Width="auto" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,6,0,0" >
             <Menu x:Name="topMenu" DockPanel.Dock="Top" Height="20" VerticalAlignment="Top" Margin="0,0,-10,0" HorizontalAlignment="Left" Width="auto"  Background="Transparent">

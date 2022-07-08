@@ -10,9 +10,9 @@
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 		<Authors>Daniel Harvey</Authors>
-		<VersionPrefix>1.0.0.0</VersionPrefix>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<VersionPrefix>1.0.0.2</VersionPrefix>
+		<AssemblyVersion>1.0.0.2</AssemblyVersion>
+		<FileVersion>1.0.0.2</FileVersion>
 		<AssemblyName>Inventaire Sobeys (Client)</AssemblyName>
 		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 		<ApplicationIcon>transparent-warehouse-icon-farm-icon-5dda3fc7b1d442.1479203315745842637284.ico</ApplicationIcon>
