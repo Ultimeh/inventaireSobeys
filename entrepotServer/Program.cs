@@ -1136,7 +1136,7 @@ namespace entrepotServer
 			}
 
 			ModelList();
-			msg("Databaseloaded correctly.");
+			msg("Database loaded correctly.");
 		}
 
 		public void ModelList()

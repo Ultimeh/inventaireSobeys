@@ -1215,7 +1215,7 @@ namespace entrepotServer
 										{
 											if ((stuff == item.serial) && item.emplacement == "Au Lab")
 											{
-												item.emplacement = "R2GO";
+												item.emplacement = "Prêt a shipper";
 
 												if (!string.IsNullOrEmpty(item.dateClone)) item.dateClone = item.dateClone + Environment.NewLine + date.ToShortDateString();
 												else item.dateClone = date.ToShortDateString();
