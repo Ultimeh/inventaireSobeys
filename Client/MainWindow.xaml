@@ -1090,6 +1090,18 @@
                                     </GridViewColumn.HeaderContainerStyle>
                                 </GridViewColumn>
 
+                                <GridViewColumn Header=" Magasin" DisplayMemberBinding="{Binding magasin}">
+                                    <GridViewColumn.HeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="FontWeight" Value="Normal"/>
+                                            <Setter Property="FontSize" Value="14"/>
+                                            <Setter Property="Background" Value="LightSteelBlue"/>
+                                            <Setter Property="BorderBrush" Value="LightGray"/>
+                                        </Style>
+                                    </GridViewColumn.HeaderContainerStyle>
+                                </GridViewColumn>
+
                                 <GridViewColumn Header=" Numéro de série" DisplayMemberBinding="{Binding serial}">
                                     <GridViewColumn.HeaderContainerStyle>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -1314,7 +1326,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <TextBox x:Name="tb_magasin" Text="{Binding searchSNlab, UpdateSourceTrigger=PropertyChanged}" MaxLength="4" Margin="104,0,0,540" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" TextChanged="tb_nom_TextChanged" PreviewTextInput="tb_magasin_PreviewTextInput">
+                            <TextBox x:Name="tb_magasin" MaxLength="4" Margin="104,0,0,540" TextWrapping="NoWrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" TextChanged="tb_nom_TextChanged" PreviewTextInput="tb_magasin_PreviewTextInput">
                                 <TextBox.Style>
                                     <Style>
                                         <Style.Triggers>

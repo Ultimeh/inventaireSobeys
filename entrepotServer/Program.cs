@@ -627,7 +627,7 @@ namespace entrepotServer
                 if (day != "samedi" && day != "dimanche")
                 {
                     //if (timeCompare >= 830 && timeCompare < 835) _ = puroTracking();
-                    if (timeCompare >= 1520 && timeCompare < 1525) Task.Run(RapportFTP);
+                    if (timeCompare >= 1550 && timeCompare < 1555) Task.Run(RapportFTP);
                 }
 
                 autoResetEvent.WaitOne(300000); // recheck au 5 min si le time est ok
@@ -685,7 +685,7 @@ namespace entrepotServer
             }
 
             AutoRapport(jour, "RapportSortieSobeys.xlsx");
-            //_ = uploadFTP();
+            _ = uploadFTP();
         }
 
         private async Task uploadFTP()
