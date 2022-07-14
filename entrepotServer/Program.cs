@@ -703,25 +703,28 @@ namespace entrepotServer
 
             msg("Attempting connection to FTP server to send the report ...");
 
-            while (true)
+			FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportSortieSobeys.xlsx");
+			request.Method = WebRequestMethods.Ftp.UploadFile;
+			//request.EnableSsl = true;
+			request.UsePassive = false;
+			request.KeepAlive = false;
+			request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
+			request.Timeout = 5000;
+
+			while (true)
             {
                 try
                 {
-                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.getserveur.com/RapportSortieSobeys.xlsx");
-                    request.Method = WebRequestMethods.Ftp.UploadFile;
-                    //request.EnableSsl = true;
-                    request.UsePassive = false;
-                    request.KeepAlive = false;
-                    request.Credentials = new NetworkCredential("dan@getserveur.com", "#isHN$W}QV)@");
-
                     //ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateCertificate);
-                    msg("Connected to FTP server.");
                     // Copy the contents of the file to the request stream.
                     await using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read);
-                    await using Stream requestStream = request.GetRequestStream();
-                    msg("Sending file ...");
+					await using Stream requestStream = request.GetRequestStream();
+					msg("Connected");
+					requestStream.WriteTimeout = 5000;
+					msg("Sending file ...");
                     await fileStream.CopyToAsync(requestStream);
-                    msg("File transfer completed.");
+
+                    msg("FTP transfer completed.");
                     //using FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                     //msg($"Upload File Complete, status {response.StatusDescription}");
                     break;
