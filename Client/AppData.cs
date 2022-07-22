@@ -441,7 +441,7 @@ namespace Client
 					return true;
 				}
 
-				if (statutSearch == 5)
+				if (statutSearch == 5 && !string.IsNullOrEmpty(item.xcolor))
 				{
 					if (!string.IsNullOrEmpty(empSearch) && !string.IsNullOrEmpty(sortieSearch))
 					{

@@ -1220,10 +1220,12 @@ namespace entrepotServer
 												if (!string.IsNullOrEmpty(item.dateClone)) item.dateClone = item.dateClone + Environment.NewLine + date.ToShortDateString();
 												else item.dateClone = date.ToShortDateString();
 
-												if (!string.IsNullOrEmpty(item.dateCloneValid)) item.dateCloneValid = item.dateCloneValid + Environment.NewLine + date.AddDays(42).ToShortDateString();
-												else item.dateCloneValid = date.AddDays(42).ToShortDateString();
-
-												item.infoValidClone.Add(date.ToShortDateString() + " - " + userInfo.UserName);
+												if (item.type == "Serveur")
+                                                {
+													if (!string.IsNullOrEmpty(item.dateCloneValid)) item.dateCloneValid = item.dateCloneValid + Environment.NewLine + date.AddDays(42).ToShortDateString();
+													else item.dateCloneValid = date.AddDays(42).ToShortDateString();
+													item.infoValidClone.Add(date.ToShortDateString() + " - " + userInfo.UserName);
+												}
 
 												modif.Add(item);
 												check = true;
