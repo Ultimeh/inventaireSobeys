@@ -904,12 +904,14 @@ namespace Client
 								string poste = br.ReadString();
 								string laptop = br.ReadString();
 								string serveur = br.ReadString();
+								string rdx = br.ReadString();
 
 								Application.Current.Dispatcher.Invoke(() =>
 								{
 									App.appData.modelPoste = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(poste));
 									App.appData.modelPortable = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(laptop));
 									App.appData.modelServeur = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(serveur));
+									App.appData.modelRDX = new ObservableCollection<string>(JsonSerializer.Deserialize<List<string>>(rdx));
 								});
 							}
 							break;
@@ -2183,7 +2185,15 @@ namespace Client
 												App.appData.modelServeur.Add(model);
 											});
 										}
-                                    }
+
+										if (type == "RDx-External")
+										{
+											Application.Current.Dispatcher.Invoke(() =>
+											{
+												App.appData.modelRDX.Add(model);
+											});
+										}
+									}
 
                                     if (task == "del")
                                     {
@@ -2210,7 +2220,15 @@ namespace Client
                                                 App.appData.modelServeur.Remove(model);
                                             });
                                         }
-                                    }
+
+										if (type == "RDx-External")
+										{
+											Application.Current.Dispatcher.Invoke(() =>
+											{
+												App.appData.modelRDX.Remove(model);
+											});
+										}
+									}
                                 }
                             }
                             break;

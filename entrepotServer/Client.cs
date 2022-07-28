@@ -1396,11 +1396,13 @@ namespace entrepotServer
                                     var poste = JsonSerializer.Serialize(Program.appData.modelPoste);
                                     var laptop = JsonSerializer.Serialize(Program.appData.modelPortable);
                                     var serveur = JsonSerializer.Serialize(Program.appData.modelServeur);
+									var rdx = JsonSerializer.Serialize(Program.appData.modelRDX);
 
-                                    bw.Write(IM_ModeleRequest);
+									bw.Write(IM_ModeleRequest);
                                     bw.Write(poste);
 									bw.Write(laptop);
 									bw.Write(serveur);
+									bw.Write(rdx);
 									bw.Flush();
                                 }
                             }
@@ -1836,6 +1838,12 @@ namespace entrepotServer
 											Program.appData.modelServeur.Add(model);
 											prog.SaveModelServeur();
 										}
+
+										if (type == "RDx-External")
+										{
+											Program.appData.modelRDX.Add(model);
+											prog.SaveModelRDX();
+										}
 									}
 
 									if (task == "del")
@@ -1856,6 +1864,12 @@ namespace entrepotServer
 										{
 											Program.appData.modelServeur.Remove(model);
 											prog.SaveModelServeur();
+										}
+
+										if (type == "RDx-External")
+										{
+											Program.appData.modelRDX.Remove(model);
+											prog.SaveModelRDX();
 										}
 									}
 								}

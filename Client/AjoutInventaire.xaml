@@ -52,6 +52,7 @@
             <ComboBoxItem Content="Poste"/>
             <ComboBoxItem Content="Portable"/>
             <ComboBoxItem Content="Serveur"/>
+            <ComboBoxItem Content="RDx-External"/>
         </ComboBox>
 
         <Label x:Name="model" Content="Modèle :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="59" Margin="86,56,0,0">

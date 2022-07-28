@@ -82,6 +82,9 @@ namespace Client
 		private ObservableCollection<string> _modelServeur = new ObservableCollection<string>();
 		public ObservableCollection<string> modelServeur { get { return _modelServeur; } set { _modelServeur = value; } }
 
+		private ObservableCollection<string> _modelRDX = new ObservableCollection<string>();
+		public ObservableCollection<string> modelRDX { get { return _modelRDX; } set { _modelRDX = value; } }
+
 		private string _user;
 		private string _IPAddress = "";
 		private string _contextName;

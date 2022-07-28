@@ -67,6 +67,9 @@ namespace entrepotServer
 		private List<string> _modelServeur = new List<string>();
 		public List<string> modelServeur { get { return _modelServeur; } set { _modelServeur = value; } }
 
+		private List<string> _modelRDX = new List<string>();
+		public List<string> modelRDX { get { return _modelRDX; } set { _modelRDX = value; } }
+
 		//public List<string> types { get { return _types; } set { _types = value; } }
 		//public List<string> modelePoste { get { return _modelePoste; } set { _modelePoste = value; } }
 		//public List<string> modeleLaptop { get { return _modeleLaptop; } set { _modeleLaptop = value; } }

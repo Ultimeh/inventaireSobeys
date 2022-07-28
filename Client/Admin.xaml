@@ -247,6 +247,7 @@
                     <ComboBoxItem Content="Poste"/>
                     <ComboBoxItem Content="Portable"/>
                     <ComboBoxItem Content="Serveur"/>
+                    <ComboBoxItem Content="RDx-External"/>
                 </ComboBox>
 
                 <Label x:Name="model" Content="Modèle :" HorizontalAlignment="Left" VerticalAlignment="Top" Width="58" Margin="5,137,0,0">

@@ -136,6 +136,7 @@ namespace Client
 			if (cb_type.SelectedIndex == 0) cb_model.ItemsSource = App.appData.modelPoste;
 			if (cb_type.SelectedIndex == 1) cb_model.ItemsSource = App.appData.modelPortable;
 			if (cb_type.SelectedIndex == 2) cb_model.ItemsSource = App.appData.modelServeur;
+			if (cb_type.SelectedIndex == 3) cb_model.ItemsSource = App.appData.modelRDX;
 		}
     }
 }

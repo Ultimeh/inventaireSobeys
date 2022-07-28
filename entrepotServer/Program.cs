@@ -1077,17 +1077,37 @@ namespace entrepotServer
 			}
 		}
 
+		public void SaveModelRDX()
+		{
+			lock (lockSave)
+			{
+				string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"rdx.model";
+
+				try
+				{
+					var jsonString = JsonSerializer.Serialize(appData.modelRDX, new JsonSerializerOptions { WriteIndented = true });
+					File.WriteAllText(path, jsonString);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+					Console.WriteLine(ex.StackTrace);
+				}
+			}
+		}
+
 		public void LoadModel()
 		{
 			string path = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"poste.model";
 			string path2 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"laptop.model";
 			string path3 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"serveur.model";
+			string path4 = Environment.CurrentDirectory + Path.DirectorySeparatorChar + @"database" + Path.DirectorySeparatorChar + @"rdx.model";
 
 			try
 			{
 				var jsonString = File.ReadAllText(path);
 				appData.modelPoste = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
-				msg("Poste model correctly.");
+				msg("Poste model loaded correctly.");
 			}
 			catch (Exception ex)
 			{
@@ -1099,7 +1119,7 @@ namespace entrepotServer
 			{
 				var jsonString = File.ReadAllText(path2);
 				appData.modelPortable = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
-				msg("Laptop model correctly.");
+				msg("Laptop model loaded correctly.");
 			}
 			catch (Exception ex)
 			{
@@ -1111,12 +1131,24 @@ namespace entrepotServer
 			{
 				var jsonString = File.ReadAllText(path3);
 				appData.modelServeur = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
-				msg("Serveur model correctly.");
+				msg("Serveur model loaded correctly.");
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 				msg("Error loading serveur model!");
+			}
+
+			try
+			{
+				var jsonString = File.ReadAllText(path4);
+				appData.modelRDX = JsonSerializer.Deserialize<List<string>>(jsonString, new JsonSerializerOptions { WriteIndented = true });
+				msg("Serveur RDX loaded correctly.");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				msg("Error loading RDX model!");
 			}
 		}
 

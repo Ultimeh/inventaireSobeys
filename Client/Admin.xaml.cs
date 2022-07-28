@@ -204,6 +204,7 @@ namespace Client
 				if (cb_type.SelectedIndex == 0) listModel.ItemsSource = App.appData.modelPoste;
 				if (cb_type.SelectedIndex == 1) listModel.ItemsSource = App.appData.modelPortable;
 				if (cb_type.SelectedIndex == 2) listModel.ItemsSource = App.appData.modelServeur;
+				if (cb_type.SelectedIndex == 3) listModel.ItemsSource = App.appData.modelRDX;
 			}
         }
 
